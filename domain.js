@@ -1,62 +1,93 @@
-interface Entité {
-  nom: string;
-}
-
 // Un catalogue ...
-class Catalogue<T extends Entité> {
-  private _fiches: Map<string, T> = new Map();
-  get index(): string[] { return [...this._fiches.keys()] }
-  rechercher(entrée: string): T | undefined { return this._fiches.get(entrée); }
-  inscrire(entrée: T): void {
-    if (!entrée)
+class Catalogue {
+  /** stockage internes des fiches du catalogue
+   * @type {Map.<string,{nom:string}>}
+   */
+  _fiches = new Map();
+  /** @type {{nom:string}[]} Liste complète des fiches du catalogue. */
+  get fiches() { return [...this._fiches.values()]; }
+  /** @type {string[]} index de tous les noms de fiche inscrite au catalogue. */
+  get index() { return [...this._fiches.keys()]; }
+  /** Recherche d'une fiche par son nom (correspondance exacte)
+   * @param {string} entrée nom de la fiche à rechercher. 
+   * @returns {{nom:string}|undefined} la fiche portant le nom demandée... si elle existe !
+   */
+  rechercher(entrée) { return Object.freeze(this._fiches.get(entrée)); }
+  /** Inscription d'une fiche au catalogue.
+   * Contrôle de l'unicité d'une fiche (par rapport à son nom) au sein du catalogue.
+   * @param {{nom:string}} entrée Fiche à entrer au catalogue
+   * @returns {void} pas de retour en cas de réussite. Exception en cas d'échec.
+   */
+  inscrire(entrée) {
+    if (!entrée?.nom)
       throw new Error("Entrée à inscrire obligatoire");
     if (this._fiches.has(entrée.nom))
       throw new Error(`Une entrée portant le même nom existe déjà : ${entrée.nom}`);
     this._fiches.set(entrée.nom, entrée);
   }
-  retirer(entrée: string): T | undefined {
+  /** Retrait d'une fiche du catalogue (principalement dans le but de la mettre à jour ?)
+   * @param {string} entrée nom de la fiche à retirer.
+   * @returns {{nom:string}|undefined} la fiche retirée si elle existe
+   */
+  retirer(entrée) {
     if (!entrée)
       throw new Error("Entrée à retirer obligatoire");
     let entrée_retirée = this._fiches.get(entrée);
-    if (!this._fiches.delete(entrée))
-      console.log(`Aucune entrée à retirer sous le nom : ${entrée}`)
-    return entrée_retirée;
+    if (entrée_retirée) {
+      this._fiches.delete(entrée);
+      return entrée_retirée;
+    }
   }
 }
 
-enum StatutProduit {
-  INIT = "INIT", // Produit toujours en cours d'initialisation.
-  INDUS = "INDUS", // Produit industrialisable, toutes les données nécessaires sont connues.
-}
-
 // Objet immutable représentant le tarif d'un objet.
-class Tarif implements Entité {
-  private _nom: string;
-  get nom(): string { return this._nom; };
-  private _prix: number;
-  get prix(): number { return this._prix; };
-  private _date_effet: Date;
-  // retourne une copie de la date pour éviter les mises à jour
-  get date_effet(): Date { return new Date(this._date_effet); };
-
-  constructor(nom: string, prix: number, date_effet: Date = new Date()) {
+class Tarif {
+  /** @type {string} Stockage interne du nom */
+  _nom;
+  /** @type {string} Nom de l'objet évalué. */
+  get nom() { return this._nom; };
+  /** @type {number} Stockage interne du prix */
+  _prix;
+  /** @type {number} Prix de l'objet évalué */
+  get prix() { return this._prix; };
+  /** @type {Date} Sockage interne de la date d'effet */
+  _date_effet;
+  /** @type {Date} Date de l'évaluation. */
+  get date_effet() { return new Date(this._date_effet); };
+  /** 
+   * @param {string} nom Nom de l'objet évalué.
+   * @param {number} prix Prix de l'objet évalué.
+   * @param {Date} date_effet Date de l'évaluation (date du jour par défaut).
+   */
+  constructor(nom, prix, date_effet = new Date()) {
     if (!nom || nom.trim().length === 0)
-      throw new Error("Nom de recette obligatoire.")
+      throw new Error("Nom de l'objet obligatoire.")
     if (!prix || prix < 0)
       throw new Error(`Valeur positive attendue. valeur fournie : prix=${prix}`)
     this._nom = nom;
     this._prix = prix;
     // Stockage d'une copie de la date pour immutabilité
     this._date_effet = new Date(date_effet); // date_effet; //
+  }
 
+  /** Formatage de l'objet sous forme de chaîne de caractère compréhensible. */
+  toString() {
+    return `{"nom":"${this._nom}","prix":"${this._prix}","date_effet":"${this._date_effet.toLocaleDateString()}"}`
   }
 }
 
 class Tarification {
-  private _tarifs: Map<string, Tarif> = new Map<string, Tarif>();
-
-  // Mettre à jour le tarif d'un objet
-  mise_a_jour(objet: string, prix: number, date: Date = new Date()): void {
+  _tarifs = new Map();
+  /** @type {Tarif[]} */
+  get tarifs() { return [...this._tarifs.values()]; }
+  /** 
+   * Mettre à jour le tarif d'un objet
+   * @return {void} Pas de retour en cas de réussite. Exception en cas d'échec.
+   * @param {string} objet nom de l'objet évalué
+   * @param {number} prix nouveau prix de l'objet
+   * @param {Date} date date de l'évaluation
+   */
+  mise_a_jour(objet, prix, date = new Date()) {
     if (!objet || objet.trim().length === 0)
       throw new Error(`Objet à mettre à jour obligatoire. Fournis : objet=${objet}`);
     if (!prix || prix < 0)
@@ -67,24 +98,39 @@ class Tarification {
     this._tarifs.set(objet, new Tarif(objet, prix, date));
   }
 
-  tarif(objet: string): Tarif | undefined {
+  /**
+   * @return {Tarif}
+   * @param {string} objet nom de l'objet pour lequel on souhaite obtenir un tarif
+   */
+  tarif(objet) {
     return this._tarifs.get(objet);
   }
 }
 
-class Recette implements Entité {
-  private _nom: string;
-  get nom(): string { return this._nom; }
+// Recette de fabrication d'un objet.
+class Recette {
+  /** @type {string} Stockage interne du nom de la recette */
+  _nom;
+  /** @type {string} nom de recette, doit correspondre au nom de l'objet fabriqué. */
+  get nom() { return this._nom; }
 
-  private _frais: number;
-  // frais de fabrication, hors prix des ingrédients
-  get frais(): number { return this._frais; }
+  /** @type {number} stockage interne des frais de fabrication. */
+  _frais;
+  /** @type {number} frais de fabrication, hors prix des ingrédients */
+  get frais() { return this._frais; }
 
-  private _ingrédients: Map<string, number> = new Map();
-  // obtention d'une copie de la liste des ingrédients pour éviter toute modification en dehors de la recette
-  get ingrédients(): Map<string, number> { return new Map(this._ingrédients) }
+  /** @type {Map.<string,number>} stockage interne des ingrédients nécessaires (quantités par nom). */
+  _ingrédients = new Map();
+  /** @type {[nom:string,quantité:number][]} Liste immutable des ingrédients de la recette. */
+  get ingrédients() { return new Map(this._ingrédients) }
 
-  constructor(nom: string, frais: number, ingrédients: { nom: string, quantité: number }[]) {
+  /** 
+   * Création d'une recette cohérente (validité des inputs + dédoublonnage des ingrédients)
+   * @param {string} nom nom de la recette (doit correspondre au nom de l'objet créé).
+   * @param {number} frais frais de fabrication, hors prix des ingrédients.
+   * @param {{nom:string,quantité:number}[]} ingrédients Liste des ingrédients nécessaire pour la fabrication.
+   */
+  constructor(nom, frais, ingrédients) {
     if (!frais || frais < 0 || !Number.isInteger(frais))
       throw new Error(`Nombre entier positif attendu. fournis : frais=${frais}`);
     if (!nom || nom.trim().length === 0)
@@ -103,14 +149,15 @@ class Recette implements Entité {
 // Gestion de stock
 class Inventaire {
   // nombre d'objets, classé par nom
-  private _objets: Map<string, number> = new Map();
+  _objets = new Map();
+  get stock() { return [...this._objets.entries()]; }
 
-  getStock(objet: string): number {
+  getStock(objet) {
     return this._objets.get(objet) ?? 0;
   }
 
   // ajoute une quantité d'objets au stock. renvoi la quantité totale d'objets de ce type en stock après ajout.
-  ajoute(objet: string, quantité: number): number {
+  ajoute(objet, quantité) {
     if (!quantité || quantité < 0 || (quantité % 0) !== quantité)
       throw new Error(`Nombre entier positif attendu. fournis : quantité=${quantité}`)
     let nouveau_stock = this.getStock(objet) + quantité;
@@ -119,43 +166,38 @@ class Inventaire {
   }
 
   // retirer un objet du stock
-  retire(objet: string, quantité: number): void {
+  retire(objet, quantité) {
     let stock = this.getStock(objet);
     if (stock < quantité) {
       throw new Error(`Impossible de retirer ${quantité} ${objet}. Seuls ${stock} disponibles`)
     }
+    let nouveau_stock = stock - quantité;
+    this._objets.set(objet, nouveau_stock);
+    return nouveau_stock;
   }
 }
 
-interface IProduit {
-  nom: string;
-  date_effet: Date;
-  statut: StatutProduit;
-  coût_reviens: number | undefined;
-  rentabilité: number | undefined;
-}
-
 // représentation la partie opérationnelle associée à une recette
-class Produit implements IProduit {
-  private _nom: string;
+class Produit {
+  _nom;
   get nom() { return this._nom; }
-  private _rentabilité: number | undefined;
-  get rentabilité(): number | undefined { return this._rentabilité };
-  private _prix_estimé: number | undefined;
-  private _coût_reviens: number | undefined;
-  get coût_reviens(): number | undefined { return this._coût_reviens };
-  private _statut: StatutProduit;
-  get statut(): StatutProduit { return this._statut; }
-  private _date_effet: Date = new Date();
+  _rentabilité;
+  get rentabilité() { return this._rentabilité };
+  _prix_estimé;
+  _coût_reviens;
+  get coût_reviens() { return this._coût_reviens };
+  _statut;
+  get statut() { return this._statut; }
+  _date_effet = new Date();
   // Obtention d'une nouvelle version de la date d'effet (garantie l'immutabilité du produit)
-  get date_effet(): Date { return new Date(this._date_effet); };
-  private _updateDateEffet(date: Date): void { this._date_effet = (date < this._date_effet) ? new Date(date) : this._date_effet; }
-  private _commentaire: string = '';
-  get commentaire(): string { return this._commentaire; }
+  get date_effet() { return new Date(this._date_effet); };
+  _updateDateEffet(date) { this._date_effet = (date < this._date_effet) ? new Date(date) : this._date_effet; }
+  _commentaire = '';
+  get commentaire() { return this._commentaire; }
 
   // Initialisation d'un produit à partir du livre de recette et du catalogue de produits de l'usine.
-  constructor(nom: string, livre_recettes: Catalogue<Recette>, catalogue_produits: Catalogue<IProduit>, marché: Tarification) {
-    this._statut = StatutProduit.INIT;
+  constructor(nom, livre_recettes, catalogue_produits, marché) {
+    this._statut = "INIT";
 
     if (!nom?.trim())
       throw new Error(`Nom de produit obligatoire`);
@@ -176,7 +218,7 @@ class Produit implements IProduit {
     for (const [ingrédient, quantité] of recette.ingrédients) {
 
       // Récupération du tarif de l'ingrédient au marché s'il existe
-      let prix_ingrédient: number | undefined;
+      let prix_ingrédient;
       let tarif_ingrédient = marché.tarif(ingrédient);
       if (tarif_ingrédient) {
         prix_ingrédient = tarif_ingrédient.prix;
@@ -185,19 +227,14 @@ class Produit implements IProduit {
 
       // Récupération du coût de reviens au catalogue si le produit existe
       let ingrédient_produit = catalogue_produits.rechercher(ingrédient);
-      if (ingrédient_produit?.coût_reviens) {
-        if (prix_ingrédient && prix_ingrédient < ingrédient_produit.coût_reviens) {
-          console.log(`Ingrédient ${ingrédient} plus coûteux à produire qu'à acheter, considéré comme matière brut.`);
-        } else {
-          prix_ingrédient = ingrédient_produit.coût_reviens;
-          this._updateDateEffet(ingrédient_produit.date_effet);
-        }
+      if (ingrédient_produit?.coût_reviens && prix_ingrédient > ingrédient_produit.coût_reviens) {
+        prix_ingrédient = ingrédient_produit.coût_reviens;
+        this._updateDateEffet(ingrédient_produit.date_effet);
       }
       if (prix_ingrédient && this._coût_reviens) {
         this._coût_reviens += prix_ingrédient * quantité;
       } else { // coût incalculable tarif manquant sur l'ingrédient en cours ou un précédent
         this._coût_reviens = undefined;
-        console.log(`Calcul de coût impossible : pas de prix disponible pour l'ingrédient : ${ingrédient}`)
       }
     }
 
@@ -206,7 +243,7 @@ class Produit implements IProduit {
     else if (!this._coût_reviens) this._commentaire = `Rentabilité incalculable : coût de reviens inconnu`
     else {
       // Si les données d'entrées sont complète, on bascule en phase industrialisée et on calcule la rentabilité.
-      this._statut = StatutProduit.INDUS;
+      this._statut = "INDUS";
       this._rentabilité = (this._prix_estimé / this._coût_reviens) - 1;
       if (this._rentabilité > 0.15) this._commentaire = `Commercialisable`;
       else if (this._rentabilité > 0) this._commentaire = "Pour consommation interne";
@@ -217,4 +254,4 @@ class Produit implements IProduit {
 
 }
 
-export { Entité, Tarification, Recette, Inventaire, Produit, IProduit, Catalogue, StatutProduit, Tarif }
+export { Tarification, Recette, Inventaire, Produit, Catalogue, Tarif }

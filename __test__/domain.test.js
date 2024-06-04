@@ -1,7 +1,7 @@
-import { Catalogue, IProduit, Produit, Recette, StatutProduit, Tarif, Tarification } from "./domain";
+import { Catalogue, Produit, Recette, Tarif, Tarification }  from "../domain.js";
 
 describe("Vérification du fonctionnement du marché", () => {
-  let marché: Tarification;
+  let marché;
   let date_effet_existante = new Date("01/01/2010");
   let date_effet_antérieure = new Date("01/01/2000");
   let date_effet_postérieure = new Date("01/01/2020");
@@ -55,7 +55,7 @@ describe("Vérification du fonctionnement du marché", () => {
     vérifier(marché.tarif("Un objet connu"), "Un objet connu", 666, new Date());
   });
 
-  function vérifier(tarif: Tarif | undefined, nom: string, prix: number, date_effet: Date) {
+  function vérifier(tarif, nom, prix, date_effet) {
     expect(tarif?.nom).toBe(nom);
     expect(tarif?.prix).toBe(prix);
     expect(tarif?.date_effet?.toLocaleDateString())
@@ -64,13 +64,13 @@ describe("Vérification du fonctionnement du marché", () => {
 });
 
 describe("Vérification du fonctionnement du produit", () => {
-  let livre_recettes: Catalogue<Recette>;
-  let catalogue_produits: Catalogue<IProduit>;
-  let marché: Tarification;
+  let livre_recettes;
+  let catalogue_produits;
+  let marché;
 
   beforeEach(() => {
-    livre_recettes = new Catalogue<Recette>();
-    catalogue_produits = new Catalogue<Produit>();
+    livre_recettes = new Catalogue();
+    catalogue_produits = new Catalogue();
     marché = new Tarification();
 
     livre_recettes.inscrire(new Recette("Objet nominal simple", 5,
@@ -83,7 +83,7 @@ describe("Vérification du fonctionnement du produit", () => {
     livre_recettes.inscrire(new Recette("Objet composite simple", 5,
       [{ nom: "Ingrédient nominal 1", quantité: 5 }
         , { nom: "Ingrédient Produit 1", quantité: 1 }]))
-    catalogue_produits.inscrire({ nom: "Ingrédient Produit 1", coût_reviens: 10, date_effet: new Date(), rentabilité: 0.5, statut: StatutProduit.INDUS });
+    catalogue_produits.inscrire({ nom: "Ingrédient Produit 1", coût_reviens: 10, date_effet: new Date(), rentabilité: 0.5, statut: "INDUS" });
     marché.mise_a_jour("Ingrédient Produit 1", 15);
     marché.mise_a_jour("Objet composite simple", 18);
 
@@ -108,7 +108,7 @@ describe("Vérification du fonctionnement du produit", () => {
     // pour cause de problème de précision sur les opérations de division entre nombre, troncature
     expect(Math.floor((produit.rentabilité ?? 0) * 100)).toBe(-10);
     expect(produit.commentaire).toBe("Ne pas produire, il vaut mieux l'acheter");
-    expect(produit.statut).toBe(StatutProduit.INDUS);
+    expect(produit.statut).toBe("INDUS");
   });
 
   test(`Cas nominal d'un produit industrialisable contenant des ingrédients qui sont eux même des produits`, () => {
@@ -117,7 +117,7 @@ describe("Vérification du fonctionnement du produit", () => {
     // pour cause de problème de précision sur les opérations de division entre nombre, troncature
     expect(Math.floor((produit.rentabilité ?? 0) * 100)).toBe(30);
     expect(produit.commentaire).toBe("Commercialisable");
-    expect(produit.statut).toBe(StatutProduit.INDUS);
+    expect(produit.statut).toBe("INDUS");
   });
 
   test(`On ne peux pas créer de produit sans nom`, () => {
@@ -134,7 +134,7 @@ describe("Vérification du fonctionnement du produit", () => {
     expect(produit.coût_reviens).toBe(10);
     expect(produit.rentabilité).toBe(undefined);
     expect(produit.commentaire).toBe("Rentabilité incalculable : prix estimé inconnu");
-    expect(produit.statut).toBe(StatutProduit.INIT);
+    expect(produit.statut).toBe("INIT");
   });
 
   test(`Un produit pour lequel aucun ingrédient n'a de prix restera à l'état d'initialisation`, () => {
@@ -142,7 +142,7 @@ describe("Vérification du fonctionnement du produit", () => {
     expect(produit.coût_reviens).toBe(undefined);
     expect(produit.rentabilité).toBe(undefined);
     expect(produit.commentaire).toBe("Rentabilité incalculable : coût de reviens inconnu");
-    expect(produit.statut).toBe(StatutProduit.INIT);
+    expect(produit.statut).toBe("INIT");
   });
 
   test(`Un produit pour lequel au moins un ingrédient n'a pas de prix restera à l'état d'initialisation`, () => {
@@ -150,7 +150,7 @@ describe("Vérification du fonctionnement du produit", () => {
     expect(produit.coût_reviens).toBe(undefined);
     expect(produit.rentabilité).toBe(undefined);
     expect(produit.commentaire).toBe("Rentabilité incalculable : coût de reviens inconnu");
-    expect(produit.statut).toBe(StatutProduit.INIT);
+    expect(produit.statut).toBe("INIT");
   });
 
 });
