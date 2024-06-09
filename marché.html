@@ -49,7 +49,7 @@
     </div>
   </nav>
 
-  <div id="ajoutUnitaire" class="modal" tabindex="-1">
+  <div id="ajout_unitaire" class="modal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -57,16 +57,16 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler"></button>
         </div>
         <div class="modal-body">
-          <label for="nom_article_input" class="form-label">Nom de l'article</label>
-          <input type="text" id="nom_article_input" class="form-control" />
-          <label for="prix_article_input" class="form-label">Prix de l'article</label>
-          <input type="text" id="prix_article_input" class="form-control" />
-          <label for="date_effet_input" class="form-label">Prix de l'article</label>
-          <input type="date" id="date_effet_input" class="form-control" />
+          <label for="nom_article_unitaire_input" class="form-label">Nom de l'article</label>
+          <input type="text" id="nom_article_unitaire_input" class="form-control" />
+          <label for="prix_article_unitaire_input" class="form-label">Prix de l'article</label>
+          <input type="text" id="prix_article_unitaire_input" class="form-control" />
+          <label for="date_effet_unitaire_input" class="form-label">Prix de l'article</label>
+          <input type="date" id="date_effet_unitaire_input" class="form-control" />
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" id="btn-enregistrer-unitaire">Enregistrer</button>
+          <button type="button" class="btn btn-primary" id="btn_enregistrer_unitaire">Enregistrer</button>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
   </div>
 
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajoutUnitaire">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajout_unitaire">
       Mettre à jour un prix
     </button>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajoutMassif">
@@ -111,33 +111,59 @@
 
   <script type="module">
     import { Usine } from "./services.js"
-    const unicode_date_format = new Intl.DateTimeFormat("en-CA"); // pour formatage YYYY-MM-DD
+    const UNICODE_DATE_FORMAT = new Intl.DateTimeFormat("en-CA"); // pour formatage YYYY-MM-DD
+
+    const INPUT_NOM_ARTICLE_UNITAIRE = document.getElementById("nom_article_unitaire_input");
+    const INPUT_PRIX_ARTICLE_UNITAIRE = document.getElementById("prix_article_unitaire_input");
+    const INPUT_DATE_EFFET_UNITAIRE = document.getElementById("date_effet_unitaire_input");
+    const BOUTON_ENREGISTRER_UNITAIRE = document.getElementById("btn_enregistrer_unitaire");
 
     const usine = new Usine(localStorage.getItem("nom"), JSON.parse(localStorage.getItem("recettes"))
       , JSON.parse(localStorage.getItem("tarifs")), JSON.parse(localStorage.getItem("stock")));
 
-    document.querySelector("#date_effet_input").value = unicode_date_format.format(new Date());
-
+    préparerSaisieUnitaire();
     présenterTarifs();
-    let i = 0;
-    document.querySelector("#btn-enregistrer-unitaire").addEventListener("click", () => {
-      usine.évaluer("Recette auto " + ++i, i + Math.random());
-      updateStorage();
-      présenterTarifs();
-    })
 
+
+    function préparerSaisieUnitaire() {
+      INPUT_DATE_EFFET_UNITAIRE.value = UNICODE_DATE_FORMAT.format(new Date());
+      BOUTON_ENREGISTRER_UNITAIRE.addEventListener("click", () => {
+        // Propager l'évaluation dans l'usine
+        usine.évaluer(INPUT_NOM_ARTICLE_UNITAIRE.value, INPUT_PRIX_ARTICLE_UNITAIRE.value, INPUT_DATE_EFFET_UNITAIRE.value)
+        // Persister l'état de l'usine
+        updateStorage();
+        // Mettre ajour l'affichage
+        présenterTarifs();
+      })
+    }
     function présenterTarifs() {
       let html_tarif = (usine.tarifs.length > 0) ? "\n" : "<tr><td class='text-center' colspan='3'>Aucun tarif enregistré</td></tr>";
       for (const tarif of usine.tarifs) {
         html_tarif += `<tr><td>${tarif.nom}</td><td>${tarif.prix}</td><td>${tarif.date_effet.toLocaleDateString()}</td></tr>\n`
       }
-      document.querySelector("#tarifs-body").innerHTML = html_tarif;
+      document.getElementById("tarifs-body").innerHTML = html_tarif;
     }
     function updateStorage() {
       localStorage.setItem("tarifs", `[${usine.tarifs}]`);
       localStorage.setItem("recettes", JSON.stringify(usine.recettes));
       localStorage.setItem("stock", JSON.stringify(usine.stock));
     }
+
+    // let butin_brut = document.getElementById("butin").value;
+    // let butin_structuré = []
+    // butin_brut.split("\n").forEach(element => {
+    //   let ligne = /^(\d+)\t(.+)\t(\d+)\t(.+)$/.exec(element);
+    //   if (ligne) {
+    //     let [, ordre, nom, quantité_brut, valeur_brut] = ligne;
+    //     let quantité = Number.parseInt(quantité_brut);
+    //     let valeur = Number.parseFloat(valeur_brut);
+    //     if (quantité == 1)
+    //       butin_structuré.push({ ordre, nom, valeur })
+    //     else
+    //       for (let i = 0; i < quantité; i++) butin_structuré.push({ ordre, nom, valeur: valeur / quantité })
+    //   }
+    // });
+
   </script>
   <!-- End Example Code -->
 </body>
