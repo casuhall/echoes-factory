@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet"> -->
   <title>L'usine de production Eve Echoes style !</title>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script id="bootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body class="p-3 m-0 border-0 bd-example m-0 border-0">
@@ -49,7 +49,7 @@
     </div>
   </nav>
 
-  <div id="ajout_unitaire" class="modal" tabindex="-1">
+  <div id="ajout_unitaire_modal" class="modal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -66,34 +66,37 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" id="btn_enregistrer_unitaire">Enregistrer</button>
+          <button type="button" class="btn btn-primary" id="btn_enregistrer_unitaire"
+            data-bs-dismiss="modal">Enregistrer</button>
         </div>
       </div>
     </div>
   </div>
-  <div id="ajoutMassif" class="modal" tabindex="-1">
+  <div id="ajout_massif_modal" class="modal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
+          <h5 class="modal-title">Mise à jour de tarifs en masse !</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>Modal body text goes here.</p>
+          <label for="saisie_massif_input" class="form-label">Lot d'objets à évaluer</label>
+          <textarea id="saisie_massif_input" class="form-control"></textarea>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" id="btn_enregistrer_massif"
+            data-bs-dismiss="modal">Enregistrer</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajout_unitaire">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajout_unitaire_modal">
       Mettre à jour un prix
     </button>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajoutMassif">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajout_massif_modal">
       Mettre à jour en masse
     </button>
   </div>
@@ -111,58 +114,79 @@
 
   <script type="module">
     import { Usine } from "./services.js"
-    const UNICODE_DATE_FORMAT = new Intl.DateTimeFormat("en-CA"); // pour formatage YYYY-MM-DD
+    import { decodeEchoesListe } from "./presentation.js"
 
+    const NUMBER_FORMAT = new Intl.NumberFormat(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    const UNICODE_DATE_FORMAT = new Intl.DateTimeFormat("fr-FR"); // pour formatage YYYY-MM-DD
+
+    // Binding des éléments d'IHM
     const INPUT_NOM_ARTICLE_UNITAIRE = document.getElementById("nom_article_unitaire_input");
     const INPUT_PRIX_ARTICLE_UNITAIRE = document.getElementById("prix_article_unitaire_input");
     const INPUT_DATE_EFFET_UNITAIRE = document.getElementById("date_effet_unitaire_input");
     const BOUTON_ENREGISTRER_UNITAIRE = document.getElementById("btn_enregistrer_unitaire");
+    const INPUT_MASSIF = document.getElementById("saisie_massif_input");
+    const BOUTON_ENREGISTRER_MASSIF = document.getElementById("btn_enregistrer_massif");
+    const TARIF_TABLE_BODY = document.getElementById("tarifs-body");
 
     const usine = new Usine(localStorage.getItem("nom"), JSON.parse(localStorage.getItem("recettes"))
       , JSON.parse(localStorage.getItem("tarifs")), JSON.parse(localStorage.getItem("stock")));
 
     préparerSaisieUnitaire();
+    préparerSaisieMassive();
     présenterTarifs();
 
 
+    // Fonction de réparation de la fenêtre modale de saisie unitaire
     function préparerSaisieUnitaire() {
+      // date d'effet par defaut = date du jour
       INPUT_DATE_EFFET_UNITAIRE.value = UNICODE_DATE_FORMAT.format(new Date());
+      // Action à réaliser sur le click du bouton
       BOUTON_ENREGISTRER_UNITAIRE.addEventListener("click", () => {
         // Propager l'évaluation dans l'usine
-        usine.évaluer(INPUT_NOM_ARTICLE_UNITAIRE.value, INPUT_PRIX_ARTICLE_UNITAIRE.value, INPUT_DATE_EFFET_UNITAIRE.value)
+        usine.évaluer(INPUT_NOM_ARTICLE_UNITAIRE.value, INPUT_PRIX_ARTICLE_UNITAIRE.value, INPUT_DATE_EFFET_UNITAIRE.value);
         // Persister l'état de l'usine
         updateStorage();
         // Mettre ajour l'affichage
         présenterTarifs();
       })
     }
+
+    // Fonction de préparation de la saisie en masse
+    function préparerSaisieMassive() {
+      BOUTON_ENREGISTRER_MASSIF.addEventListener("click", () => {
+        let liste = decodeEchoesListe(INPUT_MASSIF.value);
+        for (const stack of liste) {
+          try {
+            usine.évaluer(stack.nom, stack.valeur / stack.quantité);
+          } catch (erreur) {
+            console.error("Échec à l'évaluation du prix", stack, erreur);
+          }
+        }
+        // Persister l'état de l'usine
+        updateStorage();
+        // Mettre ajour l'affichage
+        présenterTarifs();
+      });
+    }
+
+    // Fonction d'affichage du tableau à partir des données de l'usine
     function présenterTarifs() {
       let html_tarif = (usine.tarifs.length > 0) ? "\n" : "<tr><td class='text-center' colspan='3'>Aucun tarif enregistré</td></tr>";
       for (const tarif of usine.tarifs) {
-        html_tarif += `<tr><td>${tarif.nom}</td><td>${tarif.prix}</td><td>${tarif.date_effet.toLocaleDateString()}</td></tr>\n`
+        html_tarif += `<tr><td>${tarif.nom}</td><td class="text-end">${NUMBER_FORMAT.format(tarif.prix)}</td><td>${tarif.date_effet.toLocaleDateString("fr-FR")}</td></tr>\n`
       }
-      document.getElementById("tarifs-body").innerHTML = html_tarif;
+      TARIF_TABLE_BODY.innerHTML = html_tarif;
     }
+
+    // Fonction de stockage des données de l'usine
     function updateStorage() {
       localStorage.setItem("tarifs", `[${usine.tarifs}]`);
       localStorage.setItem("recettes", JSON.stringify(usine.recettes));
       localStorage.setItem("stock", JSON.stringify(usine.stock));
     }
-
-    // let butin_brut = document.getElementById("butin").value;
-    // let butin_structuré = []
-    // butin_brut.split("\n").forEach(element => {
-    //   let ligne = /^(\d+)\t(.+)\t(\d+)\t(.+)$/.exec(element);
-    //   if (ligne) {
-    //     let [, ordre, nom, quantité_brut, valeur_brut] = ligne;
-    //     let quantité = Number.parseInt(quantité_brut);
-    //     let valeur = Number.parseFloat(valeur_brut);
-    //     if (quantité == 1)
-    //       butin_structuré.push({ ordre, nom, valeur })
-    //     else
-    //       for (let i = 0; i < quantité; i++) butin_structuré.push({ ordre, nom, valeur: valeur / quantité })
-    //   }
-    // });
 
   </script>
   <!-- End Example Code -->

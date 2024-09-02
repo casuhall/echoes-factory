@@ -62,7 +62,7 @@ class Tarif {
   constructor(nom, prix, date_effet = new Date()) {
     if (!nom || nom.trim().length === 0)
       throw new Error("Nom de l'objet obligatoire.")
-    if (!prix || prix < 0)
+    if (isNaN(prix) || prix < 0)
       throw new Error(`Valeur positive attendue. valeur fournie : prix=${prix}`)
     this._nom = nom;
     this._prix = prix;
@@ -90,8 +90,6 @@ class Tarification {
   mise_a_jour(objet, prix, date = new Date()) {
     if (!objet || objet.trim().length === 0)
       throw new Error(`Objet à mettre à jour obligatoire. Fournis : objet=${objet}`);
-    if (!prix || prix < 0)
-      throw new Error(`Nombre positif attendu. Fournis : prix=${prix}`);
     let tarif = this._tarifs.get(objet)
     if (tarif && tarif.date_effet > date)
       throw new Error(`Un tarif plus recent existe déjà. Date de tarif existant : ${tarif.date_effet.toLocaleDateString()}, date de mise à jour souhaitée : ${date.toLocaleDateString()}`);
@@ -113,36 +111,47 @@ class Recette {
   _nom;
   /** @type {string} nom de recette, doit correspondre au nom de l'objet fabriqué. */
   get nom() { return this._nom; }
-
   /** @type {number} stockage interne des frais de fabrication. */
   _frais;
   /** @type {number} frais de fabrication, hors prix des ingrédients */
   get frais() { return this._frais; }
-
   /** @type {Map.<string,number>} stockage interne des ingrédients nécessaires (quantités par nom). */
   _ingrédients = new Map();
   /** @type {[nom:string,quantité:number][]} Liste immutable des ingrédients de la recette. */
-  get ingrédients() { return new Map(this._ingrédients) }
+  get ingrédients() { return new Map(this._ingrédients); }
+  /** @type {number} Quantité d'objets produits par un un cycle de fabrication. */
+  _quantité_produite;
+  get quantité_produite() { return this._quantité_produite; }
+  /** @type {number} Pourcentage de chance de succès. ]0,1] */
+  _chance_succès;
+  get chance_succès() { return this._chance_succès; }
 
   /** 
    * Création d'une recette cohérente (validité des inputs + dédoublonnage des ingrédients)
    * @param {string} nom nom de la recette (doit correspondre au nom de l'objet créé).
    * @param {number} frais frais de fabrication, hors prix des ingrédients.
    * @param {{nom:string,quantité:number}[]} ingrédients Liste des ingrédients nécessaire pour la fabrication.
+   * @param {number} [quantité_produite=1] Quantité d'objets produits par un un cycle de fabrication.
    */
-  constructor(nom, frais, ingrédients) {
+  constructor(nom, frais, ingrédients, quantité_produite = 1, chance_succès = 1) {
     if (!frais || frais < 0 || !Number.isInteger(frais))
       throw new Error(`Nombre entier positif attendu. fournis : frais=${frais}`);
     if (!nom || nom.trim().length === 0)
       throw new Error(`Nom de recette obligatoire`);
     if (!ingrédients || ingrédients.length === 0)
       throw new Error(`Au moins un ingrédient attendu pour former une recette`);
+    if (!quantité_produite || quantité_produite <= 0 || !Number.isInteger(quantité_produite))
+      throw new Error(`Quantité produite devrait être un entier positif. Valeur fournie quantité_produite=${quantité_produite}`);
+    if (!chance_succès || chance_succès <= 0 || chance_succès > 1)
+      throw new Error(`Les chances de succès devraient être comprises entre ]0,1]. Valeur fournie quantité_produite=${chance_succès}`);
     this._nom = nom;
     this._frais = frais;
-    ingrédients.forEach(ingrédient =>
+    this._quantité_produite = quantité_produite;
+    this._chance_succès = chance_succès;
+    for (const ingrédient of ingrédients) {
       this._ingrédients.set(ingrédient.nom,
         (this._ingrédients.get(ingrédient.nom) ?? 0) + ingrédient.quantité)
-    )
+    }
   }
 }
 
@@ -244,7 +253,7 @@ class Produit {
     else {
       // Si les données d'entrées sont complète, on bascule en phase industrialisée et on calcule la rentabilité.
       this._statut = "INDUS";
-      this._rentabilité = (this._prix_estimé / this._coût_reviens) - 1;
+      this._rentabilité = ((this._prix_estimé * recette.quantité_produite) / (this._coût_reviens / recette.chance_succès)) - 1;
       if (this._rentabilité > 0.15) this._commentaire = `Commercialisable`;
       else if (this._rentabilité > 0) this._commentaire = "Pour consommation interne";
       else this._commentaire = "Ne pas produire, il vaut mieux l'acheter";

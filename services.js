@@ -55,7 +55,7 @@ class Usine {
    * @param {Date} date
    */
   évaluer(objet, prix, date = new Date()) {
-    this._marché.mise_a_jour(objet, prix, date)
+    this._marché.mise_a_jour(objet, Number.parseFloat(prix), new Date(date))
   }
 
   étudeDeMarché() {
