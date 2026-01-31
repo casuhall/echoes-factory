@@ -1,8 +1,11 @@
 
 
-/** Décode une liste d'objet exportée par le jeu pour en extraire les données associées.
+/**
+ * Décode une liste d'objets exportée par le jeu pour en extraire les données associées.
+ * Analyse le format tabulé avec index, nom, quantité et valeur.
  * @param {string} value Une liste d'objets au format exportée par le jeu
  * @returns {{ index:string, nom:string, quantité:number, valeur:number }[]} la liste d'entrée décodée sous forme d'objet.
+ * @throws {Error} Si le format ne peut être analysé correctement
  */
 function decodeEchoesListe(value) {
   let liste = []
