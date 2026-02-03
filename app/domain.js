@@ -1,3 +1,4 @@
+
 /**
  * Catalogue de gestion d'une collection d'objets nommés.
  * Assure l'unicité des noms et permet la recherche, l'inscription et le retrait d'entrées.
@@ -52,14 +53,17 @@ class Tarif {
   #nom;
   /** @type {string} Nom de l'objet évalué. */
   get nom() { return this.#nom; };
+
   /** @type {number} Stockage interne du prix */
-  #prix;
+  #montant;
   /** @type {number} Prix de l'objet évalué */
-  get prix() { return this.#prix; };
+  get montant() { return this.#montant; };
+
   /** @type {Date} Sockage interne de la date d'effet */
   #date_effet;
-  /** @type {Date} Date de l'évaluation. */
+  /** @type {Date} Date de l'évaluation. réplicat pour maintenir l'immutabilité du tarif */
   get date_effet() { return new Date(this.#date_effet); };
+
   /** 
    * @param {string} nom Nom de l'objet évalué.
    * @param {number} prix Prix de l'objet évalué.
@@ -69,17 +73,17 @@ class Tarif {
   constructor(nom, prix, date_effet = new Date()) {
     if (!nom || nom.trim().length === 0)
       throw new Error("Nom de l'objet obligatoire.")
-    if (isNaN(prix) || prix < 0)
+    if (isNaN(prix) || prix <= 0)
       throw new Error(`Valeur positive attendue. valeur fournie : prix=${prix}`)
     this.#nom = nom;
-    this.#prix = prix;
+    this.#montant = prix;
     // Stockage d'une copie de la date pour immutabilité
     this.#date_effet = new Date(date_effet); // date_effet; //
   }
 
   /** Formatage de l'objet sous forme de chaîne de caractère compréhensible. */
   toString() {
-    return `{"nom":"${this.#nom}","prix":"${this.#prix}","date_effet":"${this.#date_effet.toLocaleDateString()}"}`
+    return `{"nom":"${this.#nom}","prix":"${this.#montant}","date_effet":"${this.#date_effet.toLocaleDateString()}"}`
   }
 }
 
@@ -104,7 +108,9 @@ class Tarification {
     let tarif = this.#tarifs.get(objet)
     if (tarif && tarif.date_effet > date)
       throw new Error(`Un tarif plus recent existe déjà. Date de tarif existant : ${tarif.date_effet.toLocaleDateString()}, date de mise à jour souhaitée : ${date.toLocaleDateString()}`);
-    this.#tarifs.set(objet, new Tarif(objet, prix, date));
+    let nouveau_tarif = new Tarif(objet, prix, date);
+    this.#tarifs.set(objet, nouveau_tarif);
+    return nouveau_tarif;
   }
 
   /**
@@ -113,6 +119,73 @@ class Tarification {
    */
   tarif(objet) {
     return this.#tarifs.get(objet);
+  }
+}
+
+/** Définition d'un ingrédient utilisé pour une recette.
+ * @typedef {Object} Ingrédient
+ * @property {string} nom Nom de l'ingrédient
+ * @property {number} quantité Quantité nécessaire de l'ingrédient 
+ * @property {Produit} [produit] Produit correspondant à l'ingrédient (optionnel)
+ * @property {number} [prix] Prix des ingrédients (calculé sur la quantité nécessaire et l'éventuel coût de production du produit correspondant)
+ */
+class Ingrédient {
+  /** @type {string} Stockage interne du nom de l'ingrédient */
+  #nom;
+  /** @type {string} Nom de l'ingrédient */
+  get nom() { return this.#nom; }
+
+  /** @type {number} Stockage interne de la quantité */
+  #quantité;
+  /** @type {number} Quantité nécessaire de l'ingrédient */
+  get quantité() { return this.#quantité; }
+
+  /** @type {Produit} Stockage interne du produit correspondant */
+  #produit;
+  /** @type {Produit} Produit correspondant à l'ingrédient (optionnel) */
+  get produit() { return this.#produit; }
+  /** @type {Produit} produit Produit correspondant à l'ingrédient (optionnel) */
+  set produit(produit) {
+    if (produit && (!(produit instanceof Produit) || produit.nom !== this.#nom))
+      throw new Error(`Produit non cohérent avec l'ingrédient '${this.#nom}'. Produit fourni : ${produit?.toString()}`);
+    this.#produit = produit;
+  }
+
+  #estimé_unitaire;
+  /** @type {number} Prix des ingrédients (calculé sur la quantité nécessaire et l'éventuel coût de production du produit correspondant) */
+  get prix() {
+    let prix_unitaire = this.#estimé_unitaire
+    if (this.#produit?.coût_reviens < prix_unitaire) {
+      prix_unitaire = this.#produit.coût_reviens;
+    }
+    return prix_unitaire * this.#quantité;
+  };
+
+  toString() {
+    return `{"nom":"${this.#nom}","quantité":${this.#quantité};"produit":${this.#produit}}`;
+  }
+
+  /**
+   * Création d'un ingrédient cohérent.
+   * @param {string} nom Nom de l'ingrédient
+   * @param {number} quantité Quantité nécessaire de l'ingrédient
+   * @param {Tarif} [tarif_unitaire] Tarif unitaire de l'ingrédient (optionnel)
+   * @param {Produit} [produit] Produit correspondant à l'ingrédient (optionnel)
+   * @throws {Error} Si les inputs sont incohérents.
+   */
+  constructor(nom, quantité, tarif_unitaire = undefined, produit = undefined) {
+    if (!nom || nom.trim().length === 0)
+      throw new Error(`Nom d'ingrédient obligatoire`);
+    if (!quantité || quantité <= 0 || !Number.isInteger(quantité))
+      throw new Error(`Quantité devrait être un entier positif. Valeur fournie quantité=${quantité}`);
+    this.#nom = nom;
+    this.#quantité = quantité;
+    if (tarif_unitaire) {
+      if (!(tarif_unitaire instanceof Tarif) || tarif_unitaire.nom !== nom)
+        throw new Error(`Un tarif unitaire valide et cohérent devrait être fourni pour l'ingrédeint ${nom}. Valeur fournie tarif_unitaire=${tarif_unitaire}`);
+      this.#estimé_unitaire = tarif_unitaire.montant;
+    }
+    if (produit) this.produit = produit;
   }
 }
 
@@ -129,22 +202,22 @@ class Recette {
   #frais;
   /** @type {number} frais de fabrication, hors prix des ingrédients */
   get frais() { return this.#frais; }
-  /** @type {Map.<string,number>} stockage interne des ingrédients nécessaires (quantités par nom). */
-  #ingrédients = new Map();
-  /** @type {[nom:string,quantité:number][]} Liste immutable des ingrédients de la recette. */
-  get ingrédients() { return new Map(this.#ingrédients); }
-  /** @type {number} Quantité d'objets produits par un un cycle de fabrication. */
+  /** @type {Ingrédient[]} stockage interne des ingrédients nécessaires. */
+  #ingrédients = [];
+  /** @type {Ingrédient[]} Liste immutable des ingrédients de la recette. */
+  get ingrédients() { return [...this.#ingrédients]; }
   #quantité_produite;
+  /** @type {number} Quantité d'objets produits par un un cycle de fabrication. */
   get quantité_produite() { return this.#quantité_produite; }
-  /** @type {number} Pourcentage de chance de succès. ]0,1] */
   #chance_de_succès;
+  /** @type {number} Pourcentage de chance de succès. ]0,1] */
   get chances_de_succès() { return this.#chance_de_succès; }
 
   /** 
-   * Création d'une recette cohérente (validité des inputs + dédoublonnage des ingrédients)
+   * Création d'une recette cohérente.
    * @param {string} nom nom de la recette (doit correspondre au nom de l'objet créé).
    * @param {number} frais frais de fabrication, hors prix des ingrédients.
-   * @param {{nom:string,quantité:number}[]} ingrédients Liste des ingrédients nécessaire pour la fabrication.
+   * @param {Ingrédient[]} ingrédients Liste des ingrédients nécessaire pour la fabrication.
    * @param {number} [quantité_produite=1] Quantité d'objets produits par un un cycle de fabrication.
    * @throws {Error} Si les inputs sont incohérents.
    */
@@ -163,9 +236,14 @@ class Recette {
     this.#frais = frais;
     this.#quantité_produite = quantité_produite;
     this.#chance_de_succès = chance_succès;
+    let synthyse_ingrédient = [];
     for (const ingrédient of ingrédients) {
-      this.#ingrédients.set(ingrédient.nom,
-        (this.#ingrédients.get(ingrédient.nom) ?? 0) + ingrédient.quantité)
+      if (!ingrédient || !(ingrédient instanceof Ingrédient))
+        throw new Error(`Ingrédient non cohérent. Fournis : ${JSON.stringify(ingrédient)}`);
+      if (synthyse_ingrédient.includes(ingrédient.nom))
+        throw new Error(`Ingrédient dupliqué dans la recette : ${ingrédient.nom}`);
+      synthyse_ingrédient.push(ingrédient.nom);
+      this.#ingrédients.push(ingrédient);
     }
   }
 }
@@ -230,69 +308,60 @@ class Produit {
   #nom;
   /** @type {string} Nom du produit */
   get nom() { return this.#nom; }
+
   #rentabilité;
-  /** @type {number} Rentabilité calculée du produit */
-  get rentabilité() { return this.#rentabilité };
+  /** @type {number} Rentabilité calculée du produit ]-1,1[ (arrondi à deux chiffres après la virgule) */
+  get rentabilité() { return this.#rentabilité ? Math.round(this.#rentabilité * 100) / 100 : undefined };
+
   #prix_estimé;
+  /** @type {number} Prix estimé du produit */
+  get prix_estimé() { return this.#prix_estimé };
+
   #coût_reviens;
   /** @type {number} Coût de reviens du produit */
   get coût_reviens() { return this.#coût_reviens };
+
+  #recette;
+  /** @type {Recette} Recette du produit */
+  get recette() { return this.#recette };
+
   #statut;
-  /** @type {string} Statut du produit (INIT ou INDUS) */
+  /** @type {string} Statut du produit (NA/BUY/BUILD) */
   get statut() { return this.#statut; }
+
   #date_effet = new Date();
   /** @type {Date} Date de l'évaluation la plus ancienne */
   get date_effet() { return new Date(this.#date_effet); };
   #updateDateEffet(date) { this.#date_effet = (date < this.#date_effet) ? new Date(date) : this.#date_effet; }
+
   #commentaire = '';
   /** @type {string} Commentaire sur la rentabilité du produit */
   get commentaire() { return this.#commentaire; }
 
   /**
-   * Initialisation d'un produit à partir du livre de recette et du catalogue de produits de l'usine.
-   * @param {string} nom Nom du produit (doit correspondre au nom d'une recette)
-   * @param {Catalogue} livre_recettes Catalogue des recettes disponibles
-   * @param {Catalogue} catalogue_produits Catalogue des produits déjà créés
-   * @param {Tarification} marché Tarification du marché
-   * @throws {Error} Si le nom est vide, la recette inexistante, ou le produit existe déjà
+   * Initialisation d'un produit à partir de sa recette.
+   * @param {Recette} recette Recette du produit à initialiser
+   * @param {Tarif} [tarif] Tarif du produit
+   * @throws {Error} Si la recette est invalide, ou le produit existe déjà
    */
-  constructor(nom, livre_recettes, catalogue_produits, marché) {
-    this.#statut = "INIT";
+  constructor(recette, tarif = undefined) {
+    this.#statut = "NA";
+    if (!(recette instanceof Recette))
+      throw new Error(`Recette invalide : ${recette}`);
+    this.#recette = recette;
+    this.#nom = recette.nom;
+    if (tarif) {
+      if (!(tarif instanceof Tarif) || tarif.nom !== this.#nom)
+        throw new Error(`Un tarif valide et cohérent devrait être fourni pour le produit ${this.#nom}. Valeur fournie tarif=${tarif}`);
+      this.#prix_estimé = tarif.montant;
+      this.#updateDateEffet(tarif.date_effet);
+    }
 
-    if (!nom?.trim())
-      throw new Error(`Nom de produit obligatoire`);
-    this.#nom = nom;
-    this.#prix_estimé = marché.tarif(nom)?.prix;
-
-    // Vérifier l'absence de produit déjà au catalogue portant le même nom.
-    if (catalogue_produits.rechercher(nom))
-      throw new Error(`Produit ${nom} déjà inscrit au catalogue, création impossible.`);
-
-    // Trouver la recette correspondant au produit
-    const recette = livre_recettes.rechercher(nom);
-    if (!recette)
-      throw new Error(`Recette introuvable pour la fabrication du produit ${nom}`);
-
-    // Pour chaque ingrédient de la recette, trouver le prix des objets au marché et vérifier la présence d'un produit
     this.#coût_reviens = recette.frais;
-    for (const [ingrédient, quantité] of recette.ingrédients) {
-
-      // Récupération du tarif de l'ingrédient au marché s'il existe
-      let prix_ingrédient;
-      let tarif_ingrédient = marché.tarif(ingrédient);
-      if (tarif_ingrédient) {
-        prix_ingrédient = tarif_ingrédient.prix;
-        this.#updateDateEffet(tarif_ingrédient.date_effet);
-      }
-
-      // Récupération du coût de reviens au catalogue si le produit existe
-      let ingrédient_produit = catalogue_produits.rechercher(ingrédient);
-      if (ingrédient_produit?.coût_reviens && prix_ingrédient > ingrédient_produit.coût_reviens) {
-        prix_ingrédient = ingrédient_produit.coût_reviens;
-        this.#updateDateEffet(ingrédient_produit.date_effet);
-      }
+    for (const ingrédient of recette.ingrédients) {
+      let prix_ingrédient = ingrédient.prix
       if (prix_ingrédient && this.#coût_reviens) {
-        this.#coût_reviens += prix_ingrédient * quantité;
+        this.#coût_reviens += prix_ingrédient;
       } else { // coût incalculable tarif manquant sur l'ingrédient en cours ou un précédent
         this.#coût_reviens = undefined;
       }
@@ -303,154 +372,24 @@ class Produit {
     else if (!this.#coût_reviens) this.#commentaire = `Rentabilité incalculable : coût de reviens inconnu`
     else {
       // Si les données d'entrées sont complète, on bascule en phase industrialisée et on calcule la rentabilité.
-      this.#statut = "INDUS";
-      this.#rentabilité = ((this.#prix_estimé * recette.quantité_produite) / (this.#coût_reviens / recette.chance_succès)) - 1;
-      if (this.#rentabilité > 0.15) this.#commentaire = `Commercialisable`;
-      else if (this.#rentabilité > 0) this.#commentaire = "Pour consommation interne";
-      else this.#commentaire = "Ne pas produire, il vaut mieux l'acheter";
+      this.#rentabilité = ((this.#prix_estimé * recette.quantité_produite) / (this.#coût_reviens / recette.chances_de_succès)) - 1;
+      if (this.#rentabilité > 0.15) {
+        this.#statut = "BUILD";
+        this.#commentaire = `Commercialisable`;
+      } else if (this.#rentabilité > 0) {
+        this.#statut = "BUILD";
+        this.#commentaire = "Pour consommation interne";
+      }
+      else {
+        this.#statut = "BUY";
+        this.#commentaire = "Ne pas produire, il vaut mieux l'acheter";
+      }
     }
 
   }
-
+  toString() {
+    return `{"nom":"${this.#nom}","statut":"${this.#statut}","prix_estimé":${this.#prix_estimé},"coût_reviens":${this.#coût_reviens},"rentabilité":${this.#rentabilité},"date_effet":"${this.#date_effet.toLocaleDateString()}","commentaire":"${this.#commentaire}"}`;
+  }
 }
 
-
-/**
- * Usine de production avec gestion des recettes, tarifs, stock et produits.
- * Coordonne l'étude de marché et le calcul de rentabilité des produits.
- */
-class Usine {
-  #nom;
-  #inventaire = new Inventaire();
-  /** @type {[nom:string,quantité:number][]} Stock courant de l'usine */
-  get stock() { return this.#inventaire.stock; }
-  /** catalogue des recettes connues de l'usine */
-  #livre_recettes = new Catalogue();
-  /** @type {Recette[]} Ensemble des recettes disponibles */
-  get recettes() { return this.#livre_recettes.fiches };
-  /** catalogue des objets pouvant être produits dans l'usine */
-  #catalogue_produits = new Catalogue();
-  /** @type {Produit[]} Ensemble des produits étudiés */
-  get produits() { return this.#catalogue_produits.fiches; }
-  #marché = new Tarification();
-  /** @type {Tarif[]} Ensemble des tarifs du marché */
-  get tarifs() { return this.#marché.tarifs; }
-
-  /**
-   * Initialisation de l'usine avec ses recettes, tarifs et stock initiaux.
-   * @param {string} nom Nom de l'usine
-   * @param {Recette[]} [recettes] Liste des recettes à inscrire au livre de recettes
-   * @param {Tarif[]} [tarifs] Liste des tarifs initiaux du marché
-   * @param {{nom:string,quantité:number}[]} [stock] Stock initial de l'usine
-   */
-  constructor(nom, recettes, tarifs, stock) {
-    this.#nom = nom;
-    if (stock) for (const stack of stock) {
-      try {
-        this.#inventaire.ajoute(stack.nom, stack.quantité);
-      } catch (error) {
-        console.log(`Stack non inscrite à l'inventaire : ${JSON.stringify(stack)}. Cause : ${error.message}.`);
-      }
-    }
-    if (recettes) for (const recette of recettes) {
-      try {
-        this.#livre_recettes.inscrire(recette);
-      } catch (error) {
-        console.log(`Recette non inscrite au livre de recette : ${recette?.nom}. Cause : ${error.message}.`);
-      }
-    }
-    if (tarifs) for (const tarif of tarifs) {
-      try {
-        this.#marché.mise_a_jour(tarif.nom, tarif.prix, tarif.date_effet);
-      } catch (error) {
-        console.log(`Tarif non inscrit au marché : ${JSON.stringify(tarif)}. Cause : ${error.message}.`);
-      }
-    }
-
-    // Initialisation du catalogue correspondant
-    this.étudeDeMarché();
-
-  }
-
-  /**
-   * Ajoute une recette au livre de recettes et initialise le produit correspondant.
-   * @param {Recette} recette Recette à ajouter
-   * @throws {Error} Si une recette avec le même nom existe déjà
-   */
-  ajouteRecette(recette) {
-    this.#livre_recettes.inscrire(recette);
-    this.#initProduit(recette.nom);
-  }
-
-  /**
-   * Recherche d'un produit par son nom.
-   * @param {string} nom Nom du produit à rechercher
-   * @returns {Produit|undefined} Le produit correspondant s'il existe, sinon undefined
-   */
-  produit(nom) {
-    return this.#catalogue_produits.rechercher(nom);
-  }
-
-  /**
-   * Évalue un objet au marché en mettant à jour son tarif.
-   * @param {string} objet Nom de l'objet à évaluer
-   * @param {number} prix Nouveau prix de l'objet
-   * @param {Date} [date=new Date()] Date de l'évaluation
-   * @throws {Error} Si un tarif plus récent existe déjà
-   */
-  évaluer(objet, prix, date = new Date()) {
-    this.#marché.mise_a_jour(objet, Number.parseFloat(prix), new Date(date))
-  }
-
-  /**
-   * Réinitialise le catalogue des produits en étudiant le marché.
-   * Crée les produits en gérant les dépendances entre recettes.
-   * @throws {Error} Si les recettes forment une boucle infinie
-   */
-  étudeDeMarché() {
-    if (this.#catalogue_produits?.index?.length)
-      console.log(`Réinitialisation du catalogue précédent contenant ${this.#catalogue_produits.index.length} produits`)
-    this.#catalogue_produits = new Catalogue();
-    // tentative de création de produit pour chaque recette du livre
-    let produits_potentiels = this.#livre_recettes.index;
-    let fusible = 0;
-    while (produits_potentiels.length > 1) {
-      produits_potentiels = this.#initProduit(produits_potentiels.shift() ?? '', ...produits_potentiels);
-      if (++fusible > 999) {
-        throw new Error(`Erreur à l'étude du marché, les recettes formes probablement une boucle infinie : ${produits_potentiels}`);
-      }
-    }
-  }
-
-  /**
-   * Initialise un produit et traite ses dépendances de manière récursive.
-   * Retarde l'initialisation des produits dont la recette contient d'autres produits potentiels.
-   * @param {string} nom_produit Nom du produit à initialiser
-   * @param {...string} produits_potentiels Noms des produits restants à traiter
-   * @returns {string[]} Liste des produits retardés pour traitement ultérieur
-   * @private
-   */
-  #initProduit(nom_produit, ...produits_potentiels) {
-    // constitution d'une liste de produits à recalculé lors d'une itération ultérieur
-    let produits_retardés = [];
-    let recette = this.#livre_recettes.rechercher(nom_produit);
-    if (recette) {
-      let ingrédient_produit_potentiel = false;
-      for (const [nom_ingrédient] of recette.ingrédients.entries()) {
-        ingrédient_produit_potentiel ||= (produits_potentiels.includes(nom_ingrédient));
-      }
-      if (ingrédient_produit_potentiel)
-        // si la recette du produit en cours contient un potentiel autre produit, mettre de côté le produit en cours pour calcul ultérieur
-        produits_retardés.push(nom_produit);
-      else
-        this.#catalogue_produits.inscrire(new Produit(nom_produit, this.#livre_recettes, this.#catalogue_produits, this.#marché));
-    }
-
-    if (produits_potentiels.length) // s'il reste des produits potentiels, traitons le suivant !
-      produits_retardés.push(...this.#initProduit(produits_potentiels.shift() ?? '', ...produits_potentiels));
-    return produits_retardés;
-  }
-
-}
-
-export { Tarification, Recette, Inventaire, Produit, Catalogue, Tarif, Usine }
+export { Tarification, Recette, Inventaire, Produit, Catalogue, Tarif, Ingrédient };

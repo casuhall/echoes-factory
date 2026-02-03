@@ -1,41 +1,115 @@
 import { expect } from 'chai';
-import { Usine, Recette, Tarif, Inventaire, Catalogue, Produit, Tarification } from '../app/domain.js';
+import { Recette, Tarif, Inventaire, Catalogue, Produit, Tarification, Ingrédient } from '../app/domain.js';
 
-describe('Usine - Gestion complète', () => {
+describe('Fonctionnement des objets du domaine.', () => {
 
-    beforeEach(() => {
+    describe('Fonctionnement des Ingrédients', () => {
+
+        it('Un ingrédient est créé avec un nom et une quantité', () => {
+            let ingredient = new Ingrédient('Ingredient1', 2);
+            expect(ingredient.nom).to.equal('Ingredient1');
+            expect(ingredient.quantité).to.equal(2);
+        });
+
+        it('Un ingrédient ne peut être créé sans nom', () => {
+            expect(() => new Ingrédient(null, 2)).to.throw(Error);
+        });
+
+        it('Un ingrédient ne peut être créé avec une quantité négative ou nulle', () => {
+            expect(() => new Ingrédient('Ingredient1', -1)).to.throw(Error);
+            expect(() => new Ingrédient('Ingredient1', 0)).to.throw(Error);
+        });
+
+        it('Un ingrédient ne peut être créé avec une quantité non entière', () => {
+            expect(() => new Ingrédient('Ingredient1', 2.5)).to.throw(Error);
+        });
+
+        it(`le prix unitaire d'un ingrédient (s'il est renseigné) doit être strictement positif.
+        Il son prix estimé doit refléter sa valeur au regard de sa quantité.`, () => {
+            let ingrédient = new Ingrédient('Ingredient1', 10, new Tarif('Ingredient1', 15));
+            expect(ingrédient.prix).to.equal(150);
+            ingrédient = new Ingrédient('Ingredient1', 10, new Tarif('Ingredient1', 0.5));
+            expect(ingrédient.prix).to.equal(5);
+        })
+
+        it('Un ingrédient ne peut être créé avec un produit inconsistant', () => {
+            expect(() => new Ingrédient('Ingredient1', 1, undefined, { nom: 'ProduitInconsistant', prix: 10 })).to.throw(Error);
+            let produitInconsistant = new Produit(new Recette('ProduitInconsistant', 10, [new Ingrédient('SousIngredient1', 1)]));
+            expect(() => new Ingrédient('Ingredient1', 1, undefined, produitInconsistant)).to.throw(Error);
+        });
     });
 
-    describe('Comportement attendu d\'une nouvelle usine', () => {
-        /**
-         * @type {Usine}
-         */
-        let usine;
+    describe('Fonctionnement du Produit', () => {
+        let recette_simple, recette_multiple, recette_non_tarifée;
 
-        beforeEach(() => { usine = new Usine("Une usine toute neuve"); });
-
-        it('Les catalogues, recettes et stocks sont initialisés à vide', () => {
-            expect(usine.recettes).to.exist;
-            expect(usine.recettes.length).to.be.equal(0);
-            expect(usine.produits).to.exist;
-            expect(usine.produits.length).to.be.equal(0);
-            expect(usine.stock).to.exist;
-            expect(usine.stock.length).to.be.equal(0);
-        });
-
-        it('L\'ajout d\'une recette initialise le produit correspondant', () => {
-            const recette = new Recette("Épée", 100, [
-                { nom: "Fer", quantité: 3 },
-                { nom: "Cuir", quantité: 1 }
+        beforeEach(() => {
+            recette_non_tarifée = new Recette('NonTarifée', 50, [
+                new Ingrédient('Ingredient1', 2),
+                new Ingrédient('Ingredient2', 3)
             ]);
-            usine.ajouteRecette(recette);
-            expect(usine.produits.length).to.be.equal(1);
-            expect(usine.produit("Épée")).to.exist;
-            expect(usine.produit("Épée").nom).to.be.equal("Épée");
-            expect(usine.produit("Épée").).to.exist;
+            recette_simple = new Recette('Simple', 50, [
+                new Ingrédient('Ingredient1', 2, new Tarif('Ingredient1', 10)),
+                new Ingrédient('Ingredient2', 3, new Tarif('Ingredient2', 20))
+            ]);
+            recette_multiple = new Recette('Multiple', 50, [
+                new Ingrédient('Ingredient1', 2, new Tarif('Ingredient1', 10)),
+                new Ingrédient('Ingredient2', 3, new Tarif('Ingredient2', 20))
+            ], 10);
         });
 
+        it('Un produit ne peutpas être créé sans recette valide', () => {
+            expect(() => new Produit(null)).to.throw(Error);
+            expect(() => new Produit({ nom: 'RecetteInvalide', ingrédients: [] })).to.throw(Error);
+        });
 
+        it('Un produit créé avec une recette non tarifée, ne pourra pas être tarrrifé', () => {
+            let produit = new Produit(recette_non_tarifée);
+            expect(produit.recette).to.deep.equal(recette_non_tarifée);
+            expect(produit.prix_estimé).to.be.undefined;
+            expect(produit.coût_reviens).to.be.undefined;
+            expect(produit.rentabilité).to.be.undefined;
+            expect(produit.statut).to.equal('NA');
+        });
+
+        it('Un produit créé avec une recette simple est rentable (à produire) si son coût de reviens est inférieur à son prix estimé', () => {
+            let produit = new Produit(recette_simple, new Tarif("Simple", 180));
+            expect(produit.recette).to.deep.equal(recette_simple);
+            expect(produit.coût_reviens).to.equal(130); // 50+(2*10)+(3*20)
+            expect(produit.prix_estimé).to.equal(180);
+            expect(produit.rentabilité).to.equal(0.38); // (180-130)/130 = 50/130 = 0.3846... => 0.38
+            expect(produit.statut).to.equal('BUILD');
+        });
+
+        it('Un produit créé avec une recette simple n\'est pas rentable (à acheter) si son coût de reviens est supérieur à son prix estimé', () => {
+            let produit = new Produit(recette_simple, new Tarif("Simple", 100));
+            expect(produit.recette).to.deep.equal(recette_simple);
+            expect(produit.coût_reviens).to.equal(130); // 50+(2*10)+(3*20)
+            expect(produit.prix_estimé).to.equal(100);
+            expect(produit.rentabilité).to.equal(-0.23); // (100-130)/130 = -30/130 = -0.2307... => -0.23
+            expect(produit.statut).to.equal('BUY');
+        });
+
+        it('En cas de sous produit, si celui-ci est plus rentable à produire, c\'est le cout de reviens qui sera utilisé dans le calcul du cout de reviens du produit englobant', () => {
+            let produit_simple = new Produit(recette_simple, new Tarif("Simple", 180));
+            let recette_imbriquée = new Recette('imbriquée', 50, [
+                new Ingrédient('Simple', 2, new Tarif('Simple', 180), produit_simple),
+                new Ingrédient('Ingredient2', 3, new Tarif('Ingredient2', 20))
+            ], 10);
+            let produit = new Produit(recette_imbriquée);
+            expect(produit.coût_reviens).to.equal(370); // 50+(2*130)+(3*20) = 370
+        });
+        it('En cas de sous produit, si celui-ci est plus rentable à acheter, c\'est le prix estimé qui sera utilisé dans le calcul du cout de reviens du produit englobant', () => {
+            let produit_simple = new Produit(recette_simple, new Tarif("Simple", 100));
+            let recette_imbriquée = new Recette('imbriquée', 50, [
+                new Ingrédient('Simple', 2, new Tarif('Simple', 100), produit_simple),
+                new Ingrédient('Ingredient2', 3, new Tarif('Ingredient2', 20))
+            ], 10);
+            let produit = new Produit(recette_imbriquée);
+            expect(produit.coût_reviens).to.equal(310); // 50+(2*100)+(3*20) = 310
+        });
+        it.skip('Un produit initialise sa tarfication à la création', () => { });
+
+        it.skip('Un produit peut mettre à jour sa tarification en fonction du catalogue sur réception d\'évènement', () => { });
     });
 
 });

@@ -5,14 +5,15 @@
   "main": "index.js",
   "type": "module",
   "devDependencies": {
-    "mocha": "^10.2.0",
-    "chai": "^4.3.8",
-    "sinon": "^15.2.0",
-    "nodemon": "^3.1.4"
+    "chai": "4.3.8",
+    "mocha": "10.8.2",
+    "nodemon": "3.1.4",
+    "nyc": "17.1.0",
+    "sinon": "15.2.0"
   },
   "scripts": {
     "test": "mocha --exit \"__test__/**/*.test.js\"",
-    "test:watch": "mocha --watch --exit \"__test__/**/*.test.js\""
+    "test:nodemon": "nodemon --exec npm test || exit 1"
   },
   "repository": {
     "type": "git",
