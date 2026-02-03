@@ -80,7 +80,7 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(produit.statut).to.equal('BUILD');
         });
 
-        it('Un produit créé avec une recette simple n\'est pas rentable (à acheter) si son coût de reviens est supérieur à son prix estimé', () => {
+        it('Un produit créé avec une recette simple n est pas rentable (à acheter) si son coût de reviens est supérieur à son prix estimé', () => {
             let produit = new Produit(recette_simple, new Tarif("Simple", 100));
             expect(produit.recette).to.deep.equal(recette_simple);
             expect(produit.coût_reviens).to.equal(130); // 50+(2*10)+(3*20)
@@ -89,7 +89,7 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(produit.statut).to.equal('BUY');
         });
 
-        it('En cas de sous produit, si celui-ci est plus rentable à produire, c\'est le cout de reviens qui sera utilisé dans le calcul du cout de reviens du produit englobant', () => {
+        it('En cas de sous produit, si celui-ci est plus rentable à produire, c est le cout de reviens qui sera utilisé dans le calcul du cout de reviens du produit englobant', () => {
             let produit_simple = new Produit(recette_simple, new Tarif("Simple", 180));
             let recette_imbriquée = new Recette('imbriquée', 50, [
                 new Ingrédient('Simple', 2, new Tarif('Simple', 180), produit_simple),
@@ -98,7 +98,7 @@ describe('Fonctionnement des objets du domaine.', () => {
             let produit = new Produit(recette_imbriquée);
             expect(produit.coût_reviens).to.equal(370); // 50+(2*130)+(3*20) = 370
         });
-        it('En cas de sous produit, si celui-ci est plus rentable à acheter, c\'est le prix estimé qui sera utilisé dans le calcul du cout de reviens du produit englobant', () => {
+        it('En cas de sous produit, si celui-ci est plus rentable à acheter, c est le prix estimé qui sera utilisé dans le calcul du cout de reviens du produit englobant', () => {
             let produit_simple = new Produit(recette_simple, new Tarif("Simple", 100));
             let recette_imbriquée = new Recette('imbriquée', 50, [
                 new Ingrédient('Simple', 2, new Tarif('Simple', 100), produit_simple),
@@ -107,9 +107,6 @@ describe('Fonctionnement des objets du domaine.', () => {
             let produit = new Produit(recette_imbriquée);
             expect(produit.coût_reviens).to.equal(310); // 50+(2*100)+(3*20) = 310
         });
-        it.skip('Un produit initialise sa tarfication à la création', () => { });
-
-        it.skip('Un produit peut mettre à jour sa tarification en fonction du catalogue sur réception d\'évènement', () => { });
     });
 
 });

@@ -151,10 +151,17 @@ class Ingrédient {
     this.#produit = produit;
   }
 
+  /** @type {Tarif} Stockage interne du tarif unitaire estimé */
   #estimé_unitaire;
+  /** @param {Tarif} tarif Tarif unitaire estimé de l'ingrédient */
+  set estimé_unitaire(tarif) {
+    if (tarif && (!(tarif instanceof Tarif) || tarif.nom !== this.#nom))
+      throw new Error(`Tarif non cohérent avec l'ingrédient '${this.#nom}'. Tarif fourni : ${tarif?.toString()}`);
+    this.#estimé_unitaire = tarif;
+  }
   /** @type {number} Prix des ingrédients (calculé sur la quantité nécessaire et l'éventuel coût de production du produit correspondant) */
   get prix() {
-    let prix_unitaire = this.#estimé_unitaire
+    let prix_unitaire = this.#estimé_unitaire?.montant ?? undefined;
     if (this.#produit?.coût_reviens < prix_unitaire) {
       prix_unitaire = this.#produit.coût_reviens;
     }
@@ -183,7 +190,7 @@ class Ingrédient {
     if (tarif_unitaire) {
       if (!(tarif_unitaire instanceof Tarif) || tarif_unitaire.nom !== nom)
         throw new Error(`Un tarif unitaire valide et cohérent devrait être fourni pour l'ingrédeint ${nom}. Valeur fournie tarif_unitaire=${tarif_unitaire}`);
-      this.#estimé_unitaire = tarif_unitaire.montant;
+      this.#estimé_unitaire = tarif_unitaire;
     }
     if (produit) this.produit = produit;
   }

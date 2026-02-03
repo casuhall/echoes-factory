@@ -68,6 +68,14 @@ class Usine {
         if (this.produit(recette.nom)) {
             throw new Error(`Produit ${recette.nom} déjà inscrit au catalogue, création impossible.`);
         }
+        // Estimation du prix des ingrédients de la recette
+        for (const ingrédient of recette.ingrédients) {
+            let tarif_ingrédient = this.#marché.tarif(ingrédient.nom);
+            if (tarif_ingrédient) {
+                ingrédient.estimé_unitaire = tarif_ingrédient;
+            }
+        }
+        // Création du produit en fonction de la recette et de son prix sur le marché
         let produit = new Produit(recette, this.#marché.tarif(recette.nom));
         this.#catalogue_produits.inscrire(produit);
         this.#gestionnaire_evenements.produit("maj_produit", recette.nom);
