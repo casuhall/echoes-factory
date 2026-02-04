@@ -73,7 +73,6 @@ class Usine {
                 produit_dépendant.évaluer(tarif);
             });
         }
-        if 
     }
 
     /**

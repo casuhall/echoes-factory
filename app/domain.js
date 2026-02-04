@@ -270,7 +270,7 @@ class Inventaire {
    * @param {string} objet Nom de l'objet à vérifier
    * @returns {number} Quantité en stock (0 si absent)
    */
-  getStock(objet) {
+  quantité_en_stock(objet) {
     return this.#objets.get(objet) ?? 0;
   }
 
@@ -282,9 +282,9 @@ class Inventaire {
    * @throws {Error} Si la quantité n'est pas un entier positif
    */
   ajoute(objet, quantité) {
-    if (!quantité || quantité < 0 || (quantité % 0) !== quantité)
+    if (!quantité || quantité < 0 || Number.isInteger(quantité) === false)
       throw new Error(`Nombre entier positif attendu. fournis : quantité=${quantité}`)
-    let nouveau_stock = this.getStock(objet) + quantité;
+    let nouveau_stock = this.quantité_en_stock(objet) + quantité;
     this.#objets.set(objet, nouveau_stock);
     return nouveau_stock;
   }
@@ -297,7 +297,9 @@ class Inventaire {
    * @throws {Error} Si la quantité demandée dépasse le stock disponible
    */
   retire(objet, quantité) {
-    let stock = this.getStock(objet);
+    if (!quantité || quantité < 0 || Number.isInteger(quantité) === false)
+      throw new Error(`Nombre entier positif attendu. fournis : quantité=${quantité}`)
+    let stock = this.quantité_en_stock(objet);
     if (stock < quantité) {
       throw new Error(`Impossible de retirer ${quantité} ${objet}. Seuls ${stock} disponibles`)
     }
@@ -365,7 +367,7 @@ class Produit {
    * @param {Tarif} tarif 
    */
   évaluer(tarif) {
-    if(tarif && !(tarif instanceof Tarif))
+    if (tarif && !(tarif instanceof Tarif))
       throw new Error(`Tarif invalide : ${tarif}`);
     if (tarif?.nom === this.#nom) {
       this.#prix_estimé = tarif?.montant;

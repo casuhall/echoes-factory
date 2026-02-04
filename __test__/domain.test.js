@@ -83,7 +83,7 @@ describe('Fonctionnement des objets du domaine.', () => {
         it('Un produit créé avec une recette simple n est pas rentable (à acheter) si son coût de reviens est supérieur à son prix estimé', () => {
             let produit = new Produit(recette_simple, new Tarif("Simple", 100));
             expect(produit.recette).to.deep.equal(recette_simple);
-            expect(produit.coût_reviens).to.equal(130); // 50+(2*10)+(3*20)
+            expect(produit.coût_reviens).to.equal(130); // 50+(2*10)+(3*20) = 130
             expect(produit.prix_estimé).to.equal(100);
             expect(produit.rentabilité).to.equal(-0.23); // (100-130)/130 = -30/130 = -0.2307... => -0.23
             expect(produit.statut).to.equal('BUY');
@@ -108,7 +108,6 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(produit.coût_reviens).to.equal(310); // 50+(2*100)+(3*20) = 310
         });
     });
-
 
     describe("Fonctionnement du catalogue des produits", () => {
         let catalogue;
@@ -138,6 +137,41 @@ describe('Fonctionnement des objets du domaine.', () => {
             let retiré = catalogue.retirer('Produit1');
             expect(retiré).to.deep.equal(produit);
             expect(catalogue.rechercher('Produit1')).to.be.undefined;
+        });
+    });
+
+    describe("Fonctionnement de l'inventaire", () => {
+        /** @type {Inventaire} */
+        let inventaire;
+
+        beforeEach(() => {
+            inventaire = new Inventaire();
+        });
+
+        it("On peut ajouter des objets à l'inventaire", () => {
+            expect(inventaire.ajoute('Objet1', 5)).to.equal(5);
+            expect(inventaire.quantité_en_stock('Objet1')).to.equal(5);
+            expect(inventaire.ajoute('Objet1', 3)).to.equal(8);
+            expect(inventaire.quantité_en_stock('Objet1')).to.equal(8);
+        });
+
+        it("On peut retirer des objets de l'inventaire", () => {
+            expect(inventaire.ajoute('Objet1', 5)).to.equal(5);
+            expect(inventaire.retire('Objet1', 2)).to.equal(3);
+            expect(inventaire.quantité_en_stock('Objet1')).to.equal(3);
+        });
+
+        it("On ne peut pas retirer plus de objets que ce qui est disponible dans l'inventaire", () => {
+            expect(inventaire.ajoute('Objet1', 5)).to.equal(5);
+            expect(() => inventaire.retire('Objet1', 6)).to.throw(Error, /Impossible de retirer 6 Objet1. Seuls 5 disponibles/);
+            expect(inventaire.quantité_en_stock('Objet1')).to.equal(5);
+        });
+
+        it("On ne peut pas ajouter ou retirer une quantité négative ou fractionnée de objets", () => {
+            expect(() => inventaire.ajoute('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu. fournis : quantité=-1/);
+            expect(() => inventaire.retire('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu. fournis : quantité=-1/);
+            expect(() => inventaire.ajoute('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu. fournis : quantité=1.5/);
+            expect(() => inventaire.retire('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu. fournis : quantité=1.5/);
         });
     });
 });
