@@ -5,21 +5,21 @@
  */
 class Catalogue {
   /** stockage internes des fiches du catalogue
-   * @type {Map.<string,{nom:string}>}
+   * @type {Map.<string,Produit>}
    */
   #fiches = new Map();
-  /** @type {{nom:string}[]} Liste complète des fiches du catalogue. */
+  /** @type {Produit[]} Liste complète des fiches du catalogue. */
   get fiches() { return [...this.#fiches.values()]; }
   /** @type {string[]} index de tous les noms de fiche inscrite au catalogue. */
   get index() { return [...this.#fiches.keys()]; }
   /** Recherche d'une fiche par son nom (correspondance exacte)
    * @param {string} entrée nom de la fiche à rechercher. 
-   * @returns {{nom:string}|undefined} la fiche portant le nom demandée... si elle existe !
+   * @returns {Produit|undefined} la fiche portant le nom demandée... si elle existe !
    */
   rechercher(entrée) { return Object.freeze(this.#fiches.get(entrée)); }
   /** Inscription d'une fiche au catalogue.
    * Contrôle de l'unicité d'une fiche (par rapport à son nom) au sein du catalogue.
-   * @param {{nom:string}} entrée Fiche à entrer au catalogue
+   * @param {Produit} entrée Fiche à entrer au catalogue
    * @returns {void} pas de retour en cas de réussite. Exception en cas d'échec.
    */
   inscrire(entrée) {
@@ -31,7 +31,7 @@ class Catalogue {
   }
   /** Retrait d'une fiche du catalogue (principalement dans le but de la mettre à jour ?)
    * @param {string} entrée nom de la fiche à retirer.
-   * @returns {{nom:string}|undefined} la fiche retirée si elle existe
+   * @returns {Produit|undefined} la fiche retirée si elle existe
    */
   retirer(entrée) {
     if (!entrée)
@@ -320,10 +320,10 @@ class Produit {
   /** @type {number} Rentabilité calculée du produit ]-1,1[ (arrondi à deux chiffres après la virgule) */
   get rentabilité() { return this.#rentabilité ? Math.round(this.#rentabilité * 100) / 100 : undefined };
 
+  /** @type {number} */
   #prix_estimé;
   /** @type {number} Prix estimé du produit */
   get prix_estimé() { return this.#prix_estimé };
-
   #coût_reviens;
   /** @type {number} Coût de reviens du produit */
   get coût_reviens() { return this.#coût_reviens };
@@ -357,15 +357,29 @@ class Produit {
       throw new Error(`Recette invalide : ${recette}`);
     this.#recette = recette;
     this.#nom = recette.nom;
-    if (tarif) {
-      if (!(tarif instanceof Tarif) || tarif.nom !== this.#nom)
-        throw new Error(`Un tarif valide et cohérent devrait être fourni pour le produit ${this.#nom}. Valeur fournie tarif=${tarif}`);
-      this.#prix_estimé = tarif.montant;
-      this.#updateDateEffet(tarif.date_effet);
+    this.évaluer(tarif);
+  }
+
+  /** 
+   * Réévalue les indicateurs du produit à partir d'un nouveau tarif
+   * @param {Tarif} tarif 
+   */
+  évaluer(tarif) {
+    if(tarif && !(tarif instanceof Tarif))
+      throw new Error(`Tarif invalide : ${tarif}`);
+    if (tarif?.nom === this.#nom) {
+      this.#prix_estimé = tarif?.montant;
+      this.#date_effet = tarif?.date_effet;
+    } else {
+      // mise à jour des ingrédients
+      let ingrédient_impacté = this.#recette.ingrédients.find(ingrédient => ingrédient.nom === tarif?.nom);
+      if (ingrédient_impacté) {
+        ingrédient_impacté.estimé_unitaire = tarif;
+      }
     }
 
-    this.#coût_reviens = recette.frais;
-    for (const ingrédient of recette.ingrédients) {
+    this.#coût_reviens = this.#recette.frais;
+    for (const ingrédient of this.#recette.ingrédients) {
       let prix_ingrédient = ingrédient.prix
       if (prix_ingrédient && this.#coût_reviens) {
         this.#coût_reviens += prix_ingrédient;
@@ -373,13 +387,12 @@ class Produit {
         this.#coût_reviens = undefined;
       }
     }
-
-    // a la fin du process de calcul du coût de reviens, mise à jour du statut + calcul des indicateurs
+    // Calcul des indicateurs de rentabilité
     if (!this.#prix_estimé) this.#commentaire = `Rentabilité incalculable : prix estimé inconnu`
     else if (!this.#coût_reviens) this.#commentaire = `Rentabilité incalculable : coût de reviens inconnu`
     else {
       // Si les données d'entrées sont complète, on bascule en phase industrialisée et on calcule la rentabilité.
-      this.#rentabilité = ((this.#prix_estimé * recette.quantité_produite) / (this.#coût_reviens / recette.chances_de_succès)) - 1;
+      this.#rentabilité = ((this.#prix_estimé * this.#recette.quantité_produite) / (this.#coût_reviens / this.#recette.chances_de_succès)) - 1;
       if (this.#rentabilité > 0.15) {
         this.#statut = "BUILD";
         this.#commentaire = `Commercialisable`;
@@ -392,8 +405,8 @@ class Produit {
         this.#commentaire = "Ne pas produire, il vaut mieux l'acheter";
       }
     }
-
   }
+
   toString() {
     return `{"nom":"${this.#nom}","statut":"${this.#statut}","prix_estimé":${this.#prix_estimé},"coût_reviens":${this.#coût_reviens},"rentabilité":${this.#rentabilité},"date_effet":"${this.#date_effet.toLocaleDateString()}","commentaire":"${this.#commentaire}"}`;
   }

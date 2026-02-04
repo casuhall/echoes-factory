@@ -50,14 +50,32 @@ class Usine {
             }
         }
         gestionnaire_evenements.consomme("maj_produit", this.maj_ingrédient_produit.bind(this));
+        gestionnaire_evenements.consomme("maj_tarif", this.maj_ingrédient_produit.bind(this));
     }
-
 
     maj_ingrédient_produit(nom_ingrédient) {
-        console.log(`Ingrédient mis à jour : ${nom_ingrédient}`);
+        let tarif = this.#marché.tarif(nom_ingrédient);
         let produit = this.produit(nom_ingrédient);
-        if (!produit) throw new Error(`Impossible de mettre à jour l'ingrédient ${nom_ingrédient} car le produit n'existe pas.`);
+        if (tarif) {
+            // Mise a jour du tarif et des indicateus pour le produits lui-même s'il existe
+            if (produit) produit.évaluer(tarif);
+            // Mise a jour du tarif et des indicateus pour les produits dépendants de cet ingrédient
+            this.#catalogue_produits.fiches.filter(produit_impacté => {
+                return (produit_impacté.recette.ingrédients.find(ingrédient => {
+                    if (ingrédient.nom === nom_ingrédient) { 
+                        // tout en rechercheant les ingrédients, on en profite pour mettre à jour le produit au cas où il serait novueau
+                        ingrédient.produit=produit;
+                        return true; }
+                    else
+                        return false;
+                })) !== undefined;
+            }).forEach(produit_dépendant => {
+                produit_dépendant.évaluer(tarif);
+            });
+        }
+        if 
     }
+
     /**
      * Ajoute une recette au livre de recettes et initialise le produit correspondant.
      * @param {Recette} recette Recette à ajouter
@@ -99,38 +117,16 @@ class Usine {
      */
     évaluer(objet, prix, date = new Date()) {
         let tarif = this.#marché.mise_a_jour(objet, Number.parseFloat(prix), new Date(date));
-        this.#gestionnaire_evenements.produit("maj_tarif", tarif);
+        this.#gestionnaire_evenements.produit("maj_tarif", objet);
     }
-
-    /**
-     * Réinitialise le catalogue des produits en étudiant le marché.
-     * Crée les produits en gérant les dépendances entre recettes.
-     * @throws {Error} Si les recettes forment une boucle infinie
-     * @deprecated Cette méthode devrait être implémentée via retour d'évènements lors de la création/modification de produit.
-     */
-    // étudeDeMarché() {
-    //     if (this.#catalogue_produits?.index?.length)
-    //         console.log(`Réinitialisation du catalogue précédent contenant ${this.#catalogue_produits.index.length} produits`)
-    //     this.#catalogue_produits = new Catalogue();
-    //     // tentative de création de produit pour chaque recette du livre
-    //     let produits_potentiels = this.#livre_recettes.index;
-    //     let fusible = 0;
-    //     while (produits_potentiels.length > 1) {
-    //         produits_potentiels = this.#initProduit(produits_potentiels.shift() ?? '', ...produits_potentiels);
-    //         if (++fusible > 999) {
-    //             throw new Error(`Erreur à l'étude du marché, les recettes formes probablement une boucle infinie : ${produits_potentiels}`);
-    //         }
-    //     }
-    // }
-
 }
 
 class GestionnaireEvenements {
+    #listeners;
+
     constructor() {
         this.#listeners = {};
     }
-
-    #listeners;
 
     /**
      * Enregistre un écouteur pour un type d'événement donné.

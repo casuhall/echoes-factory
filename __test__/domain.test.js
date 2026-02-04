@@ -109,4 +109,35 @@ describe('Fonctionnement des objets du domaine.', () => {
         });
     });
 
+
+    describe("Fonctionnement du catalogue des produits", () => {
+        let catalogue;
+
+        beforeEach(() => {
+            catalogue = new Catalogue();
+        });
+
+        it("Le catalogue peut inscrire une fiche produit", () => {
+            let recette = new Recette('Produit1', 50, [new Ingrédient('Ingredient1', 2, new Tarif('Ingredient1', 10))]);
+            let produit = new Produit(recette, new Tarif('Produit1', 100));
+            catalogue.inscrire(produit);
+            expect(catalogue.rechercher('Produit1')).to.deep.equal(produit);
+        });
+
+        it("Le catalogue refuse d'inscrire une fiche produit en double", () => {
+            let recette = new Recette('Produit1', 50, [new Ingrédient('Ingredient1', 2, new Tarif('Ingredient1', 10))]);
+            let produit = new Produit(recette, new Tarif('Produit1', 100));
+            catalogue.inscrire(produit);
+            expect(() => catalogue.inscrire(produit)).to.throw(Error, /Une entrée portant le même nom existe déjà/);
+        });
+
+        it("On peut retirer une fiche produit du catalogue", () => {
+            let recette = new Recette('Produit1', 50, [new Ingrédient('Ingredient1', 2, new Tarif('Ingredient1', 10))]);
+            let produit = new Produit(recette, new Tarif('Produit1', 100));
+            catalogue.inscrire(produit);
+            let retiré = catalogue.retirer('Produit1');
+            expect(retiré).to.deep.equal(produit);
+            expect(catalogue.rechercher('Produit1')).to.be.undefined;
+        });
+    });
 });
