@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ajout d'une ligne de production</title>
+    <style>
+        :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;line-height:1.4;color:#222}
+        body{margin:24px;background:#f7f8fa}
+        .card{background:#fff;border-radius:8px;padding:18px;box-shadow:0 2px 8px rgba(16,24,40,0.06);max-width:920px;margin:auto}
+        h1{margin:0 0 12px;font-size:20px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:12px}
+        label{display:block;font-size:13px;margin-bottom:6px;color:#333}
+        input[type="number"], input[type="text"], select{width:100%;padding:8px;border:1px solid #d7dbe0;border-radius:6px;font-size:14px}
+        .row {display:flex;gap:8px;align-items:center}
+        .btn{display:inline-block;padding:8px 12px;border-radius:6px;border:0;background:#0b74de;color:#fff;cursor:pointer;font-weight:600}
+        .btn.ghost{background:#f1f5f9;color:#0b74de;border:1px solid #cfd8e3}
+        .ingredients-form{margin:12px 0;padding:12px;border:1px dashed #dfe6ee;border-radius:6px;background:#fbfdff}
+        table{width:100%;border-collapse:collapse;margin-top:8px}
+        th,td{padding:10px 8px;border-bottom:1px solid #eef2f6;text-align:left;font-size:14px}
+        th{background:#f8fafc;font-weight:700}
+        .muted{color:#687182;font-size:13px}
+        .actions button{margin-right:6px}
+        .empty{padding:12px;text-align:center;color:#6b7280}
+        .right{justify-self:end}
+    </style>
+</head>
+<body>
+    <main class="card" id="app">
+        <h1>Ajout d'une ligne de production</h1>
+
+        <section aria-labelledby="production-info">
+            <div class="grid" id="production-info">
+                <div>
+                    <label for="cost">Frais de fabrication (€)</label>
+                    <input id="cost" type="number" min="0" step="0.01" placeholder="Ex : 12.50" />
+                </div>
+                <div>
+                    <label for="count">Nombre d'objets produits</label>
+                    <input id="count" type="number" min="1" step="1" placeholder="Ex : 10" />
+                </div>
+                <div>
+                    <label for="success">Chances de réussites (%)</label>
+                    <div class="row">
+                        <input id="success" type="number" min="0" max="100" step="0.1" placeholder="Ex : 85.5" />
+                        <input id="successRange" type="range" min="0" max="100" step="0.1" style="flex:1" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section aria-labelledby="ingredients">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+                <h2 id="ingredients" style="margin:0;font-size:16px">Ingrédients</h2>
+                <button id="toggleIngredientForm" class="btn ghost" type="button">Ajouter un ingrédient</button>
+                <div class="right" style="margin-left:auto">
+                    <button id="saveBtn" class="btn" type="button">Enregistrer la ligne</button>
+                </div>
+            </div>
+
+            <form id="ingredientForm" class="ingredients-form" style="display:none" onsubmit="return false" aria-hidden="true">
+                <div class="grid">
+                    <div>
+                        <label for="ingName">Nom de l'ingrédient</label>
+                        <input id="ingName" type="text" placeholder="Ex : Acier" />
+                    </div>
+                    <div>
+                        <label for="ingQty">Quantité</label>
+                        <input id="ingQty" type="number" min="0" step="0.01" placeholder="Ex : 2.5" />
+                    </div>
+                    <div>
+                        <label for="ingUnit">Unité</label>
+                        <input id="ingUnit" type="text" placeholder="Ex : kg / pièce" />
+                    </div>
+                </div>
+                <div style="margin-top:10px;display:flex;gap:8px">
+                    <button id="addIngredientBtn" class="btn" type="button">Ajouter</button>
+                    <button id="cancelIngredientBtn" class="btn ghost" type="button">Annuler</button>
+                </div>
+            </form>
+
+            <table id="ingredientsTable" aria-live="polite">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Quantité</th>
+                        <th>Unité</th>
+                        <th style="width:110px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ingredientsBody">
+                    <tr class="empty"><td colspan="4">Aucun ingrédient défini</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        // Elements
+        const costEl = document.getElementById('cost');
+        const countEl = document.getElementById('count');
+        const successEl = document.getElementById('success');
+        const successRangeEl = document.getElementById('successRange');
+
+        const toggleBtn = document.getElementById('toggleIngredientForm');
+        const ingredientForm = document.getElementById('ingredientForm');
+        const ingName = document.getElementById('ingName');
+        const ingQty = document.getElementById('ingQty');
+        const ingUnit = document.getElementById('ingUnit');
+        const addIngredientBtn = document.getElementById('addIngredientBtn');
+        const cancelIngredientBtn = document.getElementById('cancelIngredientBtn');
+        const ingredientsBody = document.getElementById('ingredientsBody');
+        const saveBtn = document.getElementById('saveBtn');
+
+        // Data
+        let ingredients = [];
+
+        // Sync number input and range for success %
+        successEl.addEventListener('input', () => {
+            let v = parseFloat(successEl.value || 0);
+            if (v < 0) v = 0;
+            if (v > 100) v = 100;
+            successRangeEl.value = v;
+        });
+        successRangeEl.addEventListener('input', () => {
+            successEl.value = successRangeEl.value;
+        });
+
+        // Toggle ingredient form
+        toggleBtn.addEventListener('click', () => {
+            const shown = ingredientForm.style.display !== 'none';
+            if (shown) hideIngredientForm();
+            else showIngredientForm();
+        });
+        cancelIngredientBtn.addEventListener('click', hideIngredientForm);
+
+        function showIngredientForm() {
+            ingredientForm.style.display = 'block';
+            ingredientForm.setAttribute('aria-hidden', 'false');
+            ingName.focus();
+            toggleBtn.textContent = 'Masquer le formulaire';
+        }
+        function hideIngredientForm() {
+            ingredientForm.style.display = 'none';
+            ingredientForm.setAttribute('aria-hidden', 'true');
+            toggleBtn.textContent = 'Ajouter un ingrédient';
+            ingName.value = '';
+            ingQty.value = '';
+            ingUnit.value = '';
+        }
+
+        // Add ingredient
+        addIngredientBtn.addEventListener('click', () => {
+            const name = ingName.value.trim();
+            const qty = parseFloat(ingQty.value);
+            const unit = ingUnit.value.trim();
+
+            if (!name) { alert("Le nom de l'ingrédient est requis."); ingName.focus(); return; }
+            if (!isFinite(qty) || qty <= 0) { alert("La quantité doit être un nombre strictement positif."); ingQty.focus(); return; }
+
+            const ingredient = { id: Date.now().toString(36), name, qty, unit };
+            ingredients.push(ingredient);
+            renderIngredients();
+            hideIngredientForm();
+        });
+
+        // Render table
+        function renderIngredients() {
+            ingredientsBody.innerHTML = '';
+            if (ingredients.length === 0) {
+                const tr = document.createElement('tr');
+                tr.className = 'empty';
+                tr.innerHTML = '<td colspan="4">Aucun ingrédient défini</td>';
+                ingredientsBody.appendChild(tr);
+                return;
+            }
+
+            ingredients.forEach(item => {
+                const tr = document.createElement('tr');
+
+                const tdName = document.createElement('td'); tdName.textContent = item.name;
+                const tdQty = document.createElement('td'); tdQty.textContent = Number(item.qty).toLocaleString(undefined, {maximumFractionDigits: 6});
+                const tdUnit = document.createElement('td'); tdUnit.textContent = item.unit || '-';
+
+                const tdActions = document.createElement('td'); tdActions.className = 'actions';
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.className = 'btn ghost';
+                delBtn.textContent = 'Supprimer';
+                delBtn.addEventListener('click', () => {
+                    ingredients = ingredients.filter(i => i.id !== item.id);
+                    renderIngredients();
+                });
+
+                tdActions.appendChild(delBtn);
+
+                tr.appendChild(tdName);
+                tr.appendChild(tdQty);
+                tr.appendChild(tdUnit);
+                tr.appendChild(tdActions);
+                ingredientsBody.appendChild(tr);
+            });
+        }
+
+        // Save handler (example: collect values and log)
+        saveBtn.addEventListener('click', () => {
+            const data = {
+                frais_de_fabrication: parseFloat(costEl.value || 0),
+                nombre_produits: parseInt(countEl.value || 0, 10),
+                chances_reussite_pct: parseFloat(successEl.value || 0),
+                ingredients
+            };
+            // Ici on pourrait envoyer "data" à une API. Pour l'instant on le logue.
+            console.log('Ligne de production sauvegardée:', data);
+            alert('Ligne de production prête (voir console pour données).');
+        });
+
+        // Initial render
+        renderIngredients();
+    </script>
+</body>
+</html>
