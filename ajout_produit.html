@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -11,12 +12,13 @@
         h1{margin:0 0 12px;font-size:20px}
         .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:12px}
         label{display:block;font-size:13px;margin-bottom:6px;color:#333}
-        input[type="number"], input[type="text"], select{width:100%;padding:8px;border:1px solid #d7dbe0;border-radius:6px;font-size:14px}
+        input[type="number"], input[type="text"], select{width:stretch;padding:4px;border:1px solid #d7dbe0;border-radius:6px;font-size:14px}
+        textarea{width:stretch;height:120px;padding:8px;border:1px solid #d7dbe0;border-radius:6px;font-size:14px;resize:vertical}
         .row {display:flex;gap:8px;align-items:center}
         .btn{display:inline-block;padding:8px 12px;border-radius:6px;border:0;background:#0b74de;color:#fff;cursor:pointer;font-weight:600}
         .btn.ghost{background:#f1f5f9;color:#0b74de;border:1px solid #cfd8e3}
         .ingredients-form{margin:12px 0;padding:12px;border:1px dashed #dfe6ee;border-radius:6px;background:#fbfdff}
-        table{width:100%;border-collapse:collapse;margin-top:8px}
+        table{width:stretch;border-collapse:collapse;margin-top:8px}
         th,td{padding:10px 8px;border-bottom:1px solid #eef2f6;text-align:left;font-size:14px}
         th{background:#f8fafc;font-weight:700}
         .muted{color:#687182;font-size:13px}
@@ -25,6 +27,7 @@
         .right{justify-self:end}
     </style>
 </head>
+
 <body>
     <main class="card" id="app">
         <h1>Ajout d'un produit</h1>
@@ -42,7 +45,7 @@
                 <div>
                     <label for="success">Chances de réussites (%)</label>
                     <div class="row">
-                        <input id="success" type="number" min="0" max="100" step="0.1" placeholder="Ex : 85.5" />
+                        <input id="success" type="number" min="0" max="100" step="0.1" placeholder="Ex : 85.5" value="100" />
                         <input id="successRange" type="range" min="0" max="100" step="0.1" style="flex:1" />
                     </div>
                 </div>
@@ -52,13 +55,16 @@
         <section aria-labelledby="ingredients">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
                 <h2 id="ingredients" style="margin:0;font-size:16px">Ingrédients</h2>
-                <button id="toggleIngredientForm" class="btn ghost" type="button">Ajouter un ingrédient</button>
+                <button id="toggleAddIngredientForm" class="btn ghost" type="button">Ajouter un ingrédient</button>
+                <button id="toggleAllIngredientForm" class="btn ghost" type="button">Initialiser les
+                    ingrédients</button>
                 <div class="right" style="margin-left:auto">
                     <button id="saveBtn" class="btn" type="button">Enregistrer le produit</button>
                 </div>
             </div>
 
-            <form id="ingredientForm" class="ingredients-form" style="display:none" onsubmit="return false" aria-hidden="true">
+            <form id="ingredientForm" class="ingredients-form" style="display:none" onsubmit="return false"
+                aria-hidden="true">
                 <div class="grid">
                     <div>
                         <label for="ingName">Nom de l'ingrédient</label>
@@ -75,6 +81,24 @@
                 </div>
             </form>
 
+            <form id="ingredientsForm" class="ingredients-form" style="display:none" onsubmit="return false"
+                aria-hidden="true">
+                <div class="grid">
+                    <div">
+                        <label for="ingredientsArea">Ingrédients</label>
+                        <textarea id="ingredientsArea" placeholder='ID	Names	Quantity	Valuation 
+1	Phantasm Blueprint	2	92105263.159999996 
+2	Datacore - Amarrian Starship Engineering	20	3439725.2000000002 
+3	Datacore - Laser Physics	40	81626.400000000009 
+4	Ship Upgrade Experiment Data	20	315495852.0 '></textarea>
+                    </div>
+                </div>
+                <div style="margin-top:10px;display:flex;gap:8px">
+                    <button id="addAllIngredientBtn" class="btn" type="button">Initialiser</button>
+                    <button id="cancelAllIngredientBtn" class="btn ghost" type="button">Annuler</button>
+                </div>
+            </form>
+
             <table id="ingredientsTable" aria-live="polite">
                 <thead>
                     <tr>
@@ -84,29 +108,40 @@
                     </tr>
                 </thead>
                 <tbody id="ingredientsBody">
-                    <tr class="empty"><td colspan="3">Aucun ingrédient défini</td></tr>
+                    <tr class="empty">
+                        <td colspan="3">Aucun ingrédient défini</td>
+                    </tr>
                 </tbody>
             </table>
         </section>
     </main>
 
-    <script>
+    <script type="module">
+        import { decodeEchoesListe } from "./app/presentation.js"
         // Elements
         const costEl = document.getElementById('cost');
         const countEl = document.getElementById('count');
         const successEl = document.getElementById('success');
         const successRangeEl = document.getElementById('successRange');
 
-        const toggleBtn = document.getElementById('toggleIngredientForm');
+        const toggleAddBtn = document.getElementById('toggleAddIngredientForm');
+        const toggleAllBtn = document.getElementById('toggleAllIngredientForm');
         const ingredientForm = document.getElementById('ingredientForm');
+        const ingredientsForm = document.getElementById('ingredientsForm');
+        const ingredientsArea = document.getElementById('ingredientsArea');
         const ingName = document.getElementById('ingName');
         const ingQty = document.getElementById('ingQty');
         const addIngredientBtn = document.getElementById('addIngredientBtn');
         const cancelIngredientBtn = document.getElementById('cancelIngredientBtn');
+        const addAllIngredientBtn = document.getElementById('addAllIngredientBtn');
+        const cancelAllIngredientBtn = document.getElementById('cancelAllIngredientBtn');
         const ingredientsBody = document.getElementById('ingredientsBody');
         const saveBtn = document.getElementById('saveBtn');
 
         // Data
+        /**
+         * @type {Array<{name: string, qty: number}>}
+         */
         let ingredients = [];
 
         // Sync number input and range for success %
@@ -121,7 +156,7 @@
         });
 
         // Toggle ingredient form
-        toggleBtn.addEventListener('click', () => {
+        toggleAddBtn.addEventListener('click', () => {
             const shown = ingredientForm.style.display !== 'none';
             if (shown) hideIngredientForm();
             else showIngredientForm();
@@ -132,14 +167,35 @@
             ingredientForm.style.display = 'block';
             ingredientForm.setAttribute('aria-hidden', 'false');
             ingName.focus();
-            toggleBtn.textContent = 'Masquer le formulaire';
+            toggleAddBtn.textContent = 'Masquer le formulaire';
         }
         function hideIngredientForm() {
             ingredientForm.style.display = 'none';
             ingredientForm.setAttribute('aria-hidden', 'true');
-            toggleBtn.textContent = 'Ajouter un ingrédient';
+            toggleAddBtn.textContent = 'Ajouter un ingrédient';
             ingName.value = '';
             ingQty.value = '';
+        }
+
+        // Add all
+        toggleAllBtn.addEventListener('click', () => {
+            const shown = ingredientsForm.style.display !== 'none';
+            if (shown) hideIngredientsForm();
+            else showIngredientsForm();
+        });
+        cancelIngredientBtn.addEventListener('click', hideIngredientsForm);
+
+        function showIngredientsForm() {
+            ingredientsForm.style.display = 'block';
+            ingredientsForm.setAttribute('aria-hidden', 'false');
+            ingredientsArea.focus();
+            toggleAllBtn.textContent = 'Masquer le formulaire';
+        }
+        function hideIngredientsForm() {
+            ingredientsForm.style.display = 'none';
+            ingredientsForm.setAttribute('aria-hidden', 'true');
+            toggleAllBtn.textContent = 'Ajouter plusieurs ingrédients';
+            ingredientsArea.value = '';
         }
 
         // Add ingredient
@@ -150,11 +206,34 @@
             if (!name) { alert("Le nom de l'ingrédient est requis."); ingName.focus(); return; }
             if (!isFinite(qty) || qty <= 0) { alert("La quantité doit être un nombre strictement positif."); ingQty.focus(); return; }
 
-            const ingredient = { id: Date.now().toString(36), name, qty};
+            const ingredient = { id: Date.now().toString(36), name, qty };
             ingredients.push(ingredient);
             renderIngredients();
             hideIngredientForm();
         });
+
+        // Add ingredient
+        addAllIngredientBtn.addEventListener('click', () => {
+            const liste_brut = ingredientsArea.value.trim();
+            const decoded = decodeEchoesListe(liste_brut);
+            try{
+                if (decoded.length === 0) {
+                    alert("Aucun ingrédient valide trouvé. Veuillez vérifier le format.");
+                    ingredientsArea.focus();
+                    return;
+                }
+                decoded.forEach(item => {
+                    const ingredient = { name: item.nom, qty: item.quantité };
+                    ingredients.push(ingredient);
+                });
+                renderIngredients();
+                hideIngredientsForm();
+            } catch (err) {
+                console.error("Erreur lors du décodage de la liste d'ingrédients:", err);
+                alert("Format de liste d'ingrédients invalide. Veuillez vérifier et réessayer.");
+                ingredientsArea.focus();
+            };
+         });
 
         // Render table
         function renderIngredients() {
@@ -171,7 +250,7 @@
                 const tr = document.createElement('tr');
 
                 const tdName = document.createElement('td'); tdName.textContent = item.name;
-                const tdQty = document.createElement('td'); tdQty.textContent = Number(item.qty).toLocaleString(undefined, {maximumFractionDigits: 6});
+                const tdQty = document.createElement('td'); tdQty.textContent = Number(item.qty).toLocaleString(undefined, { maximumFractionDigits: 6 });
 
                 const tdActions = document.createElement('td'); tdActions.className = 'actions';
                 const delBtn = document.createElement('button');
@@ -209,4 +288,5 @@
         renderIngredients();
     </script>
 </body>
+
 </html>
