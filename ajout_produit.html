@@ -118,174 +118,299 @@
 
     <script type="module">
         import { decodeEchoesListe } from "./app/presentation.js"
-        // Elements
-        const costEl = document.getElementById('cost');
-        const countEl = document.getElementById('count');
-        const successEl = document.getElementById('success');
-        const successRangeEl = document.getElementById('successRange');
+        
+        // ============================================================
+        // ÉLÉMENTS DU DOM
+        // ============================================================
+        
+        // Champs de saisie pour les paramètres de production
+        const champFraisFabrication = document.getElementById('cost');
+        const champNombreProduits = document.getElementById('count');
+        const champChancesReussite = document.getElementById('success');
+        const champCurseurChancesReussite = document.getElementById('successRange');
 
-        const toggleAddBtn = document.getElementById('toggleAddIngredientForm');
-        const toggleAllBtn = document.getElementById('toggleAllIngredientForm');
-        const ingredientForm = document.getElementById('ingredientForm');
-        const ingredientsForm = document.getElementById('ingredientsForm');
-        const ingredientsArea = document.getElementById('ingredientsArea');
-        const ingName = document.getElementById('ingName');
-        const ingQty = document.getElementById('ingQty');
-        const addIngredientBtn = document.getElementById('addIngredientBtn');
-        const cancelIngredientBtn = document.getElementById('cancelIngredientBtn');
-        const addAllIngredientBtn = document.getElementById('addAllIngredientBtn');
-        const cancelAllIngredientBtn = document.getElementById('cancelAllIngredientBtn');
-        const ingredientsBody = document.getElementById('ingredientsBody');
-        const saveBtn = document.getElementById('saveBtn');
+        // Boutons et formulaires pour la gestion des ingrédients
+        const boutonAjouterIngredient = document.getElementById('toggleAddIngredientForm');
+        const boutonInitialiserIngredients = document.getElementById('toggleAllIngredientForm');
+        const formulaireAjoutIngredient = document.getElementById('ingredientForm');
+        const formulaireInitialisationIngredients = document.getElementById('ingredientsForm');
+        const zoneTextePlusieursIngredients = document.getElementById('ingredientsArea');
+        const champNomIngredient = document.getElementById('ingName');
+        const champQuantiteIngredient = document.getElementById('ingQty');
+        const boutonAjouterIngredientUnique = document.getElementById('addIngredientBtn');
+        const boutonAnnulerAjoutIngredient = document.getElementById('cancelIngredientBtn');
+        const boutonInitialiserPlusieursIngredients = document.getElementById('addAllIngredientBtn');
+        const boutonAnnulerInitialisation = document.getElementById('cancelAllIngredientBtn');
+        const corpsTableauIngredients = document.getElementById('ingredientsBody');
+        const boutonEnregistrer = document.getElementById('saveBtn');
 
-        // Data
+        // ============================================================
+        // DONNÉES
+        // ============================================================
+        
         /**
-         * @type {Array<{name: string, qty: number}>}
+         * Liste des ingrédients ajoutés au produit
+         * @type {Array<{name: string, qty: number, id?: string}>}
          */
-        let ingredients = [];
+        let ingredientsListe = [];
 
-        // Sync number input and range for success %
-        successEl.addEventListener('input', () => {
-            let v = parseFloat(successEl.value || 0);
-            if (v < 0) v = 0;
-            if (v > 100) v = 100;
-            successRangeEl.value = v;
+        // ============================================================
+        // SYNCHRONISATION TAUX DE RÉUSSITE (champ numérique ↔ curseur)
+        // ============================================================
+        
+        /**
+         * Synchronise le curseur quand le champ numérique du taux est modifié
+         */
+        champChancesReussite.addEventListener('input', () => {
+            let valeur = parseFloat(champChancesReussite.value || 0);
+            // Normalise la valeur entre 0 et 100%
+            if (valeur < 0) valeur = 0;
+            if (valeur > 100) valeur = 100;
+            champCurseurChancesReussite.value = valeur;
         });
-        successRangeEl.addEventListener('input', () => {
-            successEl.value = successRangeEl.value;
+        
+        /**
+         * Synchronise le champ numérique quand le curseur est modifié
+         */
+        champCurseurChancesReussite.addEventListener('input', () => {
+            champChancesReussite.value = champCurseurChancesReussite.value;
         });
 
-        // Toggle ingredient form
-        toggleAddBtn.addEventListener('click', () => {
-            const shown = ingredientForm.style.display !== 'none';
-            if (shown) hideIngredientForm();
-            else showIngredientForm();
+        // ============================================================
+        // GESTION FORMULAIRE AJOUT INGRÉDIENT UNIQUE
+        // ============================================================
+        
+        /**
+         * Bascule l'affichage du formulaire d'ajout d'un ingrédient
+         */
+        boutonAjouterIngredient.addEventListener('click', () => {
+            const estAffiche = formulaireAjoutIngredient.style.display !== 'none';
+            if (estAffiche) masquerFormulaireIngredient();
+            else afficherFormulaireIngredient();
         });
-        cancelIngredientBtn.addEventListener('click', hideIngredientForm);
+        
+        /**
+         * Masque le formulaire et annule la saisie
+         */
+        boutonAnnulerAjoutIngredient.addEventListener('click', masquerFormulaireIngredient);
 
-        function showIngredientForm() {
-            ingredientForm.style.display = 'block';
-            ingredientForm.setAttribute('aria-hidden', 'false');
-            ingName.focus();
-            toggleAddBtn.textContent = 'Masquer le formulaire';
+        /**
+         * Affiche le formulaire d'ajout et place le focus sur le champ nom
+         */
+        function afficherFormulaireIngredient() {
+            formulaireAjoutIngredient.style.display = 'block';
+            formulaireAjoutIngredient.setAttribute('aria-hidden', 'false');
+            champNomIngredient.focus();
+            boutonAjouterIngredient.textContent = 'Masquer le formulaire';
         }
-        function hideIngredientForm() {
-            ingredientForm.style.display = 'none';
-            ingredientForm.setAttribute('aria-hidden', 'true');
-            toggleAddBtn.textContent = 'Ajouter un ingrédient';
-            ingName.value = '';
-            ingQty.value = '';
+        
+        /**
+         * Masque le formulaire et réinitialise les champs
+         */
+        function masquerFormulaireIngredient() {
+            formulaireAjoutIngredient.style.display = 'none';
+            formulaireAjoutIngredient.setAttribute('aria-hidden', 'true');
+            boutonAjouterIngredient.textContent = 'Ajouter un ingrédient';
+            champNomIngredient.value = '';
+            champQuantiteIngredient.value = '';
         }
 
-        // Add all
-        toggleAllBtn.addEventListener('click', () => {
-            const shown = ingredientsForm.style.display !== 'none';
-            if (shown) hideIngredientsForm();
-            else showIngredientsForm();
+        // ============================================================
+        // GESTION FORMULAIRE INITIALISATION PLUSIEURS INGRÉDIENTS
+        // ============================================================
+        
+        /**
+         * Bascule l'affichage du formulaire d'initialisation de plusieurs ingrédients
+         */
+        boutonInitialiserIngredients.addEventListener('click', () => {
+            const estAffiche = formulaireInitialisationIngredients.style.display !== 'none';
+            if (estAffiche) masquerFormulaireInitialisation();
+            else afficherFormulaireInitialisation();
         });
-        cancelIngredientBtn.addEventListener('click', hideIngredientsForm);
+        
+        /**
+         * Annule l'initialisation
+         */
+        boutonAnnulerAjoutIngredient.addEventListener('click', masquerFormulaireInitialisation);
 
-        function showIngredientsForm() {
-            ingredientsForm.style.display = 'block';
-            ingredientsForm.setAttribute('aria-hidden', 'false');
-            ingredientsArea.focus();
-            toggleAllBtn.textContent = 'Masquer le formulaire';
+        /**
+         * Affiche le formulaire d'initialisation et place le focus sur la zone texte
+         */
+        function afficherFormulaireInitialisation() {
+            formulaireInitialisationIngredients.style.display = 'block';
+            formulaireInitialisationIngredients.setAttribute('aria-hidden', 'false');
+            zoneTextePlusieursIngredients.focus();
+            boutonInitialiserIngredients.textContent = 'Masquer le formulaire';
         }
-        function hideIngredientsForm() {
-            ingredientsForm.style.display = 'none';
-            ingredientsForm.setAttribute('aria-hidden', 'true');
-            toggleAllBtn.textContent = 'Ajouter plusieurs ingrédients';
-            ingredientsArea.value = '';
+        
+        /**
+         * Masque le formulaire d'initialisation et réinitialise le contenu
+         */
+        function masquerFormulaireInitialisation() {
+            formulaireInitialisationIngredients.style.display = 'none';
+            formulaireInitialisationIngredients.setAttribute('aria-hidden', 'true');
+            boutonInitialiserIngredients.textContent = 'Ajouter plusieurs ingrédients';
+            zoneTextePlusieursIngredients.value = '';
         }
 
-        // Add ingredient
-        addIngredientBtn.addEventListener('click', () => {
-            const name = ingName.value.trim();
-            const qty = parseFloat(ingQty.value);
+        // ============================================================
+        // AJOUT D'UN INGRÉDIENT UNIQUE
+        // ============================================================
+        
+        /**
+         * Ajoute un ingrédient unique à la liste
+         * Valide que le nom n'est pas vide et que la quantité est positive
+         */
+        boutonAjouterIngredientUnique.addEventListener('click', () => {
+            const nomIngredient = champNomIngredient.value.trim();
+            const quantiteIngredient = parseFloat(champQuantiteIngredient.value);
 
-            if (!name) { alert("Le nom de l'ingrédient est requis."); ingName.focus(); return; }
-            if (!isFinite(qty) || qty <= 0) { alert("La quantité doit être un nombre strictement positif."); ingQty.focus(); return; }
+            // Validation du nom
+            if (!nomIngredient) { 
+                alert("Le nom de l'ingrédient est requis."); 
+                champNomIngredient.focus(); 
+                return; 
+            }
+            
+            // Validation de la quantité
+            if (!isFinite(quantiteIngredient) || quantiteIngredient <= 0) { 
+                alert("La quantité doit être un nombre strictement positif."); 
+                champQuantiteIngredient.focus(); 
+                return; 
+            }
 
-            const ingredient = { id: Date.now().toString(36), name, qty };
-            ingredients.push(ingredient);
-            renderIngredients();
-            hideIngredientForm();
+            // Crée et ajoute l'ingrédient
+            const nouvelIngredient = { 
+                name: nomIngredient, 
+                qty: quantiteIngredient 
+            };
+            ingredientsListe.push(nouvelIngredient);
+            afficherIngredients();
+            masquerFormulaireIngredient();
         });
 
-        // Add ingredient
-        addAllIngredientBtn.addEventListener('click', () => {
-            const liste_brut = ingredientsArea.value.trim();
-            const decoded = decodeEchoesListe(liste_brut);
-            try{
-                if (decoded.length === 0) {
+        // ============================================================
+        // AJOUT DE PLUSIEURS INGRÉDIENTS (TEXTE BRUT)
+        // ============================================================
+        
+        /**
+         * Initialise les ingrédients en décodant une liste au format texte
+         * Format attendu : ID	Names	Quantity	Valuation (séparés par des tabulations)
+         */
+        boutonInitialiserPlusieursIngredients.addEventListener('click', () => {
+            const texteBrut = zoneTextePlusieursIngredients.value.trim();
+            
+            try {
+                const ingredientsDécodés = decodeEchoesListe(texteBrut);
+                
+                // Valide qu'au moins un ingrédient a été trouvé
+                if (ingredientsDécodés.length === 0) {
                     alert("Aucun ingrédient valide trouvé. Veuillez vérifier le format.");
-                    ingredientsArea.focus();
+                    zoneTextePlusieursIngredients.focus();
                     return;
                 }
-                decoded.forEach(item => {
-                    const ingredient = { name: item.nom, qty: item.quantité };
-                    ingredients.push(ingredient);
+                
+                // Ajoute les ingrédients décodés à la liste
+                ingredientsDécodés.forEach(element => {
+                    const nouveauElement = { 
+                        name: element.nom, 
+                        qty: element.quantité// Génère un ID unique
+                    };
+                    ingredientsListe.push(nouveauElement);
                 });
-                renderIngredients();
-                hideIngredientsForm();
-            } catch (err) {
-                console.error("Erreur lors du décodage de la liste d'ingrédients:", err);
+                
+                afficherIngredients();
+                masquerFormulaireInitialisation();
+            } catch (erreur) {
+                console.error("Erreur lors du décodage de la liste d'ingrédients:", erreur);
                 alert("Format de liste d'ingrédients invalide. Veuillez vérifier et réessayer.");
-                ingredientsArea.focus();
-            };
+                zoneTextePlusieursIngredients.focus();
+            }
          });
 
-        // Render table
-        function renderIngredients() {
-            ingredientsBody.innerHTML = '';
-            if (ingredients.length === 0) {
-                const tr = document.createElement('tr');
-                tr.className = 'empty';
-                tr.innerHTML = '<td colspan="4">Aucun ingrédient défini</td>';
-                ingredientsBody.appendChild(tr);
+        // ============================================================
+        // AFFICHAGE DU TABLEAU D'INGRÉDIENTS
+        // ============================================================
+        
+        /**
+         * Rend le tableau des ingrédients avec les données de la liste
+         * Si la liste est vide, affiche un message "Aucun ingrédient défini"
+         */
+        function afficherIngredients() {
+            corpsTableauIngredients.innerHTML = '';
+            
+            // Affiche un message si aucun ingrédient
+            if (ingredientsListe.length === 0) {
+                const ligneVide = document.createElement('tr');
+                ligneVide.className = 'empty';
+                ligneVide.innerHTML = '<td colspan="4">Aucun ingrédient défini</td>';
+                corpsTableauIngredients.appendChild(ligneVide);
                 return;
             }
 
-            ingredients.forEach(item => {
-                const tr = document.createElement('tr');
+            // Ajoute une ligne par ingrédient
+            ingredientsListe.forEach(ingredient => {
+                const ligne = document.createElement('tr');
 
-                const tdName = document.createElement('td'); tdName.textContent = item.name;
-                const tdQty = document.createElement('td'); tdQty.textContent = Number(item.qty).toLocaleString(undefined, { maximumFractionDigits: 6 });
+                // Colonne : Nom
+                const celluleNom = document.createElement('td'); 
+                celluleNom.textContent = ingredient.name;
+                
+                // Colonne : Quantité (formatée avec locale et max 6 décimales)
+                const celluleQuantite = document.createElement('td'); 
+                celluleQuantite.textContent = Number(ingredient.qty).toLocaleString(undefined, { maximumFractionDigits: 6 });
 
-                const tdActions = document.createElement('td'); tdActions.className = 'actions';
-                const delBtn = document.createElement('button');
-                delBtn.type = 'button';
-                delBtn.className = 'btn ghost';
-                delBtn.textContent = 'Supprimer';
-                delBtn.addEventListener('click', () => {
-                    ingredients = ingredients.filter(i => i.id !== item.id);
-                    renderIngredients();
+                // Colonne : Actions
+                const celluleActions = document.createElement('td'); 
+                celluleActions.className = 'actions';
+                
+                const boutonSupprimer = document.createElement('button');
+                boutonSupprimer.type = 'button';
+                boutonSupprimer.className = 'btn ghost';
+                boutonSupprimer.textContent = 'Supprimer';
+                boutonSupprimer.addEventListener('click', () => {
+                    // Filtre l'ingrédient supprimé de la liste
+                    ingredientsListe = ingredientsListe.filter(i => i.name !== ingredient.name);
+                    afficherIngredients();
                 });
 
-                tdActions.appendChild(delBtn);
+                celluleActions.appendChild(boutonSupprimer);
 
-                tr.appendChild(tdName);
-                tr.appendChild(tdQty);
-                tr.appendChild(tdActions);
-                ingredientsBody.appendChild(tr);
+                // Assemble la ligne complète
+                ligne.appendChild(celluleNom);
+                ligne.appendChild(celluleQuantite);
+                ligne.appendChild(celluleActions);
+                corpsTableauIngredients.appendChild(ligne);
             });
         }
 
-        // Save handler (example: collect values and log)
-        saveBtn.addEventListener('click', () => {
-            const data = {
-                frais_de_fabrication: parseFloat(costEl.value || 0),
-                nombre_produits: parseInt(countEl.value || 0, 10),
-                chances_reussite_pct: parseFloat(successEl.value || 0),
-                ingredients
+        // ============================================================
+        // ENREGISTREMENT DE LA LIGNE DE PRODUCTION
+        // ============================================================
+        
+        /**
+         * Enregistre les données de la ligne de production
+         * Collecte les frais, nombre de produits, taux de réussite et ingrédients
+         */
+        boutonEnregistrer.addEventListener('click', () => {
+            const donnéesProduit = {
+                frais_de_fabrication: parseFloat(champFraisFabrication.value || 0),
+                nombre_produits: parseInt(champNombreProduits.value || 0, 10),
+                chances_reussite_pct: parseFloat(champChancesReussite.value || 0),
+                ingredients: ingredientsListe
             };
-            // Ici on pourrait envoyer "data" à une API. Pour l'instant on le logue.
-            console.log('Ligne de production sauvegardée:', data);
+            
+            // TODO : Envoyer les données à une API
+            console.log('Ligne de production sauvegardée:', donnéesProduit);
             alert('Ligne de production prête (voir console pour données).');
         });
 
-        // Initial render
-        renderIngredients();
+        // ============================================================
+        // INITIALISATION
+        // ============================================================
+        
+        // Affiche le tableau vide au chargement
+        afficherIngredients();
     </script>
 </body>
 
