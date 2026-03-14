@@ -46,8 +46,6 @@ describe('Usine - Gestion complète', () => {
 
         /** @type {Usine} */
         let usine;
-        /** @type {Tarification} */
-        let marché;
         /** @type {Recette} */
         let recette_simple, recette_non_tarifée;
 
@@ -83,6 +81,77 @@ describe('Usine - Gestion complète', () => {
             usine.évaluer("Ingredient1", 15);
             const produit_simple = usine.produit("Simple");
             expect(produit_simple.coût_reviens).to.equal(140); // 50 + 2*15 + 3*20 = 140        
+        });
+
+        it('Il est possible de sérialiser et désérialiser une usine sans perdre d information', () => {
+            const usine_sérialisée = usine.toString();
+            const usine_désérialisée = Usine.parse(usine_sérialisée);
+            expect(usine_désérialisée).to.exist;
+            expect(usine_désérialisée.nom).to.equal(usine.nom);
+            expect(usine_désérialisée.produits.length).to.equal(usine.produits.length);
+            expect(usine_désérialisée.tarifs.length).to.equal(usine.tarifs.length);
+            expect(usine_désérialisée.stock.length).to.equal(usine.stock.length);
+            for (let i = 0; i < usine.produits.length; i++) {
+                const produit_original = usine.produits[i];
+                const produit_désérialisé = usine_désérialisée.produits[i];
+                expect(produit_désérialisé.nom).to.equal(produit_original.nom);
+                expect(produit_désérialisé.coût_reviens).to.equal(produit_original.coût_reviens);
+                expect(produit_désérialisé.prix_estimé).to.equal(produit_original.prix_estimé);
+            }
+            for (let i = 0; i < usine.tarifs.length; i++) {
+                const tarif_original = usine.tarifs[i];
+                const tarif_désérialisé = usine_désérialisée.tarifs[i];
+                expect(tarif_désérialisé.nom).to.equal(tarif_original.nom);
+                expect(tarif_désérialisé.montant).to.equal(tarif_original.montant);
+            }
+            for (let i = 0; i < usine.stock.length; i++) {
+                const stock_original = usine.stock[i];
+                const stock_désérialisé = usine_désérialisée.stock[i];
+                expect(stock_désérialisé.nom).to.equal(stock_original.nom);
+                expect(stock_désérialisé.quantité).to.equal(stock_original.quantité);
+            }
+        });
+    });
+
+    describe("Fiabilisation de l'initialisation d'une usine existante", () => {
+        it('L initialisation d une usine avec des recettes dont les ingrédients ne sont pas tarifés ne doit pas échouer', () => {
+            try {
+                const recette_non_tarifée = new Recette('NonTarifée', 50, [
+                    new Ingrédient('IngredientInconnu1', 2),
+                    new Ingrédient('IngredientInconnu2', 3)
+                ]);
+                const usine = new Usine("Usine avec recette non tarifée", undefined,
+                    [recette_non_tarifée],
+                    [new Tarif('IngredientInconnu1', 10)],);
+                expect(usine).to.exist;
+                const produit_non_tarifée = usine.produit("NonTarifée");
+                expect(produit_non_tarifée).to.exist;
+                expect(produit_non_tarifée.coût_reviens).to.be.undefined;
+            } catch (e) {
+                console.error(e);
+                expect.fail(`Une exception inattendue a été levée lors de l'initialisation de l'usine : ${e.message}`);
+            }
+        });
+
+        it("L'initialisation d'une usinene devrait pas dépendre des types des données mais bien de leur valeur", () => {
+            try {
+                const recette_non_tarifée = {
+                    nom: 'RecetteAvecQuantitéInvalide', frais: "200", ingrédients: [
+                        { nom: 'IngredientConnu1', quantité: "2" },
+                        { nom: 'IngredientConnu2', quantité: "3" }
+                    ]
+                };
+                const usine = new Usine("Usine avec recette non standard", undefined,
+                    [recette_non_tarifée],
+                    [{ nom: 'IngredientConnu1', montant: "10" }, { nom: 'IngredientConnu2', montant: "20" }],);
+                expect(usine).to.exist;
+                const produit_non_tarifée = usine.produit("RecetteAvecQuantitéInvalide");
+                expect(produit_non_tarifée).to.exist;
+                expect(produit_non_tarifée.coût_reviens).to.be.equal(200 + 2 * 10 + 3 * 20); // 200 + 2*10 + 3*20 = 260
+            } catch (e) {
+                console.error(e);
+                expect.fail(`Une exception inattendue a été levée lors de l'initialisation de l'usine : ${e.message}`);
+            }
         });
     });
 

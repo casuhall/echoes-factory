@@ -113,8 +113,8 @@
   </table>
 
   <script type="module">
-    import { Usine } from "./services.js"
-    import { decodeEchoesListe } from "./presentation.js"
+    import { Usine, GestionnaireEvenements } from "./app/service.js"
+    import { decodeEchoesListe } from "./app/presentation.js"
 
     const NUMBER_FORMAT = new Intl.NumberFormat(undefined, {
       minimumFractionDigits: 2,
@@ -131,8 +131,14 @@
     const BOUTON_ENREGISTRER_MASSIF = document.getElementById("btn_enregistrer_massif");
     const TARIF_TABLE_BODY = document.getElementById("tarifs-body");
 
-    const usine = new Usine(localStorage.getItem("nom"), JSON.parse(localStorage.getItem("recettes"))
-      , JSON.parse(localStorage.getItem("tarifs")), JSON.parse(localStorage.getItem("stock")));
+    let usine;
+    let storedUsine = localStorage.getItem("usine");
+    if (storedUsine) {
+      usine = Usine.parse(storedUsine);
+    }
+    else {
+      usine = new Usine("ChangeIt", undefined, [], [], []);
+    }
 
     préparerSaisieUnitaire();
     préparerSaisieMassive();
@@ -176,16 +182,14 @@
     function présenterTarifs() {
       let html_tarif = (usine.tarifs.length > 0) ? "\n" : "<tr><td class='text-center' colspan='3'>Aucun tarif enregistré</td></tr>";
       for (const tarif of usine.tarifs) {
-        html_tarif += `<tr><td>${tarif.nom}</td><td class="text-end">${NUMBER_FORMAT.format(tarif.prix)}</td><td>${tarif.date_effet.toLocaleDateString("fr-FR")}</td></tr>\n`
+        html_tarif += `<tr><td>${tarif.nom}</td><td class="text-end">${NUMBER_FORMAT.format(tarif.montant)}</td><td>${tarif.date_effet.toLocaleDateString("fr-FR")}</td></tr>\n`
       }
       TARIF_TABLE_BODY.innerHTML = html_tarif;
     }
 
     // Fonction de stockage des données de l'usine
     function updateStorage() {
-      localStorage.setItem("tarifs", `[${usine.tarifs}]`);
-      localStorage.setItem("recettes", JSON.stringify(usine.recettes));
-      localStorage.setItem("stock", JSON.stringify(usine.stock));
+      localStorage.setItem("usine", usine.toString());
     }
 
   </script>

@@ -1,4 +1,4 @@
-import { Catalogue, Tarification, Inventaire, Produit, Recette, Tarif } from './domain.js';
+import { Catalogue, Tarification, Inventaire, Produit, Recette, Tarif, Ingrédient } from './domain.js';
 
 /**
  * Usine de production avec gestion des recettes, tarifs, stock et produits.
@@ -14,6 +14,8 @@ class Usine {
     #catalogue_produits = new Catalogue();
     /** @type {Produit[]} Ensemble des produits étudiés */
     get produits() { return this.#catalogue_produits.fiches; }
+    /** @type {Recette[]} Ensemble des recettes connues de l'usine. */
+    get recettes() { return this.produits.map(produit => produit.recette); }
     #marché = new Tarification();
     /** @type {Tarif[]} Ensemble des tarifs du marché */
     get tarifs() { return this.#marché.tarifs; }
@@ -30,14 +32,14 @@ class Usine {
         this.#gestionnaire_evenements = gestionnaire_evenements;
         for (const tarif of tarifs) {
             try {
-                this.évaluer(tarif.nom, tarif.montant, tarif.date_effet);
+                this.évaluer(tarif.nom, Number.parseFloat(tarif.montant), tarif.date_effet);
             } catch (error) {
                 console.log(`Tarif non inscrit au marché : ${JSON.stringify(tarif)}. Cause : ${error.message}.`);
             }
         }
         for (const stack of stock) {
             try {
-                this.#inventaire.ajoute(stack.nom, stack.quantité);
+                this.#inventaire.ajoute(stack.nom, Number.parseFloat(stack.quantité));
             } catch (error) {
                 console.log(`Stack non inscrite à l'inventaire : ${JSON.stringify(stack)}. Cause : ${error.message}.`);
             }
@@ -62,10 +64,11 @@ class Usine {
             // Mise a jour du tarif et des indicateus pour les produits dépendants de cet ingrédient
             this.#catalogue_produits.fiches.filter(produit_impacté => {
                 return (produit_impacté.recette.ingrédients.find(ingrédient => {
-                    if (ingrédient.nom === nom_ingrédient) { 
+                    if (ingrédient.nom === nom_ingrédient) {
                         // tout en rechercheant les ingrédients, on en profite pour mettre à jour le produit au cas où il serait novueau
-                        ingrédient.produit=produit;
-                        return true; }
+                        ingrédient.produit = produit;
+                        return true;
+                    }
                     else
                         return false;
                 })) !== undefined;
@@ -81,7 +84,12 @@ class Usine {
      * @throws {Error} Si une recette avec le même nom existe déjà
      */
     ajouteRecette(recette) {
-        if (!recette || !(recette instanceof Recette)) throw new Error(`Recette nécessaire pour l'initialisation d'un produit`);
+        if (!recette) throw new Error(`Recette nécessaire pour l'initialisation d'un produit`);
+        if (!(recette instanceof Recette)) {
+            // Fiabilisation de la recette
+            recette = new Recette(recette.nom, Number.parseFloat(recette.frais),
+                recette.ingrédients?.map(ingrédient => new Ingrédient(ingrédient.nom, Number.parseFloat(ingrédient.quantité))));
+        }
         if (this.produit(recette.nom)) {
             throw new Error(`Produit ${recette.nom} déjà inscrit au catalogue, création impossible.`);
         }
@@ -115,8 +123,17 @@ class Usine {
      * @throws {Error} Si un tarif plus récent existe déjà
      */
     évaluer(objet, prix, date = new Date()) {
-        let tarif = this.#marché.mise_a_jour(objet, Number.parseFloat(prix), new Date(date));
+        this.#marché.mise_a_jour(objet, Number.parseFloat(prix), new Date(date));
         this.#gestionnaire_evenements.produit("maj_tarif", objet);
+    }
+
+    toString() {
+        return `{"nom": "${this.#nom}", "recettes": [${this.recettes.map(recette => recette.toString()).join(",")}], "stock": [${this.stock.map(stack => `{"nom": "${stack.nom}", "quantité": ${stack.quantité}}`)}], "tarifs": [${this.tarifs.map(tarif => tarif.toString())}]}`;
+    }
+
+    static parse(string) {
+        let objet = JSON.parse(string);
+        return new Usine(objet.nom, undefined, objet.recettes, objet.tarifs, objet.stock);
     }
 }
 

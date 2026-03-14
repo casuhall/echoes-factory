@@ -83,7 +83,7 @@ class Tarif {
 
   /** Formatage de l'objet sous forme de chaîne de caractère compréhensible. */
   toString() {
-    return `{"nom":"${this.#nom}","prix":"${this.#montant}","date_effet":"${this.#date_effet.toLocaleDateString()}"}`
+    return `{"nom":"${this.#nom}","montant":"${this.#montant}","date_effet":"${this.#date_effet.toLocaleDateString()}"}`
   }
 }
 
@@ -169,7 +169,7 @@ class Ingrédient {
   };
 
   toString() {
-    return `{"nom":"${this.#nom}","quantité":${this.#quantité};"produit":${this.#produit}}`;
+    return `{"nom":"${this.#nom}","quantité":${this.#quantité}}`;
   }
 
   /**
@@ -252,6 +252,10 @@ class Recette {
       synthyse_ingrédient.push(ingrédient.nom);
       this.#ingrédients.push(ingrédient);
     }
+  }
+
+  toString() {
+    return `{"nom":"${this.#nom}","frais":${this.#frais},"quantité_produite":${this.#quantité_produite},"chance_succès":${this.#chance_de_succès},"ingrédients":[${this.#ingrédients.map(ingrédient => ingrédient.toString()).join(",")}]}`;
   }
 }
 
@@ -410,7 +414,7 @@ class Produit {
   }
 
   toString() {
-    return `{"nom":"${this.#nom}","statut":"${this.#statut}","prix_estimé":${this.#prix_estimé},"coût_reviens":${this.#coût_reviens},"rentabilité":${this.#rentabilité},"date_effet":"${this.#date_effet.toLocaleDateString()}","commentaire":"${this.#commentaire}"}`;
+    return `{"nom":"${this.#nom}","statut":"${this.#statut}","prix_estimé":${this.#prix_estimé},"coût_reviens":${this.#coût_reviens},"rentabilité":${this.#rentabilité},"date_effet":"${this.#date_effet.toLocaleDateString()}","commentaire":"${this.#commentaire}","recette":${this.#recette}}`;
   }
 }
 

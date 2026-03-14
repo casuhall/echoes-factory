@@ -60,6 +60,16 @@
   <div class="accordion" id="datas" hidden>
     <div class="accordion-item">
       <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#usine" aria-expanded="false" aria-controls="usine">
+          Usine
+        </button>
+      </h2>
+      <div id="usine" class="accordion-collapse" data-bs-parent="#datas">
+        <div id="usine-body" class="accordion-body"></div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tarif" aria-expanded="false" aria-controls="tarif">
           Marché
         </button>
@@ -91,22 +101,21 @@
   </div>
 
   <script type="module">
-    import {Usine} from "./services.js"
+   // import {Usine, GestionnaireEvenements} from "./app/service.js"
     // au click sur le bouton "Debug", affichage du contenu des données
     document.querySelector("#button-debug").addEventListener("click", () => {
       const datas = document.querySelector("#datas");
       datas.hidden = !datas.hidden;
       if(!datas.hidden){
-        document.querySelector("#tarif-body").innerHTML = `${localStorage.getItem("tarifs")}`
-        document.querySelector("#recette-body").innerHTML = `${localStorage.getItem("recettes")}`
-        document.querySelector("#stock-body").innerHTML = `${localStorage.getItem("stock")}`
+        let usine = Usine.parse(localStorage.getItem("usine"));
+        document.querySelector("#usine-body").innerHTML = localStorage.getItem("usine");
       }
     });
     document.querySelector("#button-reset").addEventListener("click", () => {
-      localStorage.setItem("nom","ChangeIt");
-      localStorage.setItem("tarifs","[]");
-      localStorage.setItem("recettes","[]");
-      localStorage.setItem("stock","[]");
+      // localStorage.setItem("nom","ChangeIt");
+      // localStorage.setItem("tarifs","[]");
+      // localStorage.setItem("recettes","[]");
+      // localStorage.setItem("stock","[]");
     });
   </script>
 </body>

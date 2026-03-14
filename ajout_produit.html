@@ -6,25 +6,133 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Ajout d'un produit</title>
     <style>
-        :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;line-height:1.4;color:#222}
-        body{margin:24px;background:#f7f8fa}
-        .card{background:#fff;border-radius:8px;padding:18px;box-shadow:0 2px 8px rgba(16,24,40,0.06);max-width:920px;margin:auto}
-        h1{margin:0 0 12px;font-size:20px}
-        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:12px}
-        label{display:block;font-size:13px;margin-bottom:6px;color:#333}
-        input[type="number"], input[type="text"], select{width:stretch;padding:4px;border:1px solid #d7dbe0;border-radius:6px;font-size:14px}
-        textarea{width:stretch;height:120px;padding:8px;border:1px solid #d7dbe0;border-radius:6px;font-size:14px;resize:vertical}
-        .row {display:flex;gap:8px;align-items:center}
-        .btn{display:inline-block;padding:8px 12px;border-radius:6px;border:0;background:#0b74de;color:#fff;cursor:pointer;font-weight:600}
-        .btn.ghost{background:#f1f5f9;color:#0b74de;border:1px solid #cfd8e3}
-        .ingredients-form{margin:12px 0;padding:12px;border:1px dashed #dfe6ee;border-radius:6px;background:#fbfdff}
-        table{width:stretch;border-collapse:collapse;margin-top:8px}
-        th,td{padding:10px 8px;border-bottom:1px solid #eef2f6;text-align:left;font-size:14px}
-        th{background:#f8fafc;font-weight:700}
-        .muted{color:#687182;font-size:13px}
-        .actions button{margin-right:6px}
-        .empty{padding:12px;text-align:center;color:#6b7280}
-        .right{justify-self:end}
+        :root {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+            line-height: 1.4;
+            color: #222
+        }
+
+        body {
+            margin: 24px;
+            background: #f7f8fa
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+            max-width: 920px;
+            margin: auto
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            font-size: 20px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #333
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: stretch;
+            padding: 4px;
+            border: 1px solid #d7dbe0;
+            border-radius: 6px;
+            font-size: 14px
+        }
+
+        textarea {
+            width: stretch;
+            height: 120px;
+            padding: 8px;
+            border: 1px solid #d7dbe0;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 0;
+            background: #0b74de;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600
+        }
+
+        .btn.ghost {
+            background: #f1f5f9;
+            color: #0b74de;
+            border: 1px solid #cfd8e3
+        }
+
+        .ingredients-form {
+            margin: 12px 0;
+            padding: 12px;
+            border: 1px dashed #dfe6ee;
+            border-radius: 6px;
+            background: #fbfdff
+        }
+
+        table {
+            width: stretch;
+            border-collapse: collapse;
+            margin-top: 8px
+        }
+
+        th,
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eef2f6;
+            text-align: left;
+            font-size: 14px
+        }
+
+        th {
+            background: #f8fafc;
+            font-weight: 700
+        }
+
+        .muted {
+            color: #687182;
+            font-size: 13px
+        }
+
+        .actions button {
+            margin-right: 6px
+        }
+
+        .empty {
+            padding: 12px;
+            text-align: center;
+            color: #6b7280
+        }
+
+        .right {
+            justify-self: end
+        }
     </style>
 </head>
 
@@ -34,6 +142,10 @@
 
         <section aria-labelledby="production-info">
             <div class="grid" id="production-info">
+                <div style="grid-column: 1/ span max">
+                    <label for="name">Nom</label>
+                    <input id="name" type="text" placeholder="Ex : Velator" required />
+                </div>
                 <div>
                     <label for="cost">Frais de fabrication (ISK)</label>
                     <input id="cost" type="number" min="0" step="1" placeholder="Ex : 12 000" />
@@ -45,8 +157,10 @@
                 <div>
                     <label for="success">Chances de réussites (%)</label>
                     <div class="row">
-                        <input id="success" type="number" min="0" max="100" step="0.1" placeholder="Ex : 85.5" value="100" />
-                        <input id="successRange" type="range" min="0" max="100" step="0.1" style="flex:1" />
+                        <input id="success" type="number" min="0.01" max="100" step="0.01" placeholder="Ex : 85.5"
+                            value="100" />
+                        <input id="successRange" type="range" min="0.1" max="100" step="0.01" style="flex:1"
+                            value="100" />
                     </div>
                 </div>
             </div>
@@ -91,7 +205,7 @@
 2	Datacore - Amarrian Starship Engineering	20	3439725.2000000002 
 3	Datacore - Laser Physics	40	81626.400000000009 
 4	Ship Upgrade Experiment Data	20	315495852.0 '></textarea>
-                    </div>
+                </div>
                 </div>
                 <div style="margin-top:10px;display:flex;gap:8px">
                     <button id="addAllIngredientBtn" class="btn" type="button">Initialiser</button>
@@ -118,12 +232,14 @@
 
     <script type="module">
         import { decodeEchoesListe } from "./app/presentation.js"
-        
+        import { Usine } from "./app/service.js"
+
         // ============================================================
         // ÉLÉMENTS DU DOM
         // ============================================================
-        
+
         // Champs de saisie pour les paramètres de production
+        const champNom = document.getElementById('name');
         const champFraisFabrication = document.getElementById('cost');
         const champNombreProduits = document.getElementById('count');
         const champChancesReussite = document.getElementById('success');
@@ -147,17 +263,25 @@
         // ============================================================
         // DONNÉES
         // ============================================================
-        
+
         /**
          * Liste des ingrédients ajoutés au produit
          * @type {Array<{name: string, qty: number, id?: string}>}
          */
         let ingredientsListe = [];
+        let storedUsine = localStorage.getItem("usine");
+        let usine;
+        if (storedUsine) {
+            usine = Usine.parse(storedUsine);
+        }
+        else {
+            usine = new Usine("ChangeIt", undefined, [], [], []);
+        }
 
         // ============================================================
         // SYNCHRONISATION TAUX DE RÉUSSITE (champ numérique ↔ curseur)
         // ============================================================
-        
+
         /**
          * Synchronise le curseur quand le champ numérique du taux est modifié
          */
@@ -168,7 +292,7 @@
             if (valeur > 100) valeur = 100;
             champCurseurChancesReussite.value = valeur;
         });
-        
+
         /**
          * Synchronise le champ numérique quand le curseur est modifié
          */
@@ -179,7 +303,7 @@
         // ============================================================
         // GESTION FORMULAIRE AJOUT INGRÉDIENT UNIQUE
         // ============================================================
-        
+
         /**
          * Bascule l'affichage du formulaire d'ajout d'un ingrédient
          */
@@ -188,7 +312,7 @@
             if (estAffiche) masquerFormulaireIngredient();
             else afficherFormulaireIngredient();
         });
-        
+
         /**
          * Masque le formulaire et annule la saisie
          */
@@ -203,7 +327,7 @@
             champNomIngredient.focus();
             boutonAjouterIngredient.textContent = 'Masquer le formulaire';
         }
-        
+
         /**
          * Masque le formulaire et réinitialise les champs
          */
@@ -218,7 +342,7 @@
         // ============================================================
         // GESTION FORMULAIRE INITIALISATION PLUSIEURS INGRÉDIENTS
         // ============================================================
-        
+
         /**
          * Bascule l'affichage du formulaire d'initialisation de plusieurs ingrédients
          */
@@ -227,7 +351,7 @@
             if (estAffiche) masquerFormulaireInitialisation();
             else afficherFormulaireInitialisation();
         });
-        
+
         /**
          * Annule l'initialisation
          */
@@ -242,7 +366,7 @@
             zoneTextePlusieursIngredients.focus();
             boutonInitialiserIngredients.textContent = 'Masquer le formulaire';
         }
-        
+
         /**
          * Masque le formulaire d'initialisation et réinitialise le contenu
          */
@@ -256,7 +380,7 @@
         // ============================================================
         // AJOUT D'UN INGRÉDIENT UNIQUE
         // ============================================================
-        
+
         /**
          * Ajoute un ingrédient unique à la liste
          * Valide que le nom n'est pas vide et que la quantité est positive
@@ -266,23 +390,23 @@
             const quantiteIngredient = parseFloat(champQuantiteIngredient.value);
 
             // Validation du nom
-            if (!nomIngredient) { 
-                alert("Le nom de l'ingrédient est requis."); 
-                champNomIngredient.focus(); 
-                return; 
+            if (!nomIngredient) {
+                alert("Le nom de l'ingrédient est requis.");
+                champNomIngredient.focus();
+                return;
             }
-            
+
             // Validation de la quantité
-            if (!isFinite(quantiteIngredient) || quantiteIngredient <= 0) { 
-                alert("La quantité doit être un nombre strictement positif."); 
-                champQuantiteIngredient.focus(); 
-                return; 
+            if (!isFinite(quantiteIngredient) || quantiteIngredient <= 0) {
+                alert("La quantité doit être un nombre strictement positif.");
+                champQuantiteIngredient.focus();
+                return;
             }
 
             // Crée et ajoute l'ingrédient
-            const nouvelIngredient = { 
-                name: nomIngredient, 
-                qty: quantiteIngredient 
+            const nouvelIngredient = {
+                nom: nomIngredient,
+                quantité: quantiteIngredient
             };
             ingredientsListe.push(nouvelIngredient);
             afficherIngredients();
@@ -292,33 +416,33 @@
         // ============================================================
         // AJOUT DE PLUSIEURS INGRÉDIENTS (TEXTE BRUT)
         // ============================================================
-        
+
         /**
          * Initialise les ingrédients en décodant une liste au format texte
          * Format attendu : ID	Names	Quantity	Valuation (séparés par des tabulations)
          */
         boutonInitialiserPlusieursIngredients.addEventListener('click', () => {
             const texteBrut = zoneTextePlusieursIngredients.value.trim();
-            
+
             try {
                 const ingredientsDécodés = decodeEchoesListe(texteBrut);
-                
+
                 // Valide qu'au moins un ingrédient a été trouvé
                 if (ingredientsDécodés.length === 0) {
                     alert("Aucun ingrédient valide trouvé. Veuillez vérifier le format.");
                     zoneTextePlusieursIngredients.focus();
                     return;
                 }
-                
+
                 // Ajoute les ingrédients décodés à la liste
                 ingredientsDécodés.forEach(element => {
                     const nouveauElement = {
-                        name: element.nom,
-                        qty: element.quantité
+                        nom: element.nom,
+                        quantité: element.quantité
                     };
                     ingredientsListe.push(nouveauElement);
                 });
-                
+
                 afficherIngredients();
                 masquerFormulaireInitialisation();
             } catch (erreur) {
@@ -326,19 +450,19 @@
                 alert("Format de liste d'ingrédients invalide. Veuillez vérifier et réessayer.");
                 zoneTextePlusieursIngredients.focus();
             }
-         });
+        });
 
         // ============================================================
         // AFFICHAGE DU TABLEAU D'INGRÉDIENTS
         // ============================================================
-        
+
         /**
          * Rend le tableau des ingrédients avec les données de la liste
          * Si la liste est vide, affiche un message "Aucun ingrédient défini"
          */
         function afficherIngredients() {
             corpsTableauIngredients.innerHTML = '';
-            
+
             // Affiche un message si aucun ingrédient
             if (ingredientsListe.length === 0) {
                 const ligneVide = document.createElement('tr');
@@ -353,17 +477,17 @@
                 const ligne = document.createElement('tr');
 
                 // Colonne : Nom
-                const celluleNom = document.createElement('td'); 
-                celluleNom.textContent = ingredient.name;
-                
+                const celluleNom = document.createElement('td');
+                celluleNom.textContent = ingredient.nom;
+
                 // Colonne : Quantité (formatée avec locale et max 6 décimales)
-                const celluleQuantite = document.createElement('td'); 
-                celluleQuantite.textContent = Number(ingredient.qty).toLocaleString(undefined, { maximumFractionDigits: 6 });
+                const celluleQuantite = document.createElement('td');
+                celluleQuantite.textContent = Number(ingredient.quantité).toLocaleString(undefined, { maximumFractionDigits: 6 });
 
                 // Colonne : Actions
-                const celluleActions = document.createElement('td'); 
+                const celluleActions = document.createElement('td');
                 celluleActions.className = 'actions';
-                
+
                 const boutonSupprimer = document.createElement('button');
                 boutonSupprimer.type = 'button';
                 boutonSupprimer.className = 'btn ghost';
@@ -387,28 +511,31 @@
         // ============================================================
         // ENREGISTREMENT DE LA LIGNE DE PRODUCTION
         // ============================================================
-        
+
         /**
          * Enregistre les données de la ligne de production
          * Collecte les frais, nombre de produits, taux de réussite et ingrédients
          */
         boutonEnregistrer.addEventListener('click', () => {
-            const donnéesProduit = {
-                frais_de_fabrication: parseFloat(champFraisFabrication.value || 0),
-                nombre_produits: parseInt(champNombreProduits.value || 0, 10),
-                chances_reussite_pct: parseFloat(champChancesReussite.value || 0),
-                ingredients: ingredientsListe
+            const recette = {
+                nom: champNom.value.trim(),
+                frais: parseFloat(champFraisFabrication.value || 0),
+                quantité_produite: parseInt(champNombreProduits.value || 0),
+                chances_de_succès: parseFloat(champChancesReussite.value || 0),
+                ingrédients: ingredientsListe
             };
-            
-            // TODO : Envoyer les données à une API
-            console.log('Ligne de production sauvegardée:', donnéesProduit);
-            alert('Ligne de production prête (voir console pour données).');
+
+            usine.ajouteRecette(recette);
+            localStorage.setItem("usine", usine.toString());
+
+            window.location.href = "/";
+
         });
 
         // ============================================================
         // INITIALISATION
         // ============================================================
-        
+
         // Affiche le tableau vide au chargement
         afficherIngredients();
     </script>

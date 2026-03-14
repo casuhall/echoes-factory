@@ -1,5 +1,4 @@
 
-
 /**
  * Décode une liste d'objets exportée par le jeu pour en extraire les données associées.
  * Analyse le format tabulé avec index, nom, quantité et valeur.
@@ -13,12 +12,13 @@ function decodeEchoesListe(value) {
     let ligne = /^(\d+)\t(.+)\t(\d+)\t(.+)$/.exec(element);
     if (ligne) {
       let [, index, nom, quantité_brut, valeur_brut] = ligne;
-      let quantité = Number.parseInt(quantité_brut);
+      let quantité = Number.parseFloat(quantité_brut);
       let valeur = Number.parseFloat(valeur_brut);
       liste.push({ index, nom, quantité, valeur })
     }
   });
   return liste;
 }
+
 
 export { decodeEchoesListe }
