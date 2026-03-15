@@ -6,6 +6,8 @@ import { Catalogue, Tarification, Inventaire, Produit, Recette, Tarif, Ingrédie
  */
 class Usine {
     #nom;
+    /** @type {string} Nom de l'usine */
+    get nom() { return this.#nom; }
     #gestionnaire_evenements;
     #inventaire = new Inventaire();
     /** @type {[nom:string,quantité:number][]} Stock courant de l'usine */

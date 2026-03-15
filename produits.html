@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Catalogue des Produits - Usine</title>
+    <style>
+        body {font-family: Arial, sans-serif;background: #f7f7f7;margin: 0;padding: 0;}
+        h1 {text-align: center;margin-top: 30px;}
+        table {margin: 40px auto;border-collapse: collapse;width: 90%;background: #fff;}
+        th, td {border: 1px solid #ccc;padding: 12px 8px;text-align: left;}
+        th {background: #eaeaea;}
+        tr:nth-child(even) {background: #f2f2f2;}
+        .rentable {color: green;font-weight: bold;}
+        .non-rentable {color: red;font-weight: bold;}
+    </style>
+</head>
+
+<body>
+    <nav style="width:90%; margin: 0 auto 20px auto;">
+        <ul style="display:flex; list-style:none; padding:0; margin:0; border-bottom:2px solid #eaeaea;">
+            <li style="margin-right:30px;">
+                <a href="index.html"
+                    style="text-decoration:none; color:#333; padding:12px 24px; display:inline-block;">Accueil</a>
+            </li>
+            <li style="margin-right:30px;">
+                <a href="marché.html"
+                    style="text-decoration:none; color:#333; padding:12px 24px; display:inline-block;">Marché</a>
+            </li>
+            <li style="margin-right:30px;">
+                <a href="stock.html"
+                    style="text-decoration:none; color:#333; padding:12px 24px; display:inline-block;">Stock</a>
+            </li>
+            <li>
+                <a href="produits.html"
+                    style="text-decoration:none; color:#0b74de; font-weight:bold; border-bottom:3px solid #0b74de; padding:12px 24px; display:inline-block;">Produits</a>
+            </li>
+        </ul>
+    </nav>
+    <h1>Catalogue des Produits de l'Usine</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Prix de revient (€)</th>
+                <th>Prix d'achat (€)</th>
+                <th>Rentabilité</th>
+                <th>Commentaires</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Widget Alpha</td>
+                <td>12.50</td>
+                <td>18.00</td>
+                <td class="rentable">Rentable</td>
+                <td>Produit phare, forte demande.</td>
+            </tr>
+            <tr>
+                <td>Gadget Beta</td>
+                <td>9.00</td>
+                <td>8.50</td>
+                <td class="non-rentable">Non rentable</td>
+                <td>Prix d'achat trop bas, à revoir.</td>
+            </tr>
+            <tr>
+                <td>Module Gamma</td>
+                <td>15.00</td>
+                <td>22.00</td>
+                <td class="rentable">Rentable</td>
+                <td>Bonne marge, ventes régulières.</td>
+            </tr>
+            <tr>
+                <td>Composant Delta</td>
+                <td>20.00</td>
+                <td>19.00</td>
+                <td class="non-rentable">Non rentable</td>
+                <td>Coût de production élevé.</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>

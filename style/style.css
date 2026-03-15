@@ -1,0 +1,132 @@
+:root {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    line-height: 1.4;
+    color: #222
+}
+
+body {
+    margin: 24px;
+    background: #f7f8fa
+}
+
+main {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+}
+
+main,
+nav {
+    max-width: 920px;
+    margin: auto;
+    padding: 18px;
+}
+
+h1,
+.h1 {
+    margin: 0 0 12px;
+    font-size: 20px;
+    font-weight: 700
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #333
+}
+
+input[type="number"],
+input[type="text"],
+select {
+    width: stretch;
+    padding: 4px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px
+}
+
+textarea {
+    width: stretch;
+    height: 120px;
+    padding: 8px;
+    border: 1px solid #d7dbe0;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: vertical
+}
+
+.row {
+    display: flex;
+    gap: 8px;
+    align-items: center
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 0;
+    background: #0b74de;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600
+}
+
+.btn.ghost {
+    background: #f1f5f9;
+    color: #0b74de;
+    border: 1px solid #cfd8e3
+}
+
+.ingredients-form {
+    margin: 12px 0;
+    padding: 12px;
+    border: 1px dashed #dfe6ee;
+    border-radius: 6px;
+    background: #fbfdff
+}
+
+table {
+    width: stretch;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #eef2f6;
+    text-align: left;
+    font-size: 14px
+}
+
+th {
+    background: #f8fafc;
+    font-weight: 700
+}
+
+.muted {
+    color: #687182;
+    font-size: 13px
+}
+
+.actions button {
+    margin-right: 6px
+}
+
+.empty {
+    padding: 12px;
+    text-align: center;
+    color: #6b7280
+}
+
+.right {
+    justify-self: end
+}
