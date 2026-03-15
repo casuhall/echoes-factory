@@ -19,8 +19,7 @@
         </div>
     </nav>
     <main class="card" id="app">
-        <h1 id="productName"><input id="productNameInput" class="h1" type="text" placeholder="Ex : Nom du produit" />
-        </h1>
+        <input id="productNameInput" class="h1" type="text" placeholder="Ex : Nom du produit" required/>
 
         <section aria-labelledby="production-info">
             <div class="grid" id="production-info">
@@ -121,8 +120,8 @@
         const nomUsine = document.getElementById('nomUsine');
 
         // Champs de saisie pour les paramètres de production
-        const titreNom = document.getElementById('productName');
         const champFraisFabrication = document.getElementById('cost');
+        const champNomProduit = document.getElementById('productNameInput');
         const champNombreProduits = document.getElementById('count');
         const champChancesReussite = document.getElementById('success');
         const champCurseurChancesReussite = document.getElementById('successRange');
@@ -401,7 +400,7 @@
          */
         boutonEnregistrer.addEventListener('click', () => {
             const recette = {
-                nom: titreNom.innerText.trim(),
+                nom: champNomProduit.value.trim(),
                 frais: parseFloat(champFraisFabrication.value || 0),
                 quantité_produite: parseInt(champNombreProduits.value || 0),
                 chances_de_succès: parseFloat(champChancesReussite.value || 0),
