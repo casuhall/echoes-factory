@@ -14,12 +14,12 @@
             <span class="h1" id="nomUsine">[Nom de l'usine]</span>
             <a href="/" class="btn ghost">Accueil</a>
             <a href="/marché.html" class="btn ghost">Marché</a>
-            <a href="/produits.html" class="btn">Produits</a>
+            <a class="btn">Produits</a>
             <a href="http://www.perdu.com/" class="btn ghost">Stock</a>
         </div>
     </nav>
-    <main class="card" id="app">
-        <input id="productNameInput" class="h1" type="text" placeholder="Ex : Nom du produit" required/>
+    <main id="ajoutProduitMain">
+        <input id="productNameInput" class="h1" type="text" placeholder="Ex : Nom du produit" required />
 
         <section aria-labelledby="production-info">
             <div class="grid" id="production-info">
@@ -103,9 +103,16 @@
                 </table>
             </div>
         </section>
-        <div class="right" style="margin-left:auto">
-            <button id="saveBtn" class="btn" type="button">Enregistrer le produit</button>
-        </div>
+        <section id="boutons">
+            <div class="grid">
+                <div>
+                    <button id="annulerBtn" class="btn ghost" type="button">Retour aux produits</button>
+                </div>
+                <div class="right">
+                    <button id="saveBtn" class="btn" type="button">Enregistrer le produit</button>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script type="module">
@@ -140,6 +147,7 @@
         const boutonAnnulerInitialisation = document.getElementById('cancelAllIngredientBtn');
         const corpsTableauIngredients = document.getElementById('ingredientsBody');
         const boutonEnregistrer = document.getElementById('saveBtn');
+        const boutonAnnuler = document.getElementById('annulerBtn');
 
         // ============================================================
         // DONNÉES
@@ -410,8 +418,11 @@
             usine.ajouteRecette(recette);
             localStorage.setItem("usine", usine.toString());
 
-            window.location.href = "/";
+            window.location.href = "./produits.html";
 
+        });
+        boutonAnnuler.addEventListener('click', () => {
+            window.location.href = "./produits.html";
         });
 
         // ============================================================

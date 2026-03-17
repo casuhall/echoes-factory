@@ -32,6 +32,8 @@ class Usine {
     constructor(nom, gestionnaire_evenements = new GestionnaireEvenements(), recettes = [], tarifs = [], stock = []) {
         this.#nom = nom;
         this.#gestionnaire_evenements = gestionnaire_evenements;
+        gestionnaire_evenements.consomme("maj_produit", this.maj_ingrédient_produit.bind(this));
+        gestionnaire_evenements.consomme("maj_tarif", this.maj_ingrédient_produit.bind(this));
         for (const tarif of tarifs) {
             try {
                 this.évaluer(tarif.nom, Number.parseFloat(tarif.montant), tarif.date_effet);
@@ -53,8 +55,6 @@ class Usine {
                 console.log(`Recette non inscrite au livre de recette : ${recette?.nom}. Cause : ${error.message}.`);
             }
         }
-        gestionnaire_evenements.consomme("maj_produit", this.maj_ingrédient_produit.bind(this));
-        gestionnaire_evenements.consomme("maj_tarif", this.maj_ingrédient_produit.bind(this));
     }
 
     maj_ingrédient_produit(nom_ingrédient) {
@@ -101,6 +101,10 @@ class Usine {
             if (tarif_ingrédient) {
                 ingrédient.estimé_unitaire = tarif_ingrédient;
             }
+            let produit_ingrédient = this.produit(ingrédient.nom)
+            if(produit_ingrédient){
+                ingrédient.produit = produit_ingrédient;
+            }
         }
         // Création du produit en fonction de la recette et de son prix sur le marché
         let produit = new Produit(recette, this.#marché.tarif(recette.nom));
@@ -127,6 +131,18 @@ class Usine {
     évaluer(objet, prix, date = new Date()) {
         this.#marché.mise_a_jour(objet, Number.parseFloat(prix), new Date(date));
         this.#gestionnaire_evenements.produit("maj_tarif", objet);
+    }
+
+    /**
+     * Supression d'un produit du catalogue de l'usine.
+     * Ne devrait pas être utilisé en temps normal.
+     * 
+     * @param {string} nomProduit 
+     */
+    supprimerProduit(nomProduit) {
+        if(!this.#catalogue_produits.retirer(nomProduit))
+            throw new Error("Aucun produit correspondant à supprimer");
+        this.#gestionnaire_evenements.produit("maj_produit",nomProduit);
     }
 
     toString() {

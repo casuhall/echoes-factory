@@ -47,28 +47,36 @@ describe('Usine - Gestion complète', () => {
         /** @type {Usine} */
         let usine;
         /** @type {Recette} */
-        let recette_simple, recette_non_tarifée;
+        let recette_simple, recette_non_tarifée, recette_complexe;
 
         beforeEach(() => {
             recette_simple = new Recette('Simple', 50, [
                 new Ingrédient('Ingredient1', 2),
                 new Ingrédient('Ingredient2', 3)
             ]);
+            recette_complexe = new Recette('Complexe', 50, [
+                new Ingrédient('Simple', 2)
+            ]);
             recette_non_tarifée = new Recette('NonTarifée', 50, [
                 new Ingrédient('IngredientInconnu1', 2),
                 new Ingrédient('IngredientInconnu2', 3)
             ]);
             usine = new Usine("Une usine toute neuve", undefined,
-                [recette_simple, recette_non_tarifée],
-                [new Tarif('Ingredient1', 10), new Tarif('Ingredient2', 20), new Tarif('Simple', 180)],);
+                [recette_simple, recette_non_tarifée, recette_complexe],
+                [new Tarif('Ingredient1', 10), new Tarif('Ingredient2', 20), new Tarif('Simple', 180), new Tarif("Complexe", 300)],);
         });
 
         it('Les produits créés à l initialisation sont tarifés correctement', () => {
             const produit_simple = usine.produit("Simple");
             expect(produit_simple).to.exist;
-            expect(produit_simple.prix_estimé).to.equal(180); // 180
+            expect(produit_simple.prix_estimé).to.equal(180);
             expect(produit_simple.coût_reviens).to.equal(130); // 50 + 2*10 + 3*20 = 130
             expect(produit_simple.rentabilité).to.equal(0.38); // (180-130)/130 = 50/130 = 0.3846... => 0.38
+            const produit_complexe = usine.produit("Complexe");
+            expect(produit_complexe).to.exist;
+            expect(produit_complexe.prix_estimé).to.equal(300);
+            expect(produit_complexe.coût_reviens).to.equal(310); // 50 + 2*130 = 310
+            expect(produit_complexe.rentabilité).to.equal(-0.03); // (300-310)/310 = -10/310 = -0,032258... => -0.03
         });
 
         it('Les produits non tarifés à l initialisation n ont pas de coût de revient calculé', () => {
@@ -110,6 +118,17 @@ describe('Usine - Gestion complète', () => {
                 expect(stock_désérialisé.nom).to.equal(stock_original.nom);
                 expect(stock_désérialisé.quantité).to.equal(stock_original.quantité);
             }
+        });
+
+        it("Un produit existant doit pouvoir être supprimer. La suppréssion doit se répercuter sur les autres produits si nécessaires", () => {
+            // Aucune erreur ne devrait être produite à la supression d'un produit existant
+            usine.supprimerProduit("Simple");
+            // Le produit restant composé à partir du produit supprimé doit être mis à jour suite à cette supression
+            const produit_complexe = usine.produit("Complexe");
+            expect(produit_complexe).to.exist;
+            expect(produit_complexe.prix_estimé).to.equal(300);
+            expect(produit_complexe.coût_reviens).to.equal(410); // 50 + 2*180 = 410
+            expect(produit_complexe.rentabilité).to.equal(-0.27); // (300-410)/410 = -110/410 = -0,2682926... => -0,27
         });
     });
 

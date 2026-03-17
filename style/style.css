@@ -86,6 +86,11 @@ textarea {
     border: 1px solid #cfd8e3
 }
 
+.btn.warning {
+    background: #c11515;
+    border: 1px solid #cfd8e3
+}
+
 .ingredients-form {
     margin: 12px 0;
     padding: 12px;
