@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Modification d'un produit</title>
+    <link rel="stylesheet" href="./style/style.css" />
+</head>
+
+<body>
+    <nav class="">
+        <div>
+            <span class="h1" id="nomUsine">[Nom de l'usine]</span>
+            <a href="./index.html" class="btn ghost">Accueil</a>
+            <a href="./marché.html" class="btn ghost">Marché</a>
+            <a class="btn">Produits</a>
+            <a href="http://www.perdu.com/" class="btn ghost">Stock</a>
+        </div>
+    </nav>
+    <main id="modifieProduitMain">
+        <h1 id="productNameInput" class="h1" >[Nom du produit]</h1>
+
+        <section aria-labelledby="production-info">
+            <div class="grid" id="production-info">
+                <div>
+                    <label for="cost">Frais de fabrication (ISK)</label>
+                    <input id="cost" type="number" min="1" step="1" placeholder="Ex : 12 000" />
+                </div>
+                <div>
+                    <label for="count">Nombre d'objets produits</label>
+                    <input id="count" type="number" min="1" step="1" placeholder="Ex : 10" />
+                </div>
+                <div>
+                    <label for="success">Chances de réussites (%)</label>
+                    <div class="row">
+                        <input id="success" type="number" min="0.01" max="100" step="0.01" placeholder="Ex : 85.5"
+                            value="100" />
+                        <input id="successRange" type="range" min="0.1" max="100" step="0.01" style="flex:1"
+                            value="100" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section aria-labelledby="ingredients">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+                <h2 id="ingredients" style="margin:0;font-size:16px">Ingrédients</h2>
+                <button id="toggleAddIngredientForm" class="btn ghost" type="button">Ajouter un ingrédient</button>
+                <button id="toggleAllIngredientForm" class="btn ghost" type="button">Initialiser les
+                    ingrédients</button>
+            </div>
+
+            <form id="ingredientForm" class="ingredients-form" style="display:none" onsubmit="return false"
+                aria-hidden="true">
+                <div class="grid">
+                    <div>
+                        <label for="ingName">Nom de l'ingrédient</label>
+                        <input id="ingName" type="text" placeholder="Ex : Tritanium" />
+                    </div>
+                    <div>
+                        <label for="ingQty">Quantité</label>
+                        <input id="ingQty" type="number" min="0" step="1" placeholder="Ex : 2" />
+                    </div>
+                </div>
+                <div style="margin-top:10px;display:flex;gap:8px">
+                    <button id="addIngredientBtn" class="btn" type="button">Ajouter</button>
+                    <button id="cancelIngredientBtn" class="btn ghost" type="button">Annuler</button>
+                </div>
+            </form>
+
+            <form id="ingredientsForm" class="ingredients-form" style="display:none" onsubmit="return false"
+                aria-hidden="true">
+                <div class="grid">
+                    <div>
+                        <label for="ingredientsArea">Ingrédients</label>
+                        <textarea id="ingredientsArea" placeholder='ID	Names	Quantity	Valuation 
+1	Phantasm Blueprint	2	92105263.159999996 
+2	Datacore - Amarrian Starship Engineering	20	3439725.2000000002 
+3	Datacore - Laser Physics	40	81626.400000000009 
+4	Ship Upgrade Experiment Data	20	315495852.0 '></textarea>
+                    </div>
+                </div>
+                <div style="margin-top:10px;display:flex;gap:8px">
+                    <button id="addAllIngredientBtn" class="btn" type="button">Initialiser</button>
+                    <button id="cancelAllIngredientBtn" class="btn ghost" type="button">Annuler</button>
+                </div>
+            </form>
+            <div class="grid">
+                <table id="ingredientsTable" aria-live="polite">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Quantité</th>
+                            <th style="width:110px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ingredientsBody">
+                        <tr>
+                            <td class="empty" colspan="3">Aucun ingrédient défini</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section>
+            <div class="grid">
+                <div>
+                    <button id="annulerBtn" class="btn ghost" type="button">Retour aux produits</button>
+                </div>
+                <div class="right">
+                    <button id="saveBtn" class="btn" type="button">Enregistrer les modifications</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { decodeEchoesListe } from "./app/presentation.js"
+        import { Usine } from "./app/service.js"
+
+        let storedUsine = localStorage.getItem("usine");
+        const usine = storedUsine ? Usine.parse(storedUsine) : new Usine("ChangeIt", undefined, [], [], []);
+        document.getElementById('nomUsine').innerText = usine.nom;
+
+        // récupération du produit à modifier
+        const urlParams = new URLSearchParams(window.location.search);
+        const nomProduit = urlParams.get('produit');
+        const produit = usine.produit(nomProduit);
+        if (!produit) {
+            alert("Aucun produit correspondant");
+            window.location.href = "./produits.html";
+        }
+        let ingredientsListe = produit.recette.ingrédients;
+
+        // Champs de saisie pour les paramètres de production
+        const champNomProduit = document.getElementById('productNameInput');
+        champNomProduit.innerText = produit.nom;
+        const champFraisFabrication = document.getElementById('cost');
+        champFraisFabrication.value = produit.recette.frais;
+        const champNombreProduits = document.getElementById('count');
+        champNombreProduits.value = produit.recette.quantité_produite;
+        const champChancesReussite = document.getElementById('success');
+        champChancesReussite.value = produit.recette.chances_de_succès * 100;
+        const champCurseurChancesReussite = document.getElementById('successRange');
+        champCurseurChancesReussite.value = produit.recette.chances_de_succès * 100;
+
+        // Boutons et formulaires pour la gestion des ingrédients
+        const boutonAjouterIngredient = document.getElementById('toggleAddIngredientForm');
+        const boutonInitialiserIngredients = document.getElementById('toggleAllIngredientForm');
+        const formulaireAjoutIngredient = document.getElementById('ingredientForm');
+        const formulaireInitialisationIngredients = document.getElementById('ingredientsForm');
+        const zoneTextePlusieursIngredients = document.getElementById('ingredientsArea');
+        const champNomIngredient = document.getElementById('ingName');
+        const champQuantiteIngredient = document.getElementById('ingQty');
+        const boutonAjouterIngredientUnique = document.getElementById('addIngredientBtn');
+        const boutonAnnulerAjoutIngredient = document.getElementById('cancelIngredientBtn');
+        const boutonInitialiserPlusieursIngredients = document.getElementById('addAllIngredientBtn');
+        const boutonAnnulerInitialisation = document.getElementById('cancelAllIngredientBtn');
+        const corpsTableauIngredients = document.getElementById('ingredientsBody');
+
+
+        // Boutons globaux de validation/anulation du formulaire
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            const recette = {
+                nom: champNomProduit.value.trim(),
+                frais: parseFloat(champFraisFabrication.value || 0),
+                quantité_produite: parseInt(champNombreProduits.value || 0),
+                chances_de_succès: parseFloat(champChancesReussite.value || 0),
+                ingrédients: ingredientsListe
+            };
+
+            usine.modifieProduit(recette);
+            localStorage.setItem("usine", usine.toString());
+
+            window.location.href = "./produits.html";
+
+        });
+        document.getElementById('annulerBtn').addEventListener('click', () => {
+            window.location.href = "./produits.html";
+        });
+
+        /**
+         * Rend le tableau des ingrédients avec les données de la liste
+         * Si la liste est vide, affiche un message "Aucun ingrédient défini"
+         */
+        function afficherIngredients() {
+            corpsTableauIngredients.innerHTML = '';
+
+            // Affiche un message si aucun ingrédient
+            if (ingredientsListe.length === 0) {
+                const ligneVide = document.createElement('tr');
+                ligneVide.innerHTML = '<td class="empty" colspan="3">Aucun ingrédient défini</td>';
+                corpsTableauIngredients.appendChild(ligneVide);
+                return;
+            }
+
+            // Ajoute une ligne par ingrédient
+            ingredientsListe.forEach(ingredient => {
+                const ligne = document.createElement('tr');
+
+                // Colonne : Nom
+                const celluleNom = document.createElement('td');
+                celluleNom.textContent = ingredient.nom;
+
+                // Colonne : Quantité (formatée avec locale et max 6 décimales)
+                const celluleQuantite = document.createElement('td');
+                celluleQuantite.textContent = Number(ingredient.quantité).toLocaleString(undefined, { maximumFractionDigits: 6 });
+
+                // Colonne : Actions
+                const celluleActions = document.createElement('td');
+                celluleActions.className = 'actions';
+
+                const boutonSupprimer = document.createElement('button');
+                boutonSupprimer.type = 'button';
+                boutonSupprimer.className = 'btn warning';
+                boutonSupprimer.textContent = '🗑';
+                boutonSupprimer.addEventListener('click', () => {
+                    // Filtre l'ingrédient supprimé de la liste
+                    ingredientsListe = ingredientsListe.filter(i => i.name !== ingredient.name);
+                    afficherIngredients();
+                });
+
+                celluleActions.appendChild(boutonSupprimer);
+
+                // Assemble la ligne complète
+                ligne.appendChild(celluleNom);
+                ligne.appendChild(celluleQuantite);
+                ligne.appendChild(celluleActions);
+                corpsTableauIngredients.appendChild(ligne);
+            });
+        }
+
+        afficherIngredients();
+    </script>
+</body>
+
+</html>

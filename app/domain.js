@@ -324,7 +324,7 @@ class Produit {
 
   #rentabilité;
   /** @type {number} Rentabilité calculée du produit ]-1,1[ (arrondi à deux chiffres après la virgule) */
-  get rentabilité() { return this.#rentabilité ? Math.round(this.#rentabilité * 100) / 100 : undefined };
+  get rentabilité() { return (this.#rentabilité === 0 || this.#rentabilité) ? Math.round(this.#rentabilité * 100) / 100 : undefined };
 
   /** @type {number} */
   #prix_estimé;

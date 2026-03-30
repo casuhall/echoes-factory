@@ -34,7 +34,7 @@ describe('Usine - Gestion complète', () => {
                     new Ingrédient("Bois", 2),
                     new Ingrédient("Cuir", 1)
                 ]);
-                usine.ajouteRecette(recette);
+                usine.ajouteProduit(recette);
             } catch (e) { console.error(e); expect.fail(`Une exception inattendue a été levée lors de l'ajout de la recette : ${e.message}`); }
             const produit_épée = usine.produit("Épée");
             expect(produit_épée).to.exist;
@@ -130,6 +130,23 @@ describe('Usine - Gestion complète', () => {
             expect(produit_complexe.coût_reviens).to.equal(410); // 50 + 2*180 = 410
             expect(produit_complexe.rentabilité).to.equal(-0.27); // (300-410)/410 = -110/410 = -0,2682926... => -0,27
         });
+
+        it("La modification d'une recette permet la réévaluation des produits associés", () => {
+            usine.modifieProduit(new Recette('Simple', 50, [
+                new Ingrédient('Ingredient1', 1),
+                new Ingrédient('Ingredient2', 2)
+            ]));
+            const produit_simple = usine.produit("Simple");
+            expect(produit_simple).to.exist;
+            expect(produit_simple.prix_estimé).to.equal(180);
+            expect(produit_simple.coût_reviens).to.equal(100); // 50 + 1*10 + 2*20 = 100
+            expect(produit_simple.rentabilité).to.equal(0.8); // (180-100)/100 = 80/100 = 0.8
+            const produit_complexe = usine.produit("Complexe");
+            expect(produit_complexe).to.exist;
+            expect(produit_complexe.prix_estimé).to.equal(300);
+            expect(produit_complexe.coût_reviens).to.equal(250); // 50 + 2*100 = 250
+            expect(produit_complexe.rentabilité).to.equal(0.2); // (300-250)/250 = -50/250 = 0,2
+         });
     });
 
     describe("Fiabilisation de l'initialisation d'une usine existante", () => {

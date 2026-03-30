@@ -89,6 +89,15 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(produit.statut).to.equal('BUY');
         });
 
+        it("Un produit dont le coût de revient est égal au prix estimé ne provoque pas d'erreur", () => {
+            let produit = new Produit(recette_simple, new Tarif("Simple", 130));
+            expect(produit.recette).to.deep.equal(recette_simple);
+            expect(produit.coût_reviens).to.equal(130); // 50+(2*10)+(3*20)
+            expect(produit.prix_estimé).to.equal(130);
+            expect(produit.rentabilité).to.equal(0);
+            expect(produit.statut).to.equal('BUY');
+        });
+
         it('En cas de sous produit, si celui-ci est plus rentable à produire, c est le cout de reviens qui sera utilisé dans le calcul du cout de reviens du produit englobant', () => {
             let produit_simple = new Produit(recette_simple, new Tarif("Simple", 180));
             let recette_imbriquée = new Recette('imbriquée', 50, [

@@ -50,7 +50,7 @@ class Usine {
         }
         for (const recette of recettes) {
             try {
-                this.ajouteRecette(recette);
+                this.ajouteProduit(recette);
             } catch (error) {
                 console.log(`Recette non inscrite au livre de recette : ${recette?.nom}. Cause : ${error.message}.`);
             }
@@ -81,11 +81,11 @@ class Usine {
     }
 
     /**
-     * Ajoute une recette au livre de recettes et initialise le produit correspondant.
+     * Ajoute un produit au catalogue de l'usine.
      * @param {Recette} recette Recette à ajouter
      * @throws {Error} Si une recette avec le même nom existe déjà
      */
-    ajouteRecette(recette) {
+    ajouteProduit(recette) {
         if (!recette) throw new Error(`Recette nécessaire pour l'initialisation d'un produit`);
         if (!(recette instanceof Recette)) {
             // Fiabilisation de la recette
@@ -102,7 +102,7 @@ class Usine {
                 ingrédient.estimé_unitaire = tarif_ingrédient;
             }
             let produit_ingrédient = this.produit(ingrédient.nom)
-            if(produit_ingrédient){
+            if (produit_ingrédient) {
                 ingrédient.produit = produit_ingrédient;
             }
         }
@@ -110,6 +110,26 @@ class Usine {
         let produit = new Produit(recette, this.#marché.tarif(recette.nom));
         this.#catalogue_produits.inscrire(produit);
         this.#gestionnaire_evenements.produit("maj_produit", recette.nom);
+    }
+
+    /**
+     * Modifie un produit préalablement inscrit au catalogue de l'usine.
+     * @param {Recette} recette Recette à ajouter
+     * @throws {Error} Si la recette nouvelle recette ne corresponds à aucun produit existant.
+     */
+    modifieProduit(recette) {
+        if (!recette) throw new Error(`Recette nécessaire pour la mise à jour d'un produit`);
+        // retrait temporaire du produit au catalogue
+        let old_produit = this.#catalogue_produits.retirer(recette.nom);
+        if(!old_produit) throw new Error(`La recette ne semble correspondre à aucun produit au catalogue : ${recette}`);
+        try {
+            this.ajouteProduit(recette);
+        } catch (error) { // en cas d'erreur à la création de la nouvelle version du produit
+            // Réinscription de l'ancien produit au catalogue
+            this.#catalogue_produits.inscrire(old_produit);
+            // Propagation de l'erreur initiale
+            throw error;
+        }
     }
 
     /**
@@ -140,9 +160,9 @@ class Usine {
      * @param {string} nomProduit 
      */
     supprimerProduit(nomProduit) {
-        if(!this.#catalogue_produits.retirer(nomProduit))
+        if (!this.#catalogue_produits.retirer(nomProduit))
             throw new Error("Aucun produit correspondant à supprimer");
-        this.#gestionnaire_evenements.produit("maj_produit",nomProduit);
+        this.#gestionnaire_evenements.produit("maj_produit", nomProduit);
     }
 
     toString() {

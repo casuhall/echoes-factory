@@ -12,8 +12,8 @@
     <nav class="">
         <div>
             <span class="h1" id="nomUsine">[Nom de l'usine]</span>
-            <a href="/" class="btn ghost">Accueil</a>
-            <a href="/marché.html" class="btn ghost">Marché</a>
+            <a href="./index.html" class="btn ghost">Accueil</a>
+            <a href="./marché.html" class="btn ghost">Marché</a>
             <a class="btn">Produits</a>
             <a href="http://www.perdu.com/" class="btn ghost">Stock</a>
         </div>
@@ -92,12 +92,12 @@
                         <tr>
                             <th>Nom</th>
                             <th>Quantité</th>
-                            <th style="width:110px">Actions</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="ingredientsBody">
-                        <tr class="empty">
-                            <td colspan="3">Aucun ingrédient défini</td>
+                        <tr>
+                            <td class="empty" colspan="3">Aucun ingrédient défini</td>
                         </tr>
                     </tbody>
                 </table>
@@ -356,8 +356,7 @@
             // Affiche un message si aucun ingrédient
             if (ingredientsListe.length === 0) {
                 const ligneVide = document.createElement('tr');
-                ligneVide.className = 'empty';
-                ligneVide.innerHTML = '<td colspan="4">Aucun ingrédient défini</td>';
+                ligneVide.innerHTML = '<td class="empty" colspan="3">Aucun ingrédient défini</td>';
                 corpsTableauIngredients.appendChild(ligneVide);
                 return;
             }
@@ -380,8 +379,8 @@
 
                 const boutonSupprimer = document.createElement('button');
                 boutonSupprimer.type = 'button';
-                boutonSupprimer.className = 'btn ghost';
-                boutonSupprimer.textContent = 'Supprimer';
+                boutonSupprimer.className = 'btn warning';
+                boutonSupprimer.textContent = '🗑';
                 boutonSupprimer.addEventListener('click', () => {
                     // Filtre l'ingrédient supprimé de la liste
                     ingredientsListe = ingredientsListe.filter(i => i.name !== ingredient.name);
@@ -415,7 +414,7 @@
                 ingrédients: ingredientsListe
             };
 
-            usine.ajouteRecette(recette);
+            usine.ajouteProduit(recette);
             localStorage.setItem("usine", usine.toString());
 
             window.location.href = "./produits.html";
