@@ -8,6 +8,11 @@ class Usine {
     #nom;
     /** @type {string} Nom de l'usine */
     get nom() { return this.#nom; }
+    set nom(nom) {
+        if (!nom)
+            throw Error("Nom d'usine Obligatoire");
+        this.#nom = nom
+    }
     #gestionnaire_evenements;
     #inventaire = new Inventaire();
     /** @type {[nom:string,quantité:number][]} Stock courant de l'usine */
@@ -30,7 +35,7 @@ class Usine {
      * @param {{nom:string,quantité:number}[]} [stock] Stock initial de l'usine
      */
     constructor(nom, gestionnaire_evenements = new GestionnaireEvenements(), recettes = [], tarifs = [], stock = []) {
-        this.#nom = nom;
+        this.#nom = nom || "Jhon Doe";
         this.#gestionnaire_evenements = gestionnaire_evenements;
         gestionnaire_evenements.consomme("maj_produit", this.maj_ingrédient_produit.bind(this));
         gestionnaire_evenements.consomme("maj_tarif", this.maj_ingrédient_produit.bind(this));
@@ -50,7 +55,7 @@ class Usine {
         }
         for (const recette of recettes) {
             try {
-                this.ajouteProduit(recette);
+                this.ajouteRecette(recette);
             } catch (error) {
                 console.log(`Recette non inscrite au livre de recette : ${recette?.nom}. Cause : ${error.message}.`);
             }
@@ -81,11 +86,11 @@ class Usine {
     }
 
     /**
-     * Ajoute un produit au catalogue de l'usine.
+     * Ajoute une recette au livre de recettes et initialise le produit correspondant.
      * @param {Recette} recette Recette à ajouter
      * @throws {Error} Si une recette avec le même nom existe déjà
      */
-    ajouteProduit(recette) {
+    ajouteRecette(recette) {
         if (!recette) throw new Error(`Recette nécessaire pour l'initialisation d'un produit`);
         if (!(recette instanceof Recette)) {
             // Fiabilisation de la recette
@@ -170,8 +175,14 @@ class Usine {
     }
 
     static parse(string) {
-        let objet = JSON.parse(string);
-        return new Usine(objet.nom, undefined, objet.recettes, objet.tarifs, objet.stock);
+        try {
+            let objet = JSON.parse(string);
+            return new Usine(objet.nom, undefined, objet.recettes, objet.tarifs, objet.stock);
+        } catch (error) {
+            console.info(`Erreur lors de l'interprétation de la représentation de l'usine :
+    ${string}`)
+            throw error
+        }
     }
 }
 

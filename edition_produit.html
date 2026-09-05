@@ -9,11 +9,11 @@
 </head>
 
 <body>
-    <nav class="">
+    <nav>
         <div>
-            <span class="h1" id="nomUsine">[Nom de l'usine]</span>
-            <a href="./index.html" class="btn ghost">Accueil</a>
-            <a href="./marché.html" class="btn ghost">Marché</a>
+            <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
+            <a href="/" class="btn ghost">Accueil</a>
+            <a href="/marché.html" class="btn ghost">Marché</a>
             <a class="btn">Produits</a>
             <a href="http://www.perdu.com/" class="btn ghost">Stock</a>
         </div>
@@ -92,12 +92,12 @@
                         <tr>
                             <th>Nom</th>
                             <th>Quantité</th>
-                            <th>Actions</th>
+                            <th style="width:110px">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="ingredientsBody">
-                        <tr>
-                            <td class="empty" colspan="3">Aucun ingrédient défini</td>
+                        <tr class="empty">
+                            <td colspan="3">Aucun ingrédient défini</td>
                         </tr>
                     </tbody>
                 </table>
@@ -124,7 +124,7 @@
         // ============================================================
 
         // Eléments de personnalisation de la page
-        const nomUsine = document.getElementById('nomUsine');
+        const nomUsine = document.getElementById('nav-nomUsine');
 
         // Champs de saisie pour les paramètres de production
         const champFraisFabrication = document.getElementById('cost');
@@ -155,7 +155,7 @@
 
         /**
          * Liste des ingrédients ajoutés au produit
-         * @type {Array<{name: string, qty: number, id?: string}>}
+         * @type {Array<{nom: string, quantité: number}>}
          */
         let ingredientsListe = [];
         let storedUsine = localStorage.getItem("usine");
@@ -167,6 +167,17 @@
             usine = new Usine("ChangeIt", undefined, [], [], []);
         }
         nomUsine.innerText = usine.nom;
+        let nomProduitAEditer = new URLSearchParams(document.location.search).get("produit");
+        let recette = usine.produit(nomProduitAEditer)?.recette;
+        if(recette) {
+            champNomProduit.value = recette.nom;
+            champFraisFabrication.value = recette.frais;
+            champNombreProduits.value = recette.quantité_produite;
+            champChancesReussite.value = recette.chances_de_succès;
+            champCurseurChancesReussite.value = recette.chances_de_succès;
+            ingredientsListe = recette.ingrédients;
+        }
+
 
         // ============================================================
         // SYNCHRONISATION TAUX DE RÉUSSITE (champ numérique ↔ curseur)
@@ -356,7 +367,8 @@
             // Affiche un message si aucun ingrédient
             if (ingredientsListe.length === 0) {
                 const ligneVide = document.createElement('tr');
-                ligneVide.innerHTML = '<td class="empty" colspan="3">Aucun ingrédient défini</td>';
+                ligneVide.className = 'empty';
+                ligneVide.innerHTML = '<td colspan="4">Aucun ingrédient défini</td>';
                 corpsTableauIngredients.appendChild(ligneVide);
                 return;
             }
@@ -379,8 +391,8 @@
 
                 const boutonSupprimer = document.createElement('button');
                 boutonSupprimer.type = 'button';
-                boutonSupprimer.className = 'btn warning';
-                boutonSupprimer.textContent = '🗑';
+                boutonSupprimer.className = 'btn ghost';
+                boutonSupprimer.textContent = 'Supprimer';
                 boutonSupprimer.addEventListener('click', () => {
                     // Filtre l'ingrédient supprimé de la liste
                     ingredientsListe = ingredientsListe.filter(i => i.name !== ingredient.name);
@@ -414,7 +426,7 @@
                 ingrédients: ingredientsListe
             };
 
-            usine.ajouteProduit(recette);
+            usine.ajouteRecette(recette);
             localStorage.setItem("usine", usine.toString());
 
             window.location.href = "./produits.html";

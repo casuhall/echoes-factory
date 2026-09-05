@@ -9,19 +9,19 @@
 </head>
 
 <body>
-    <nav class="">
+    <nav>
         <div>
-            <span class="h1" id="nomUsine">[Nom de l'usine]</span>
-            <a href="./index.html" class="btn ghost">Accueil</a>
-            <a href="./marché.html" class="btn ghost">Marché</a>
-            <a class="btn">Produits</a>
+            <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
+            <a href="/" class="btn ghost">Accueil</a>
+            <a href="/marché.html" class="btn ghost">Marché</a>
+            <a href="/produits.html" class="btn">Produits</a>
             <a href="http://www.perdu.com/" class="btn ghost">Stock</a>
         </div>
     </nav>
     <main id="ajoutProduitMain">
         <h1>Catalogue des Produits de l'Usine</h1>
         <div class="actions">
-            <a href="/ajout_produit.html" class="btn">Ajouter un produit</a>
+            <a href="/edition_produit.html" class="btn">Ajouter un produit</a>
         </div>
         <div>
             <table>
@@ -36,7 +36,9 @@
                     </tr>
                 </thead>
                 <tbody id="produitsBody">
-                    <tr><td class="empty" colspan="6">Aucun produit défini</td></tr>
+                    <tr class="empty">
+                        <td colspan="6">Aucun produit défini</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -47,8 +49,8 @@
         const corpsTableauProduits = document.getElementById('produitsBody');
 
         const usine = Usine.parse(localStorage.getItem("usine") || "{}");
-        document.getElementById("nomUsine").innerText = usine.nom;
-
+        document.getElementById("nav-nomUsine").innerText = usine.nom;
+    
         if (usine.produits.length > 0) {
             corpsTableauProduits.innerHTML = "";
             usine.produits.forEach(produit => {
@@ -57,15 +59,16 @@
                     <td>${produit.nom}</td>
                     <td>${produit.coût_reviens}</td>
                     <td>${produit.prix_estimé}</td>
-                    <td>${produit.rentabilité * 100}%</td>
+                    <td>${produit.rentabilité}%</td>
                     <td>${produit.commentaires || ''}</td>
-                `;
+                `; 
                 const actionsCell = document.createElement("td");
                 const editButton = document.createElement("button");
                 editButton.textContent = "✎";
-                editButton.classList.add("btn", "ghost");
-                editButton.addEventListener("click", () => {
-                    window.location.href = `./modif_produit.html?produit=${produit.nom}`;
+                editButton.classList.add("btn","ghost");
+                editButton.addEventListener("click", () => { 
+                    localStorage.setItem("produitÀÉditer", JSON.stringify(produit));
+                    window.location.href = `./edition_produit.html?produit=${produit.nom}`;
                 });
                 const deleteButton = document.createElement("button");
                 deleteButton.textContent = "🗑";
@@ -83,8 +86,6 @@
 
                 corpsTableauProduits.appendChild(ligne);
             });
-        } else {
-            corpsTableauProduits.innerHTML = '<tr><td class="empty" colspan="6">Aucun produit défini</td></tr>';
         }
     </script>
 </body>

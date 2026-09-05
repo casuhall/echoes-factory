@@ -6,9 +6,9 @@
   "type": "module",
   "devDependencies": {
     "chai": "4.3.8",
-    "mocha": "10.8.2",
+    "mocha": "^12.0.0",
     "nodemon": "3.1.4",
-    "nyc": "17.1.0",
+    "nyc": "^18.0.0",
     "sinon": "15.2.0"
   },
   "scripts": {

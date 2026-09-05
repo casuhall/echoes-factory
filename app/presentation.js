@@ -20,5 +20,11 @@ function decodeEchoesListe(value) {
   return liste;
 }
 
+const NUMBER_FORMAT = new Intl.NumberFormat(undefined, {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+});
+const UNICODE_DATE_FORMAT = new Intl.DateTimeFormat("fr-FR"); // pour formatage YYYY-MM-DD
 
-export { decodeEchoesListe }
+
+export { decodeEchoesListe, NUMBER_FORMAT, UNICODE_DATE_FORMAT }

@@ -2,121 +2,79 @@
 <html lang="fr" data-bs-theme="dark">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet"> -->
-  <title>L'usine de production Eve Echoes style !</title>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Gestion de l'usine</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./style/style.css" />
 </head>
 
-<body class="p-3 m-0 border-0 bd-example m-0 border-0">
-
-  <nav class="navbar navbar-expand-sm bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">L'usine</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="nav-tabs navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Accueil</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/marché.html">Marché</a>
-          </li>
-          <!-- <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li> -->
-        </ul>
-        <div class="d-flex" role="search">
-          <input id="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        </div>
-      </div>
+<body>
+  <nav>
+    <div>
+      <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
+      <a href="/" class="btn">Accueil</a>
+      <a href="/marché.html" class="btn ghost">Marché</a>
+      <a href="/produits.html" class="btn ghost">Produits</a>
+      <a href="http://www.perdu.com/" class="btn ghost">Stock</a>
     </div>
   </nav>
 
-  <p class="gap-0"></p>
+  <main>
+    <div class="grid">
+      <div>
+        <label for="input-nomUsine">Nom de l'usine</label>
+        <input type="text" id="input-nomUsine" />
+      </div>
+      <div>
+        <label for="input-nbProduits">Nombre de produits</label>
+        <input id="input-nbProduits" type="number" readonly></input>
+      </div>
+      <div>
+        <label for="input-nbMarché">Nombre de valeurs de marché</label>
+        <input id="input-nbMarché" type="number" readonly></input>
+      </div>
+      <div>
+        <label for="input-nbStock">Nombre de type d'objets en stock</label>
+        <input id="input-nbStock" type="number" readonly></input>
+      </div>
+    </div>
+  </main>
 
-  <div class="input-group mb-3">
-    <span class="input-group-text">Gestion des données</span>
-    <button class="btn btn-outline-secondary" type="button" id="button-debug">Debug</button>
-    <button class="btn btn-outline-secondary" type="button" id="button-reset">Reset</button>
-  </div>
-
-  <div class="accordion" id="datas" hidden>
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#usine" aria-expanded="false" aria-controls="usine">
-          Usine
-        </button>
-      </h2>
-      <div id="usine" class="accordion-collapse" data-bs-parent="#datas">
-        <div id="usine-body" class="accordion-body"></div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tarif" aria-expanded="false" aria-controls="tarif">
-          Marché
-        </button>
-      </h2>
-      <div id="tarif" class="accordion-collapse collapse" data-bs-parent="#datas">
-        <div id="tarif-body" class="accordion-body"></div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#recette" aria-expanded="false" aria-controls="recette">
-          Recettes
-        </button>
-      </h2>
-      <div id="recette" class="accordion-collapse collapse" data-bs-parent="#datas">
-        <div id="recette-body" class="accordion-body"></div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stock" aria-expanded="false" aria-controls="stock">
-          Inventaire
-        </button>
-      </h2>
-      <div id="stock" class="accordion-collapse collapse" data-bs-parent="#datas">
-        <div id="stock-body" class="accordion-body"></div>
-      </div>
-    </div>
-  </div>
+  <footer><span>Gestion des données</span>
+    <button type="button" class="btn warning" id="button-reset">Reset</button>
+  </footer>
 
   <script type="module">
-   // import {Usine, GestionnaireEvenements} from "./app/service.js"
-    // au click sur le bouton "Debug", affichage du contenu des données
-    document.querySelector("#button-debug").addEventListener("click", () => {
-      const datas = document.querySelector("#datas");
-      datas.hidden = !datas.hidden;
-      if(!datas.hidden){
-        let usine = Usine.parse(localStorage.getItem("usine"));
-        document.querySelector("#usine-body").innerHTML = localStorage.getItem("usine");
-      }
+    import { Usine } from "./app/service.js"
+    const usine = Usine.parse(localStorage.getItem("usine") || new Usine("He's alive !").toString());
+
+    init();
+
+    // Auclic sur le bouton "reset", supression de l'usine persistée pour la remplacer par une usine vide
+    document.querySelector("#input-nomUsine").addEventListener("blur", (event) => {
+      save();
     });
+    // Auclic sur le bouton "reset", supression de l'usine persistée pour la remplacer par une usine vide
     document.querySelector("#button-reset").addEventListener("click", () => {
-      // localStorage.setItem("nom","ChangeIt");
-      // localStorage.setItem("tarifs","[]");
-      // localStorage.setItem("recettes","[]");
-      // localStorage.setItem("stock","[]");
+      localStorage.removeItem("usine");
+      localStorage.setItem("usine", new Usine("Red is DED").toString());
+      window.location.reload();
     });
+
+    // initialisation des parties du DOM qui sont dynamiques
+    function init() {
+      document.getElementById("nav-nomUsine").innerText = usine.nom;
+      document.getElementById("input-nomUsine").value = usine.nom;
+
+      document.getElementById("input-nbProduits").value = usine.produits.length;
+      document.getElementById("input-nbMarché").value = usine.tarifs.length;
+      document.getElementById("input-nbStock").value = usine.stock.length;
+    }
+    function save() {
+      usine.nom = document.querySelector("#input-nomUsine").value;
+      localStorage.setItem("usine", usine.toString());
+      init();
+    }
   </script>
 </body>
 

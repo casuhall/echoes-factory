@@ -11,12 +11,21 @@ body {
 
 main {
     background: #fff;
-    border-radius: 8px;
     box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
 }
 
+dialog,
+main {
+    border-radius: 8px;
+}
+
+dialog {
+    border: 1px
+}
+
 main,
-nav {
+nav,
+footer {
     max-width: 920px;
     margin: auto;
     padding: 18px;
@@ -108,13 +117,17 @@ th,
 td {
     padding: 10px 8px;
     border-bottom: 1px solid #eef2f6;
-    text-align: left;
     font-size: 14px
+}
+
+td {
+    text-align: left;
 }
 
 th {
     background: #f8fafc;
-    font-weight: 700
+    font-weight: 700;
+    text-align: center;
 }
 
 .muted {

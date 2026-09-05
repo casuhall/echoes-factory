@@ -1,0 +1,685 @@
+ID	Names	Quantity	Valuation 
+1	Caldari Shuttle	1	92190435.609999999 
+2	Minmatar Shuttle	4	958888887.12 
+3	Gallente Shuttle	4	476800000.0 
+4	Griffin	2	4457981.5 
+5	Condor	5	25850.0 
+6	Merlin	1	63261.0 
+7	Condor Interceptor	1	53815788.490000002 
+8	Heron	1	122365.17 
+9	Heron Covert Ops	1	7436683.0300000003 
+10	Condor II Interceptor	1	303386363.63999999 
+11	Slasher	1	5047.1800000000003 
+12	Rifter	2	126522.0 
+13	Breacher	4	502908.0 
+14	Slasher II	4	5735591.96 
+15	Slasher Interceptor	4	206674481.36000001 
+16	Hound	3	44555199.0 
+17	Probe	2	243520.0 
+18	Probe Covert Ops	1	7557966.8399999999 
+19	Crucifier	4	6072000.0 
+20	Inquisitor	1	3885886.8620000007 
+21	Executioner	1	5170.0 
+22	Tormentor	1	59129.0 
+23	Punisher	1	115825.45 
+24	Executioner Interceptor	2	92579384.620000005 
+25	Purifier	5	50080645.149999999 
+26	Magnate	2	237280.0 
+27	Maulus	2	4913765.0 
+28	Atron	1	5170.0 
+29	Tristan	1	59128.639999999999 
+30	Atron Interceptor	1	49788122.670000002 
+31	Nemesis	4	76437629.079999998 
+32	Imicus	1	121760.0 
+33	Atron II Interceptor	1	338953399.98000002 
+34	Cormorant Interdictor	5	142448270.69999999 
+35	Cormorant II Interdictor	14	1539500873.1900003 
+36	Cormorant	8	1244354.0800000001 
+37	Cormorant III Interdictor	1	317499994.75 
+38	Thrasher Interdictor	3	119999997.35999998 
+39	Thrasher II Interdictor	1	121888888.89 
+40	Thrasher	2	345667.46000000002 
+41	Talwar	1	1771702.71 
+42	Thrasher II	1	3205313.5 
+43	Talwar Trainer	2	523333.34000000003 
+44	Coercer Interdictor	4	208810126.59999999 
+45	Coercer II Interdictor	1	77195652.170000002 
+46	Coercer	1	172203.56 
+47	Dragoon Assault	1	68954428.430000007 
+48	Dragoon Trainer	3	823656.71999999997 
+49	Dragoon Sniper	1	58499994.25 
+50	Catalyst Interdictor	12	599999991.96000004 
+51	Algos Assault	1	82833333.329999998 
+52	Moa II Guardian	1	85866666.200000003 
+53	Osprey	1	71086257.671000004 
+54	Moa	2	130908544.28 
+55	Caracal Navy Issue	1	57590476.189999998 
+56	Rupture Guardian	1	71055248.770000011 
+57	Stabber Fleet Issue	1	48269230.770000003 
+58	Stabber Trainer	2	17347939.239999998 
+59	Arbitrator	4	223909387.68000001 
+60	Omen	3	61187499.989999987 
+61	Omen Navy Issue	1	51636363.549999997 
+62	Exequror	1	82412313.797000021 
+63	Vexor Navy Issue	2	118668095.23999999 
+64	Thorax	4	224869565.19999999 
+65	Vexor Trainer	2	12205682.960000001 
+66	Fiend	1	3242771929.6799998 
+67	Naga	1	220266666.37 
+68	Drake Logistics	1	486198399.80000001 
+69	Cyclone Guardian	1	479999999.80000001 
+70	Hurricane Logistics	1	249116862.65000001 
+71	Hurricane	1	277453740.64999998 
+72	Hurricane Prototype	1	181603658.19999999 
+73	Talos	1	289428571.43000001 
+74	Brutix Logistics	2	286281142.27999997 
+75	Typhoon	1	416000000.0 
+76	Wreathe	1	196369230.22999999 
+77	Bestower	1	60700002.25 
+78	Nereus II	4	2010652543.04 
+79	Nereus High Mobility	2	86935290.359999999 
+80	Imicus High Mobility	7	3577829.5 
+81	Retriever	1	62246748.850000001 
+82	Venture Trainer	12	900027.11999999988 
+83	Venture	11	5620219.0 
+84	Venture II	1	4240000.0 
+85	Venture III	2	11864776.119999999 
+86	Venture IV	1	323302217.08999997 
+87	Covetor II	1	834598234.14999998 
+88	Orca	1	1521342856.79 
+89	Thanatos	1	29926226510.588001 
+90	Caldari Navy Small Rifled Railgun	40	3501784.3999999999 
+91	Coreli C-Type Small Rifled Railgun	1	28806060.309999999 
+92	MK9 Medium Rifled Railgun	2	107392.46000000001 
+93	Corelum C-Type Medium Rifled Railgun	51	51986389.469999999 
+94	MK9 Large Rifled Railgun	2	234019.34 
+95	Caldari Navy Large Rifled Railgun	21	8012518.9199999999 
+96	Core C-Type Large Rifled Railgun	4	3518599.9199999999 
+97	Coreli C-Type Small Snubnosed Railgun	4	153623187.31999999 
+98	MK9 Medium Snubnosed Railgun	2	64799.919999999998 
+99	MK9 Large Snubnosed Railgun	1	218328.91 
+100	Core C-Type Large Snubnosed Railgun	1	7975821.79 
+101	Imperial Navy Small Beam Laser	7	8461853.1199999992 
+102	Imperial Navy Medium Beam Laser	10	44352189.799999997 
+103	Centum C-Type Medium Beam Laser	6	4162231.3199999998 
+104	'Catapult' Large Beam Laser	3	965758.97999999998 
+105	Corpus C-Type Large Beam Laser	1	9700700.8800000008 
+106	Imperial Navy Capital Beam Laser	2	9270270.2799999993 
+107	Imperial Navy Small Pulse Laser	6	1741040.46 
+108	Centii C-Type Small Pulse Laser	3	54358668.420000002 
+109	Corpii C-Type Small Pulse Laser	1	19925277.510000002 
+110	Imperial Navy Medium Pulse Laser	7	15141079.380000001 
+111	Centum C-Type Medium Pulse Laser	5	5236093.9500000002 
+112	Corpus C-Type Large Pulse Laser	5	4214246.8499999996 
+113	'Jolt' Small Autocannon	3	781164.20999999996 
+114	Republic Fleet Small Autocannon	5	4845093.4499999993 
+115	Gistii C-Type Small Autocannon	4	123414593.31999999 
+116	Gist C-Type Large Autocannon	2	2335542.54 
+117	Republic Fleet Capital Autocannon	1	1355882.3500000001 
+118	Gist C-Type Capital Autocannon	3	56535714.299999997 
+119	Republic Fleet Small Strike Cannon	2	1911373.8400000001 
+120	Gistum C-Type Medium Strike Cannon	10	9152707.3000000007 
+121	Gist C-Type Large Strike Cannon	9	57020457.780000001 
+122	'The Returned' Small Jetstream Decomposer	16	66883200.0 
+123	'The Returned' Medium Jetstream Decomposer	1	12313055.560000001 
+124	MK3 Miner	1	47629.959999999999 
+125	MK9 Miner	1	10488386.77 
+126	MK7 Strip Miner	3	25163263.710000001 
+127	MK9 Strip Miner	46	39895752.159999996 
+128	MK9 Small Missile Launcher	7	762182.95999999996 
+129	Caldari Navy Small Missile Launcher	14	44414318.200000003 
+130	Republic Fleet Small Missile Launcher	3	15813346.140000001 
+131	MK9 Medium Missile Launcher	19	5811266.6600000001 
+132	Caldari Navy Medium Missile Launcher	8	16485795.76 
+133	Dread Guristas Medium Missile Launcher	1	9086711.5800000001 
+134	MK9 Large Missile Launcher	29	7014240.7300000004 
+135	Caldari Navy Large Missile Launcher	71	27396612.380000006 
+136	Pith C-Type Large Missile Launcher	37	160853373.02000001 
+137	MK9 Medium Rapid Missile Launcher	4	1340678.4399999999 
+138	Caldari Navy Medium Rapid Missile Launcher	16	50409696.479999997 
+139	Pithum C-Type Medium Rapid Missile Launcher	6	88659267.599999994 
+140	MK9 Large Rapid Missile Launcher	17	4352862.2400000002 
+141	Caldari Navy Large Rapid Missile Launcher	99	56387076.570000008 
+142	Pith C-Type Large Rapid Missile Launcher	40	211169690.80000001 
+143	MK9 Medium Torpedo Launcher	14	864900.95999999996 
+144	Caldari Navy Medium Torpedo Launcher	13	53751369.75 
+145	Republic Fleet Medium Torpedo Launcher	5	23395992.0 
+146	'Heth' Medium Torpedo Launcher	1	16043478.26 
+147	Pithum C-Type Medium Torpedo Launcher	5	31719636.699999999 
+148	MK9 Capital Cruise Missile Launcher	19	4898091.5099999998 
+149	Caldari Navy Capital Cruise Missile Launcher	6	1191292.9199999999 
+150	Caldari Navy Small Torpedo Launcher	74	14858571.0 
+151	MK9 Large Torpedo Launcher	8	2359607.52 
+152	Caldari Navy Large Torpedo Launcher	33	69022085.88000001 
+153	Pith C-Type Large Torpedo Launcher	28	264819051.83999997 
+154	Caldari Navy Barreled Capital Missile Launcher Torpedo	2	36844444.439999998 
+155	MK9 Capital Torpedo Launcher	4	1850715.2 
+156	Caldari Navy Capital Torpedo Launcher	9	2310000.0300000003 
+157	Pith C-Type Capital Torpedo Launcher	1	7963870.9699999997 
+158	MK5 Interdiction Sphere Launcher	7	61944667.329999998 
+159	MK9 Small Energy Nosferatu	2	1421084.5800000001 
+160	Imperial Navy Medium Energy Nosferatu	9	99949591.799999997 
+161	MK9 Large Energy Nosferatu	24	28403428.559999999 
+162	MK9 Capital Energy Nosferatu	2	46446163.880000003 
+163	'Caltrop' Small Energy Neutralizer	4	332689.64000000001 
+164	Imperial Navy Small Energy Neutralizer	1	291686.37 
+165	'Caltrop' Medium Energy Neutralizer	1	476890.65999999997 
+166	MK9 Large Energy Neutralizer	1	1894067.4199999999 
+167	MK9 Wide Range Wave Resonance Simulator	6	5060428.2599999998 
+168	MK7 Narrow Resonance Scanner	6	37824187.200000003 
+169	MK9 Narrow Resonance Scanner	5	20326736.299999997 
+170	MK9 Small Remote Capacitor Transmitter	4	1144616.0 
+171	'Squire' Small Remote Capacitor Transmitter	2	91702.119999999995 
+172	MK9 Medium Remote Capacitor Transmiiter	1	63405.410000000003 
+173	Imperial Navy Medium Remote Capacitor Transmiiter	3	17868212.490000002 
+174	'Knight' Medium Remote Capacitor Transmiiter	4	2309433.4399999999 
+175	MK9 Large Remote Capacitor Transmitter	3	3054875.0999999996 
+176	Caldari Navy Medium Remote Shield Booster	7	41329611.189999998 
+177	'Healer' Medium Remote Shield Booster	1	999969.0 
+178	Pithum C-Type Medium Remote Shield Booster	6	2257981.6800000002 
+179	MK9 Large Remote Shield Booster	10	1010000.0 
+180	Caldari Navy Large Remote Shield Booster	1	1214838.71 
+181	Pith C-Type Large Remote Shield Booster	15	238162645.5 
+182	MK9 Capital Remote Shield Booster	4	10609.200000000001 
+183	'Beatnik' Medium Remote Armor Repairer	1	108656.13 
+184	'Tranquil' Large Remote Armor Repairer	3	4391937.9900000002 
+185	'Aurora' Fleet Cynosural Field Generator	13	27650058.02 
+186	MK9 Warp Disrupt Field Generator	1	64089901.259999998 
+187	Caldari Navy Small Shield Extender	4	2001514.6799999999 
+188	'Trapper' Small Shield Extender	1	24062500.0 
+189	Pithi C-Type Small Shield Extender	1	20000000.0 
+190	MK9 Medium Shield Extender	7	10500.0 
+191	Caldari Navy Medium Shield Extender	13	144271424.04999998 
+192	Caldari Navy Large Shield Extender	26	29900000.0 
+193	Republic Fleet Large Shield Extender	10	11514698.899999999 
+194	MK9 Capital Shield Extender	10	17664361.699999999 
+195	Caldari Navy Capital Shield Extender	4	5530325.6399999997 
+196	Republic Fleet Capital Shield Extender	6	8258181.8399999999 
+197	Caldari Navy Small Shield Booster	12	1311664.4399999999 
+198	Republic Fleet Small Shield Booster	1	13750.950000000001 
+199	Pithi C-Type Small Shield Booster	2	32636046.52 
+200	MK9 Medium Shield Booster	8	2828737.7599999998 
+201	Caldari Navy Medium Shield Booster	8	18099589.920000002 
+202	Republic Fleet Medium Shield Booster	3	6220900.5300000003 
+203	Dread Guristas Medium Shield Booster	1	1797789.47 
+204	Centum C-Type Medium Shield Booster	1	711693.78000000003 
+205	Pithum C-Type Medium Shield Booster	13	3959249.3199999998 
+206	Gistum C-Type Medium Shield Booster	4	3531950.0 
+207	MK9 Large Shield Booster	5	1472622.9500000002 
+208	'Seeker' Large Shield Booster	1	2957141.9300000002 
+209	Pith C-Type Large Shield Booster	9	38607640.920000002 
+210	MK9 Capital Shield Booster	8	2376058.0 
+211	Caldari Navy Capital Shield Booster	3	337381.89000000001 
+212	Centus C-Type Capital Shield Booster	2	18900358.739999998 
+213	Gist C-Type Capital Shield Booster	3	23115897.359999999 
+214	MK3 Small Microwarpdrive	2	27791.299999999999 
+215	MK7 Small Microwarpdrive	7	835576.14000000001 
+216	Republic Fleet Small Microwarpdrive	1	1416705.6100000001 
+217	MK9 Capital Warpdrive	3	7853948.5199999996 
+218	Smuggler Small Afterburner	1	1719169.8100000001 
+219	'Ranger' Small Afterburner	3	47937271.829999998 
+220	Centii C-Type Small Afterburner	1	32993767.670000002 
+221	Federation Navy Medium Afterburner	19	178238356.84999999 
+222	Corelum C-Type Medium Afterburner	16	53200692.960000001 
+223	MK9 Large Afterburner	2	1517640.0 
+224	Centus C-Type Capital Afterburner	1	8866916.1899999995 
+225	Caldari Navy Warp Disruptors	20	14680846.399999999 
+226	MK9 Small Capacitor Battery	1	538111.10999999999 
+227	Acolyte Small Capacitor Battery	1	289379.96000000002 
+228	Republic Fleet Small Capacitor Battery	11	12595533.940000003 
+229	MK9 Large Capacitor Battery	8	9449471.2799999993 
+230	MK9 Capital Cap Battery	47	161130113.16 
+231	Republic Fleet Capital Cap Battery	1	1801754.25 
+232	Gist C-Type Capital Cap Battery	2	13078098.380000001 
+233	MK9 Stasis Webifier	12	5354522.2800000003 
+234	Caldari Navy Stasis Webifier	21	16064085.449999999 
+235	Federation Navy Stasis Webifier	49	107444063.51000001 
+236	Republic Fleet Stasis Webifier	18	13829931.0 
+237	MK9 Adaptive Invulnerability Field	44	5437987.7200000016 
+238	Caldari Navy Adaptive Invulnerability Field	23	15199008.579999998 
+239	Pith C-Type Adaptive Invulnerability Field	50	63211033.5 
+240	MK9 Sensor Dampener	2	789784.18000000005 
+241	Federation Navy Sensor Dampener	61	153191736.95000002 
+242	'Marketeer' Tracking Computer	2	4966629.0 
+243	Federation Navy Tracking Computer	3	122651414.81999999 
+244	MK5 Target Painter	1	177584.31 
+245	'Guide' Target Painter	18	13873721.039999999 
+246	Republic Fleet Target Painter	5	3922431.7999999998 
+247	Federation Navy Drone Navigation Computer	28	438363547.44 
+248	MK9 Fighter Microwarpdrive Guide	2	932099.30000000005 
+249	MK9 Missile Guidance Computer	6	1230096.0 
+250	'Elusive' Missile Guidance Computer	3	2534006.2800000003 
+251	Caldari Navy Missile Guidance Computer	28	645094972.19999993 
+252	Caldari Navy Warp Scrambler	5	6499995.0 
+253	Federation Navy Warp Scrambler	74	366602196.0200001 
+254	MK9 Tracking Disruptor	1	429620.09999999998 
+255	Imperial Navy Tracking Disruptor	34	142472181.51999998 
+256	MK9 Guidance Disruptor	11	3890652.1500000004 
+257	Caldari Navy Guidance Disruptor	85	344708162.75 
+258	Republic Fleet Gyrostabilizer	6	9198615.8999999985 
+259	Federation Navy Damage Control	15	224391350.09999999 
+260	Federation Navy Small Armor Repairer	9	4212729.0 
+261	Coreli C-Type Small Armor Repairer	1	24749143.969999999 
+262	Corelum C-Type Medium Armor Repairer	13	32221266.350000001 
+263	'Gorget' Large Armor Repairer	3	1739509.0499999998 
+264	'Knight' Large Armor Repairer	1	1067533.3300000001 
+265	Imperial Navy Capital Armor Repairer	1	4767829.46 
+266	Federation Navy Capital Armor Repairer	7	123031701.03 
+267	Corpus C-Type Capital Armor Repairer	1	11709009.01 
+268	Imperial Navy Heat Sink	3	2393528.6699999999 
+269	Centum C-Type Heat Sink	10	7192574.4000000004 
+270	Corpum C-Type Heat Sink	2	1104013.3999999999 
+271	MK9 Magnetic Field Stabilizer	53	8643032.2400000002 
+272	Federation Navy Magnetic Field Stabilizer	6	27149894.219999999 
+273	Corelum C-Type Magnetic Field Stabilizer	9	8075971.0800000001 
+274	MK9 Warp Core Stabilizer	1	358490.95000000001 
+275	Federation Navy Adaptive Armor Hardener	81	226363222.08000001 
+276	Corpus C-Type Adaptive Armor Hardener	2	10336968.619999999 
+277	Core C-Type Adaptive Armor Hardener	3	14575724.970000001 
+278	Federation Navy 400mm Reinforced Steel Plate	36	547351161.84000003 
+279	Federation Navy 800mm Reinforced Steel Plate	37	1171092804.5599999 
+280	Imperial Navy 25000mm Steel Plates	2	17488595.260000002 
+281	Corpus C-Type 25000mm Steel Plates	1	15244565.220000001 
+282	MK9 Ballistic Control System	6	794339.28000000003 
+283	Caldari Navy Ballistic Control System	66	75505519.320000008 
+284	Dread Guristas Ballistic Control System	3	172421.04000000001 
+285	Pithum C-Type Ballistic Control System	55	49937848.399999999 
+286	Imperial Navy Drone Damage Amplifier	10	53234228.200000003 
+287	MK9 Fighter Fire Control Array	10	1112605.3 
+288	Imperial Navy Fighter Fire Control Array	16	15052800.0 
+289	MK9 Inertial Stabilizer	50	79976066.5 
+290	Imperial Navy Reactive Armor Hardener	6	3106165.4399999999 
+291	Federation Navy Reactive Armor Hardener	2	2483046.5800000001 
+292	'Sparkly' Reactive Armor Hardener	11	37684031.329999998 
+293	MK9 Reactive Shield Hardener	18	1196549.6399999999 
+294	Caldari Navy Reactive Shield Hardener	35	12256786.85 
+295	'Enterprise' Reactive Shield Hardener	13	58662399.25 
+296	Pithum C-Type Reactive Shield Hardener	56	23802658.32 
+297	Gistum C-Type Reactive Shield Hardener	2	799633.95999999996 
+298	Branch Medium Armor Link Module	1	7095000.0 
+299	MK5 Medium Group Shield Booster	16	19261916.752 
+300	MK7 Large Group Shield Booster	1	6480455.5300000003 
+301	MK7 Medium Group Capacitor Transmitter	2	7778461.8600000003 
+302	'The Returned' Macro Particle Stabilizer	14	9800000.0 
+303	MK5 Data Analyzer	1	1766202.53 
+304	MK7 Data Analyzer	9	140534996.84999999 
+305	MK5 Relic Analyzer	1	658522.39000000001 
+306	MK9 Relic Analyzer	3	2166830.1899999999 
+307	Railgun Collision Accelerator I	6	1695924.4199999999 
+308	Railgun Collision Accelerator III	5	13650595.4 
+309	Railgun Ambit Extension I	12	785113.31999999995 
+310	Railgun Ambit Extension II	8	3779120.0079999999 
+311	Railgun Ambit Extension III	6	23366026.559999999 
+312	Railgun Discharge Elutriation I	1	13624.879999999999 
+313	Railgun Discharge Elutriation II	1	208411.67000000001 
+314	Railgun Discharge Elutriation III	3	3488823.54 
+315	Railgun Burst Aerator I	25	7631646.2499999991 
+316	Railgun Burst Aerator II	7	13036369.220000001 
+317	Algid Railgun Administrations Unit I	10	199000.0 
+318	Algid Railgun Administrations Unit II	1	2100000.0 
+319	Cannon Collision Accelerator II	2	3557017.2200000002 
+320	Cannon Burst Aerator II	3	9000000.0 
+321	Warhead Flare Catalyst I	3	449081.64000000001 
+322	Warhead Flare Catalyst III	1	4862778.9500000002 
+323	Warhead Calefaction Catalyst I	6	2364840.54 
+324	Warhead Rigor Catalyst III	1	2578520.4100000001 
+325	Bay Loading Accelerator II	1	2163919.8999999999 
+326	Core Defense Operational Solidifier I	1	190750.0 
+327	Core Defense Charge Economizer III	1	7136745.5099999998 
+328	Core Defense Field Extender II	8	32215048.079999998 
+329	Anti-Explosive Screen Reinforcer I	1	18253.68 
+330	Anti-Explosive Screen Reinforcer II	2	1996959.22 
+331	Anti-EM Screen Reinforcer I	1	164895.82999999999 
+332	Anti-Kinetic Screen Reinforcer I	2	56248.040000000001 
+333	Anti-Kinetic Screen Reinforcer II	8	17427522.640000001 
+334	Nanobot Accelerator I	20	1162026.0 
+335	Auxiliary Nano Pump I	26	2609450.48 
+336	Trimark Armor Pump I	27	3266197.5600000001 
+337	Anti-Explosive Pump I	88	28771416.079999998 
+338	Anti-EM Pump II	1	1401679.9399999999 
+339	Anti-Thermal Pump II	2	1082803.4199999999 
+340	Remote Armor Repairer Stabilizer I	1	400000.0 
+341	Remote Armor Repairer Economizer I	1	490000.0 
+342	Remote Armor Repairer Amplifier I	1	500000.0 
+343	Dynamic Fuel Valve I	14	2237489.8000000003 
+344	Dynamic Fuel Valve II	1	1277634.4099999999 
+345	Auxiliary Thrusters I	10	2450296.4000000004 
+346	Polycarbon Engine Housing I	64	14033228.16 
+347	Cargohold Optimization I	14	6212110.3799999999 
+348	Cargohold Optimization II	6	33935545.68 
+349	Warp Core Optimizer I	11	803982.4099999998 
+350	Semiconductor Memory Cell I	13	5393915.0199999996 
+351	Ancillary Powergrid Router II	1	1183251.45 
+352	Gravity Capacitor Upgrade II	2	3530392.1600000001 
+353	Transverse Bulkhead III	10	46632783.5 
+354	Anti-Explosive Transverse Bulkhead III	9	17445566.07 
+355	Anti-EM Transverse Bulkhead III	2	4117735.6000000001 
+356	Anti-Thermal Transverse Bulkhead III	1	1416499.8999999999 
+357	Drone Firepower Augmentor I	26	5311837.4400000004 
+358	Drone Firepower Augmentor II	6	22736508.359999999 
+359	Drone Control Range I	17	4283320.6799999997 
+360	Drone Control Range II	5	46916386.150000006 
+361	Drone Flight Accelerator I	1	161665.67000000001 
+362	MK5  Acolyte	34	1423726.8799999999 
+363	MK7  Acolyte	16	2870588.1600000001 
+364	MK3  Hornet	100	4827731.0 
+365	MK5  Hornet	3	177777.32999999999 
+366	MK3  Hobgoblin	4	574997.95999999996 
+367	MK7  Hobgoblin	4	2852814.9199999999 
+368	MK5  Warrior	21	4197176.9699999997 
+369	MK5  Infiltrator	20	29079845.199999999 
+370	MK7  Infiltrator	27	92297266.559999987 
+371	MK7  Vespa	5	9110770.0 
+372	MK7  Hammerhead	10	49716710.5 
+373	MK5  Valkyrie	21	27403294.170000002 
+374	MK7  Valkyrie	21	26463823.470000006 
+375	Sea Urchin Heavy Mining Drone	5	427022340.45000005 
+376	Heat Sink Overheating Boost v1.0	1	11.0 
+377	Gyrostabilizer Overheating Boost v1.0	1	11.0 
+378	Tracking Computer Tracking Correction v1.0	2	22.0 
+379	Shield Booster Efficiency Optimization v1.0	1	500000.0 
+380	Armor Plate Efficiency Optimization v1.0	2	1000000.0 
+381	Remote Shield Booster Output Boost v2.0	1	2212000.0 
+382	Remote Armor Repairer Efficiency Optimization v1.0	1	500000.0 
+383	Capacitor Battery Overheating Boost v1.0	1	500000.0 
+384	Afterburner Output Boost v1.0	1	500000.0 
+385	Microwarpdrive Efficiency Optimization v1.0	1	500000.0 
+386	Damage Control Efficiency Optimization v2.0	1	2212000.0 
+387	Damage Control Overheating Boost v1.0	1	500000.0 
+388	Sensor Dampening Distance Optimization v.1.0	2	1000000.0 
+389	Sensor Dampening Distance Optimization v.2.0	2	4424000.0 
+390	Guidance Disruption Range Jamming v1.0	1	500000.0 
+391	Guidance Disruption Precision Jamming v1.0	1	50.0 
+392	Energy Nosferatu Distance Optimization v1.0	1	500000.0 
+393	Energy Neutralizer Distance Optimization v.1.0	1	500000.0 
+394	Energy Neutralizer Output Boost v1.0	1	500000.0 
+395	Remote Capacitor Transmitter Distance Optimization v.1.0	1	500000.0 
+396	Fighter Microwarpdrive Guide Output Boost v1.0	1	500000.0 
+397	Assembly Workshop I	1	6243272743.0 
+398	Capital Ship Parts Factory	1	15000000000.0 
+399	Pirate Detection Array I	2	13315714594.0 
+400	Space Lab I	1	6381778171.0 
+401	Analytical Computer I	1	6518591248.0 
+402	Base Detection Array I	2	12763520986.0 
+403	Asteroid Detection Array	2	12214780800.0 
+404	Standard Standup Small Missile Launcher	1	108956521.73999999 
+405	Standard Standup Medium Missile Launcher	1	281151999.72000003 
+406	Standard Standup Large Missile Launcher	1	331159016.38999999 
+407	Standard Standup Stasis Webifier	1	356250000.0 
+408	Industry Service Center	1	674624962.12 
+409	Structure Hangar Array	44	5907939917.4399996 
+410	Structure Storage Bay	47	2374737079.48 
+411	Structure Laboratory	23	1613150736.6500001 
+412	Structure Factory	12	942300543.87600017 
+413	Structure Repair Facility	44	5946470588.0799999 
+414	Structure Docking Bay	66	5035109023.5599995 
+415	Structure Market Network	20	2948533536.6000004 
+416	Structure Medical Center	52	4098823485.1199999 
+417	Structure Office Center	27	1971947385.72 
+418	Structure Mission Network	43	2823913785.6599998 
+419	Structure Electromagnetic Sensor	35	2421453870.1500001 
+420	Structure Acceleration Coils	61	6079666615.0200005 
+421	Structure Advertisement Nexus	65	4798181812.4499998 
+422	Capital Ship Maintenance Bay	18	5638651677.539999 
+423	Capital Capacitor Battery	3	925890410.97000003 
+424	Capital Power Generator	5	1824084507.0500002 
+425	Capital Launcher Hardpoint	2	788365986.0 
+426	Capital Armor Plates	8	3261374826.4000001 
+427	Capital Sensor Cluster	7	3093461538.4400001 
+428	Capital Shield Emitter	6	2246318259.3000002 
+429	Capital Siege Array	13	3830338561.0100002 
+430	Capital Computer System	4	1777627118.6400001 
+431	Capital Construction Parts	4	1560000000.0 
+432	Capital Clone Vat Bay	1	277964713.74400008 
+433	Capital Corporate Hangar Bay	3	922352624.16000021 
+434	Capital Turret Hardpoint	1	262286927.44400001 
+435	Datacore - Hydromagnetic Physics	52	6506517.1600000001 
+436	Datacore - Plasma Physics	72	9905616.0 
+437	Datacore - Electromagnetic Physics	10	31929.299999999999 
+438	Datacore - High Energy Physics	12	46677.360000000001 
+439	Datacore - Nuclear Physics	80	100750753.59999999 
+440	Datacore - Rocket Science	24	76836.720000000001 
+441	Datacore - Mechanical Engineering	11	118142.20000000001 
+442	Datacore - Laser Physics	1	1538.8599999999999 
+443	Datacore - Caldari Starship Engineering	16	2099804.48 
+444	Datacore - Quantum Physics	35	2353521.1000000001 
+445	Metal Scraps	11	10690.790000000001 
+446	Ancient Remains	71	7100000.0 
+447	Production Process Decryptor	1	11635484.310000001 
+448	Production Symmetry Decryptor	12	76106022.840000004 
+449	Production Accelerant Decryptor	16	116487741.28 
+450	Reverse Symmetry Decryptor	43	508824101.08999997 
+451	Reverse Accelerant Decryptor	13	28482065.949999999 
+452	Reverse Enhancement Decryptor	2	428357602.31999999 
+453	Doge: Shocked and Scared	1	0.0 
+454	 Noise-1 'Needlejack' Filament	1	20000000.0 
+455	Tritanium	1133177143	1133177143.0 
+456	Pyerite	20242156	40484312.0 
+457	Mexallon	7098562	40390817.780000001 
+458	Isogen	1143887	134521111.19999999 
+459	Nocxium	278024	116189009.84 
+460	Zydrine	88342	190452100.69999999 
+461	Megacyte	50422	29880581.420000002 
+462	Morphite	1722400	20672692624.0 
+463	Compressed Pyerite	5	22412.199999999997 
+464	Phenolic Composites	1630	90240092.599999994 
+465	Reinforced Carbon Fiber	1772	222664576.12 
+466	Fullero-Ferrocene	28796	715296959.4000001 
+467	Fullerene Intercalated Graphite	22694	1393740436.0599999 
+468	Tripped Power Circuit	7994	585880.26000000001 
+469	Damaged Close-in Weapon System	176	41393.440000000002 
+470	Scorched Telemetry Processor	429	73633.559999999998 
+471	Contaminated Lorentz Fluid	385	17432.799999999999 
+472	Defective Current Pump	5380	121050.0 
+473	Capital Burned Logic Circuit	102	10679918.16 
+474	Capital Damaged Artificial Neural Network	52	21076275.48 
+475	Capital Contaminated Lorentz Fluid	139	21924870.32 
+476	Capital Conductive Polymer	106	7726128.0 
+477	Capital Contaminated Nanite Compound	67	68015988.0 
+478	Capital Defective Current Pump	110	37878148.0 
+479	Mimetic Neuron	61210	512154475.69999999 
+480	Deep-Chain Neuron	22987	460096068.63000005 
+481	Self-Renovating Neuron	21006	1208321206.02 
+482	Overloaded Neuron	19047	3515371651.4699998 
+483	Torn Sleeper Structure	452	123513.51999999997 
+484	Primary Sleeper Structure	103	3855624.75 
+485	Holomorphic Sleeper Structure	38	6582.3599999999997 
+486	Terminal Sleeper Structure	23	184651030.87 
+487	Focused Crystal Core	2	196752534.74000001 
+488	Barrage Repression Core	7	253545922.34999996 
+489	Thermal Circulation Core	1	243733333.33000001 
+490	Sniping Technology Core	3	38916736.259999998 
+491	Support Projection Core	13	185129876.75 
+492	Bombard Tactics Core	5	644831426.0 
+493	Armor Support Core	18	225488654.81999999 
+494	Tactical Missile Core	1	225720379.15000001 
+495	Armor Computing Unit	36	44136.0 
+496	Armor Computing Module	9	1260000.0 
+497	Charisma Mimetic Neuron	1905	177619228.19999999 
+498	Willpower Mimetic Neuron	1628	121889922.88000003 
+499	Intelligence Mimetic Neuron	1855	5582140366.9499998 
+500	Perception Mimetic Neuron	1539	753181521.29999995 
+501	Memory Mimetic Neuron	1319	611522060.88 
+502	General Computing Unit	12	329903.27999999997 
+503	Lustering Alloy	9134034	4610220980.8199997 
+504	Sheen Compound	254917	120759281.23999999 
+505	Gleaming Alloy	65758	12956298.74 
+506	Condensed Alloy	165838	85982027.859999999 
+507	Precious Alloy	10263420	8232597084.6000004 
+508	Motley Compound	4039978	3541444714.8000002 
+509	Fiber Composite	3144997	1225731130.78 
+510	Lucent Compound	3074195	2034901896.3499999 
+511	Opulent Compound	4062110	2738227729.9000001 
+512	Glossy Compound	7506006	3242819772.1799998 
+513	Crystal Compound	740132	607766793.12 
+514	Dark Compound	341664	239352715.19999999 
+515	Reactive Gas	11217889	1891223906.51 
+516	Noble Gas	1682323	432155132.24000001 
+517	Base Metals	25745	21490123.850000001 
+518	Heavy Metals	202695	131713237.94999999 
+519	Noble Metals	61929	28771594.109999999 
+520	Reactive Metals	17028	19879338.600000001 
+521	Toxic Metals	8815	13802791.449999999 
+522	Industrial Fibers	625438	1125338084.6399999 
+523	Supertensile Plastics	3467516	2123645499.0400002 
+524	Polyaramids	1537164	400554195.12 
+525	Coolant	4839549	1162798438.23 
+526	Condensates	1074646	497045267.9199999 
+527	Construction Blocks	20069778	6328001003.3999996 
+528	Nanites	1224600	3241993794.0 
+529	Silicate Glass	182220	232574674.80000001 
+530	Smartfab Units	658929	247961571.99000001 
+531	Precious Metals	217821	2846426016.3299999 
+532	Non-CS Crystals	80611	1920148377.23 
+533	Liquid Ozone	681269	289069249.38999999 
+534	Plasmoids	67355	655133795.89999998 
+535	Enriched Uranium Concentrate	92014	6387802348.9799995 
+536	Lv.10 Caldari Ship Debris	519	439193.37 
+537	Caldari Dreadnought Debris	57	415236802.8300001 
+538	Caldari Carrier Debris	56	370673102.24000001 
+539	Medium Damaged ORE Hull	9	722693.96999999997 
+540	Large Damaged ORE Hull	10	1936722.3 
+541	Damaged ORE Capital Hull	8	33331090.239999998 
+542	Medium Damaged InterBus Hull	12	19336.68 
+543	Large Damaged InterBus Hull	23	12108.580000000002 
+544	Fullerite-C50	18269605	3365626633.0999999 
+545	Fullerite-C60	14631584	6796809715.5200005 
+546	Fullerite-C70	357417	359954660.69999999 
+547	Compressed Fullerite-C50	420314	912821132.6400001 
+548	Compressed Fullerite-C60	778967	3733331771.8899999 
+549	Veldspar	530171	1590513.0 
+550	Rich Veldspar	27544	634062.88 
+551	Scordite	214955	726547.90000000002 
+552	Rich Scordite	12983	330806.84000000003 
+553	Pyroxeres	311680	28718195.199999999 
+554	Rich Pyroxeres	25319	22579484.199999999 
+555	Plagioclase	90	559.79999999999995 
+556	Rich Plagioclase	4	165.68000000000001 
+557	Omber	6	207.12 
+558	Rich Omber	5	1700.2 
+559	Kernite	38	1545.8399999999999 
+560	Rich Kernite	5	1782.8499999999999 
+561	Jaspet	2926	2912862.2599999998 
+562	Rich Jaspet	1412	9273564.1600000001 
+563	Hemorphite	4780	8597499.2000000011 
+564	Rich Hemorphite	1819	14148764.08 
+565	Hedbergite	47501	26838540.010000002 
+566	Rich Hedbergite	2854	14099958.68 
+567	Spodumain	76350	16099161.000000002 
+568	Rich Spodumain	10795	20056570.25 
+569	Dark Ochre	16439	1956734.1699999999 
+570	Rich Dark Ochre	873	918788.85000000009 
+571	Gneiss	116375	14073228.75 
+572	Rich Gneiss	9157	9711822.629999999 
+573	Crokite	2663	9658328.1799999997 
+574	Rich Crokite	1147	18530335.559999999 
+575	Bistot	2901	2713015.2000000002 
+576	Rich Bistot	1129	8648410.959999999 
+577	Arkonor	15092	16285777.199999999 
+578	Rich Arkonor	909	4255565.3100000005 
+579	Mercoxit	229816	857691697.27999997 
+580	Rich Mercoxit	1023	42423595.170000002 
+581	Gray Moon Ore	24	58521.600000000006 
+582	Brown Moon Ore	63	100907.10000000001 
+583	Black Moon Ore	18	17839.98 
+584	Motley Moon Ore	42	88212.179999999993 
+585	Pink Star Crystal	27	52531.199999999997 
+586	Purple Star Crystal	38	70433.0 
+587	Blue Star Crystal	48	181680.0 
+588	Chromatic Star Crystal	89	1092699.28 
+589	Charon Blueprint	3	132600000.0 
+590	Rhea Blueprint	1	750000000.0 
+591	MK9 Shield Command Burst Blueprint	1	5743515.9100000001 
+592	Rocket Fuel Cache Partition I Blueprint	1	4526.0 
+593	Capital Rocket Fuel Cache Partition I Blueprint	1	1500000.0 
+594	Capital Bay Loading Accelerator I Blueprint	1	1416453.9399999999 
+595	Anti-Kinetic Screen Reinforcer I Blueprint	1	5640.71 
+596	Anti-Thermal Screen Reinforcer I Blueprint	1	5658.0 
+597	Capital Core Defense Charge Economizer I Blueprint	1	998097.97999999998 
+598	Capital Anti-Explosive Screen Reinforcer I Blueprint	4	3629824.5600000001 
+599	Cargohold Optimization II Blueprint	1	2874882.3399999999 
+600	Capital Capacitor Control Circuit I Blueprint	2	17239397.120000001 
+601	Capital Ancillary Current Router I Blueprint	1	30000.0 
+602	Drone Firepower Augmentor I Blueprint	1	100000.0 
+603	Fighter Range Extender I Blueprint	2	3000000.0 
+604	Fighter Control Range Augmentor I Blueprint	1	1500000.0 
+605	Drone Flight Accelerator Blueprint III	1	100.0 
+606	Drone Defense Enhancer Blueprint II	1	12086.0 
+607	Fighter Flight Accelerator Blueprint I	1	26594.490000000002 
+608	Lightweight Ship Burst Aerator Blueprint I	1	2981967.75 
+609	Lightweight Ship Flight Accelerator Blueprint I	1	1051912.75 
+610	Lightweight Ship Defense Enhancer Blueprint I	1	1500000.0 
+611	Drone Shield Booster Stabilizer Blueprint III	1	12588000.0 
+612	Drone Shield Booster Amplifier Blueprint II	1	10.0 
+613	Prototype Micro Jump Drive Blueprint	1	17971014.390000001 
+614	Expert Capital Module Invention Specialization Blueprints	1	100833332.79000001 
+615	Expert Shield Hardening Array Blueprints	1	298785714.29000002 
+616	Expert Armor Hardening Array Blueprints	1	41487500.0 
+617	Expert Mothership Defense Blueprints	2	59555554.439999998 
+618	Expert Team Combat Support Blueprints	1	22722727.27 
+619	Expert Target Navigation Prediction Blueprints	2	177659258.66 
+620	Expert Missile Projection Blueprints	1	5800000.0 
+621	Expert Drone Navigation Blueprints	1	36250000.75 
+622	Expert Motion Prediction Blueprints	1	33914285.710000001 
+623	Expert Gunnery Blueprints	1	20416666.670000002 
+624	Expert Exhumer Drone Structure Blueprints	1	132162224.2 
+625	Expert Mining Drone Structure Blueprints	2	163200000.0 
+626	Expert Remote Shield Reinforcement Theory Blueprints	1	200000000.0 
+627	Expert Remote Shield Reinforcement Array Theory Blueprints	2	400000000.0 
+628	Coercer II Cold Iron SKIN(permanent)	1	2500000.0 
+629	Prophecy Command Cold Iron SKIN(permanent)	1	3500000.0 
+630	Executioner II Interceptor Cold Iron SKIN(permanent)	1	2000000.0 
+631	Griffin Wiyrkomi SKIN(permanent)	1	1000000.0 
+632	Heron Covert Ops Wiyrkomi SKIN(permanent)	1	1000000.0 
+633	Caracal Trainer Wiyrkomi SKIN(permanent)	1	1500000.0 
+634	Cormorant Interdictor Wiyrkomi SKIN(permanent)	1	1250000.0 
+635	Blackbird Wiyrkomi SKIN(permanent)	1	1500000.0 
+636	Tayra Wiyrkomi SKIN(permanent)	1	1500000.0 
+637	Naga III Wiyrkomi SKIN(permanent)	1	1750000.0 
+638	Thorax Erasdo SKIN(permanent)	1	25000000.0 
+639	Thorax Prototype Kopis Edge SKIN(permanent)	1	3000000.0 
+640	Catalyst Interdictor Kopis Edge SKIN(permanent)	1	2500000.0 
+641	Algos Assault Kopis Edge SKIN(permanent)	1	2500000.0 
+642	Celestis Covert Ops Kopis Edge SKIN(permanent)	1	3000000.0 
+643	Nereus Combat Kopis Edge SKIN(permanent)	1	3000000.0 
+644	Myrmidon II Command Kopis Edge SKIN(permanent)	1	3500000.0 
+645	Talwar Sniper Valklear Glory SKIN(permanent)	1	2500000.0 
+646	Hurricane Logistics Valklear Glory SKIN(permanent)	1	3500000.0 
+647	Probe Explorer Valklear Glory SKIN(permanent)	1	2000000.0 
+648	Tornado III Valklear Glory SKIN(permanent)	1	3500000.0 
+649	Tempest Striker Valklear Glory SKIN(permanent)	1	4000000.0 
+650	Omen Trainer Exoplanets Hunter SKIN(permanent)	1	1225000.0 
+651	Coercer Earth  SKIN(15 days)	1	520834.0 
+652	Catalyst Earth  SKIN(15 days)	4	2083336.0 
+653	Thrasher Earth  SKIN(15 days)	2	1041668.0 
+654	Rupture Earth  SKIN(15 days)	3	1562502.0 
+655	Dragoon Air SKIN(15 days)	3	1562502.0 
+656	Corax Air SKIN(15 days)	4	2083336.0 
+657	Algos Air SKIN(15 days)	5	2604170.0 
+658	Talwar Air SKIN(15 days)	2	1041668.0 
+659	Dragoon Trainer Air SKIN(permanent)	1	12500000.0 
+660	Prophecy Air SKIN(15 days)	6	3125004.0 
+661	Myrmidon Air SKIN(15 days)	8	4166672.0 
+662	Cyclone Air SKIN(15 days)	2	1041668.0 
+663	Drake Air SKIN(15 days)	3	1562502.0 
+664	Merlin Water  SKIN(15 days)	1	520834.0 
+665	Rifter Water  SKIN(15 days)	2	1041668.0 
+666	Moa Water  SKIN(permanent)	1	12500000.0 
+667	Moa Water  SKIN(15 days)	11	5729174.0 
+668	Thorax Water  SKIN(15 days)	15	7812510.0 
+669	Merlin Assault Yoiul Envoy SKIN(permanent)	4	8000000.0 
+670	Talwar Yoiul Envoy SKIN(permanent)	1	2500000.0 
+671	Breacher Assault Yoiul Envoy SKIN(permanent)	1	2000000.0 
+672	Purifier Golden Slumber SKIN (Permanent)	1	2000000.0 
+673	Moa Guardian Golden Slumber SKIN (Permanent)	1	2000000.0 
+674	Thorax Guardian Golden Slumber SKIN (Permanent)	1	2000000.0 
+675	Myrmidon Grimace SKIN(7 days)	1	607640.0 
+676	Capsule Gramophone SKIN(permanent)	1	41428571.43 
+677	Caracal Trainer Rosethorn SKIN (Permanent)	1	3000000.0 
+678	Omen Sniper High Noon SKIN(permanent)	1	46875000.0 
+679	Griffin Breeze Core	1	1500000.0 
+680	Incursus Breeze Core	1	1500000.0 
+681	Catalyst Breeze Core	2	3750000.0 
+682	Thrasher Breeze Core	1	1875000.0 
+683	Sigil Breeze Core	2	4500000.0 
+684	Kryos Breeze Core	1	2250000.0 
