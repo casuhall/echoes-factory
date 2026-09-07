@@ -75,7 +75,7 @@
                 deleteButton.classList.add("btn", "warning");
                 deleteButton.addEventListener("click", () => {
                     if (confirm(`Êtes-vous sûr de vouloir supprimer le produit "${produit.nom}" ?`)) {
-                        usine.supprimerProduit(produit.nom);
+                        usine.supprimeProduit(produit.nom);
                         localStorage.setItem("usine", usine.toString());
                         location.reload();
                     }

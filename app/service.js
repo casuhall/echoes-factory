@@ -55,7 +55,7 @@ class Usine {
         }
         for (const recette of recettes) {
             try {
-                this.ajouteRecette(recette);
+                this.ajouteProduit(recette);
             } catch (error) {
                 console.log(`Recette non inscrite au livre de recette : ${recette?.nom}. Cause : ${error.message}.`);
             }
@@ -90,7 +90,7 @@ class Usine {
      * @param {Recette} recette Recette à ajouter
      * @throws {Error} Si une recette avec le même nom existe déjà
      */
-    ajouteRecette(recette) {
+    ajouteProduit(recette) {
         if (!recette) throw new Error(`Recette nécessaire pour l'initialisation d'un produit`);
         if (!(recette instanceof Recette)) {
             // Fiabilisation de la recette
@@ -159,12 +159,12 @@ class Usine {
     }
 
     /**
-     * Supression d'un produit du catalogue de l'usine.
+     * Suppression d'un produit du catalogue de l'usine.
      * Ne devrait pas être utilisé en temps normal.
      * 
      * @param {string} nomProduit 
      */
-    supprimerProduit(nomProduit) {
+    supprimeProduit(nomProduit) {
         if (!this.#catalogue_produits.retirer(nomProduit))
             throw new Error("Aucun produit correspondant à supprimer");
         this.#gestionnaire_evenements.produit("maj_produit", nomProduit);

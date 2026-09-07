@@ -122,7 +122,7 @@ describe('Usine - Gestion complète', () => {
 
         it("Un produit existant doit pouvoir être supprimer. La suppréssion doit se répercuter sur les autres produits si nécessaires", () => {
             // Aucune erreur ne devrait être produite à la supression d'un produit existant
-            usine.supprimerProduit("Simple");
+            usine.supprimeProduit("Simple");
             // Le produit restant composé à partir du produit supprimé doit être mis à jour suite à cette supression
             const produit_complexe = usine.produit("Complexe");
             expect(produit_complexe).to.exist;
