@@ -45,6 +45,7 @@
     </main>
     <script type="module">
         import { Usine } from "./app/service.js"
+        import { NUMBER_FORMAT, UNICODE_DATE_FORMAT } from "./app/presentation.js"
 
         const corpsTableauProduits = document.getElementById('produitsBody');
 
@@ -57,9 +58,9 @@
                 const ligne = document.createElement("tr");
                 ligne.innerHTML = `
                     <td>${produit.nom}</td>
-                    <td>${produit.coût_reviens}</td>
-                    <td>${produit.prix_estimé}</td>
-                    <td>${produit.rentabilité}%</td>
+                    <td>${NUMBER_FORMAT.format(produit.coût_reviens)}</td>
+                    <td>${NUMBER_FORMAT.format(produit.prix_estimé)}</td>
+                    <td>${NUMBER_FORMAT.format(produit.rentabilité * 100)}%</td>
                     <td>${produit.commentaires || ''}</td>
                 `; 
                 const actionsCell = document.createElement("td");
