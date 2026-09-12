@@ -169,7 +169,7 @@
         nomUsine.innerText = usine.nom;
         let nomProduitAEditer = new URLSearchParams(document.location.search).get("produit");
         let recette = usine.produit(nomProduitAEditer)?.recette;
-        if(recette) {
+        if (recette) {
             champNomProduit.value = recette.nom;
             champFraisFabrication.value = recette.frais;
             champNombreProduits.value = recette.quantité_produite;
@@ -395,7 +395,7 @@
                 boutonSupprimer.textContent = 'Supprimer';
                 boutonSupprimer.addEventListener('click', () => {
                     // Filtre l'ingrédient supprimé de la liste
-                    ingredientsListe = ingredientsListe.filter(i => i.name !== ingredient.name);
+                    ingredientsListe = ingredientsListe.filter(i => i.nom !== ingredient.nom);
                     afficherIngredients();
                 });
 
