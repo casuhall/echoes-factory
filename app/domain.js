@@ -162,7 +162,7 @@ class Ingrédient {
   /** @type {number} Prix des ingrédients (calculé sur la quantité nécessaire et l'éventuel coût de production du produit correspondant) */
   get prix() {
     let prix_unitaire = this.#estimé_unitaire?.montant ?? undefined;
-    if (this.#produit?.coût_reviens < prix_unitaire) {
+    if (this.#produit?.statut === 'BUILD') {
       prix_unitaire = this.#produit.coût_reviens;
     }
     return prix_unitaire * this.#quantité;
