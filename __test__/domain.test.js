@@ -194,10 +194,10 @@ describe('Fonctionnement des objets du domaine.', () => {
         });
 
         it("On ne peut pas ajouter ou retirer une quantité négative ou fractionnée de objets", () => {
-            expect(() => inventaire.ajoute('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu. fournis : quantité=-1/);
-            expect(() => inventaire.retire('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu. fournis : quantité=-1/);
-            expect(() => inventaire.ajoute('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu. fournis : quantité=1.5/);
-            expect(() => inventaire.retire('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu. fournis : quantité=1.5/);
+            expect(() => inventaire.ajoute('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu\. fournis : quantité=-1/);
+            expect(() => inventaire.retire('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu\. fournis : quantité=-1/);
+            expect(() => inventaire.ajoute('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu\. fournis : quantité=1\.5/);
+            expect(() => inventaire.retire('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu\. fournis : quantité=1\.5/);
         });
     });
 });
