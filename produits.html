@@ -31,7 +31,7 @@
                         <th>Prix de revient (ISK)</th>
                         <th>Prix estimé (ISK)</th>
                         <th>Rentabilité</th>
-                        <th>Commentaires</th>
+                        <th>Commentaire</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -61,7 +61,7 @@
                     <td>${NUMBER_FORMAT.format(produit.coût_reviens)}</td>
                     <td>${NUMBER_FORMAT.format(produit.prix_estimé)}</td>
                     <td>${NUMBER_FORMAT.format(produit.rentabilité * 100)} %</td>
-                    <td>${produit.commentaires || ''}</td>
+                    <td>${produit.commentaire || ''}</td>
                 `; 
                 const actionsCell = document.createElement("td");
                 const editButton = document.createElement("button");
