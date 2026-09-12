@@ -115,7 +115,7 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(produit.statut).to.equal('BUY');
         });
 
-        it('En cas de sous produit, si celui-ci est plus rentable à produire, c est le cout de reviens qui sera utilisé dans le calcul du cout de reviens du produit englobant et ses ingrédients seront ajoutés aux ingrédients de la recette initiale', () => {
+        it('En cas de sous produit, si celui-ci est plus rentable à produire, c est le cout de reviens qui sera utilisé dans le calcul du cout de reviens du produit englobant', () => {
             let produit_simple = new Produit(recette_simple, new Tarif("Simple", 180));
             let recette_imbriquée = new Recette('imbriquée', 50, [
                 new Ingrédient('Simple', 2, new Tarif('Simple', 180), produit_simple),
@@ -123,10 +123,6 @@ describe('Fonctionnement des objets du domaine.', () => {
             ], 10);
             let produit = new Produit(recette_imbriquée);
             expect(produit.coût_reviens).to.equal(370); // 50+(2*130)+(3*20) = 370
-            // vérification des ingrédients du produit (qui devront inclure les ingrédients du sous-produit)
-            expect(produit.ingrédients).to.have.lengthOf(2);
-            expect(produit.ingrédients.find(i => i.nom === 'Ingredient1')).to.deep.equal({ nom: 'Ingredient1', quantité: 4 });
-            expect(produit.ingrédients.find(i => i.nom === 'Ingredient2')).to.deep.equal({ nom: 'Ingredient2', quantité: 9 });
         });
         it('En cas de sous produit, si celui-ci est plus rentable à acheter, c est le prix estimé qui sera utilisé dans le calcul du cout de reviens du produit englobant', () => {
             let produit_simple = new Produit(recette_simple, new Tarif("Simple", 100));
@@ -136,21 +132,6 @@ describe('Fonctionnement des objets du domaine.', () => {
             ], 10);
             let produit = new Produit(recette_imbriquée);
             expect(produit.coût_reviens).to.equal(310); // 50+(2*100)+(3*20) = 310
-            // vérification des ingrédients du produit (qui ne devront pas inclure les ingrédients du sous-produit)
-            expect(produit.ingrédients).to.have.lengthOf(2);
-            expect(produit.ingrédients.find(i => i.nom === 'Simple')).to.deep.equal({ nom: 'Simple', quantité: 2 });
-            expect(produit.ingrédients.find(i => i.nom === 'Ingredient2')).to.deep.equal({ nom: 'Ingredient2', quantité: 3 });
-        });
-        it("l'ajout d'un produit menant à une boucle de dépendance dans les sous-produits provoque une erreur", () => {
-            let sous_ingredient = new Produit(new Recette('Sous-ingredient', 50, [
-                new Ingrédient('Produit Imbriqué', 2, new Tarif('Produit Imbriqué', 50)),
-                new Ingrédient('Ingredient2', 3, new Tarif('Ingredient2', 20))
-            ], 10), new Tarif('Sous-ingredient', 100));
-            let recette_imbriquée = new Recette('Produit Imbriqué', 50, [
-                new Ingrédient('Sous-ingredient', 2, undefined, sous_ingredient),
-                new Ingrédient('Ingredient2', 3, new Tarif('Ingredient2', 20))
-            ], 10);
-            expect(() => new Produit(recette_imbriquée)).to.throw(Error, /Boucle de dépendance détectée dans la recette du produit "Produit Imbriqué"/);
         });
     });
 

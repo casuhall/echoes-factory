@@ -347,31 +347,6 @@ class Produit {
   get date_effet() { return new Date(this.#date_effet); };
   #updateDateEffet(date) { this.#date_effet = (date < this.#date_effet) ? new Date(date) : this.#date_effet; }
 
-  /** @type {Ingrédient[]} Liste des ingrédients nécessaires à la fabrication du produit, avec les quantités ajustées pour les sous-produits */
-  get ingrédients() {
-    let ingrédients = new Map();
-    for (const ingrédient of this.#recette.ingrédients) {
-      if (ingrédient.produit && ingrédient.produit.statut === 'BUILD') { // Si l'ingrédient est un produit, on récupère ses ingrédients
-        for (const ingrédient_sous_produit of ingrédient.produit.ingrédients) {
-          let ingrédient_existant = ingrédients.get(ingrédient_sous_produit.nom);
-          if (ingrédient_existant) {
-            ingrédient_existant.quantité += ingrédient_sous_produit.quantité * ingrédient.quantité;
-          } else {
-            ingrédients.set(ingrédient_sous_produit.nom, { nom: ingrédient_sous_produit.nom, quantité: ingrédient_sous_produit.quantité * ingrédient.quantité });
-          }
-        }
-      } else {
-        let ingrédient_existant = ingrédients.get(ingrédient.nom);
-        if (ingrédient_existant) {
-          ingrédient_existant.quantité += ingrédient.quantité;
-        } else {
-          ingrédients.set(ingrédient.nom, { nom: ingrédient.nom, quantité: ingrédient.quantité });
-        }
-      }
-    }
-    return [...ingrédients.values()];
-  }
-
   #commentaire = '';
   /** @type {string} Commentaire sur la rentabilité du produit */
   get commentaire() { return this.#commentaire; }
@@ -388,9 +363,6 @@ class Produit {
       throw new Error(`Recette invalide : ${recette}`);
     this.#recette = recette;
     this.#nom = recette.nom;
-    // Vérification de l'absence de boucle de dépendance dans les ingrédients
-    this.ingrédients.find(ingrédient => ingrédient.nom === this.#nom) && (() => { throw new Error(`Boucle de dépendance détectée dans la recette du produit "${this.#nom}"`) })();
-    // Evaluation finale de la rentabilité du produit à partir du tarif fourni (ou non)
     this.évaluer(tarif);
   }
 
