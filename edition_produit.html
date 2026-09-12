@@ -426,7 +426,10 @@
                 ingrédients: ingredientsListe
             };
 
-            usine.ajouteProduit(recette);
+            if (nomProduitAEditer)
+                usine.modifieProduit(recette);
+            else
+                usine.ajouteProduit(recette);
             localStorage.setItem("usine", usine.toString());
 
             window.location.href = "./produits.html";
