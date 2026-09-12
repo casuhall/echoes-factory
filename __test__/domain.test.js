@@ -69,6 +69,15 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(produit.coût_reviens).to.be.undefined;
             expect(produit.rentabilité).to.be.undefined;
             expect(produit.statut).to.equal('NA');
+            expect(produit.commentaire).to.equal('Rentabilité incalculable : prix estimé inconnu.');
+            // Rentabilité incalculable : coût de reviens inconnu.
+            produit = new Produit(recette_non_tarifée, new Tarif("NonTarifée", 1));
+            expect(produit.recette).to.deep.equal(recette_non_tarifée);
+            expect(produit.prix_estimé).to.equal(1);
+            expect(produit.coût_reviens).to.be.undefined;
+            expect(produit.rentabilité).to.be.undefined;
+            expect(produit.statut).to.equal('NA');
+            expect(produit.commentaire).to.equal('Rentabilité incalculable : coût de reviens inconnu.');
         });
 
         it('Un produit créé avec une recette simple est rentable (à produire) si son coût de reviens est inférieur à son prix estimé', () => {
@@ -78,6 +87,14 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(produit.prix_estimé).to.equal(180);
             expect(produit.rentabilité).to.equal(0.38); // (180-130)/130 = 50/130 = 0.3846... => 0.38
             expect(produit.statut).to.equal('BUILD');
+            expect(produit.commentaire).to.equal('Commercialisable');
+            produit = new Produit(recette_simple, new Tarif("Simple", 140));
+            expect(produit.recette).to.deep.equal(recette_simple);
+            expect(produit.coût_reviens).to.equal(130); // 50+(2*10)+(3*20)
+            expect(produit.prix_estimé).to.equal(140);
+            expect(produit.rentabilité).to.equal(0.08); // (140-130)/130 = 10/130 = 0.0769...
+            expect(produit.statut).to.equal('BUILD');
+            expect(produit.commentaire).to.equal('Pour consommation interne');
         });
 
         it('Un produit créé avec une recette simple n est pas rentable (à acheter) si son coût de reviens est supérieur à son prix estimé', () => {

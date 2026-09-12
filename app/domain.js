@@ -394,8 +394,8 @@ class Produit {
       }
     }
     // Calcul des indicateurs de rentabilité
-    if (!this.#prix_estimé) this.#commentaire = `Rentabilité incalculable : prix estimé inconnu`
-    else if (!this.#coût_reviens) this.#commentaire = `Rentabilité incalculable : coût de reviens inconnu`
+    if (!this.#prix_estimé) this.#commentaire = `Rentabilité incalculable : prix estimé inconnu.`
+    else if (!this.#coût_reviens) this.#commentaire = `Rentabilité incalculable : coût de reviens inconnu.`
     else {
       // Si les données d'entrées sont complète, on bascule en phase industrialisée et on calcule la rentabilité.
       this.#rentabilité = ((this.#prix_estimé * this.#recette.quantité_produite) / (this.#coût_reviens / this.#recette.chances_de_succès)) - 1;
