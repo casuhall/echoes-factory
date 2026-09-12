@@ -169,7 +169,7 @@ describe('Usine - Gestion complète', () => {
             }
         });
 
-        it("L'initialisation d'une usinene devrait pas dépendre des types des données mais bien de leur valeur", () => {
+        it("L'initialisation d'une usine ne devrait pas dépendre des types des données mais bien de leur valeur", () => {
             try {
                 const recette_non_tarifée = {
                     nom: 'RecetteAvecQuantitéInvalide', frais: "200", ingrédients: [
