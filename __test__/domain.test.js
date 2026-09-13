@@ -179,6 +179,8 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(inventaire.quantité_en_stock('Objet1')).to.equal(5);
             expect(inventaire.ajoute('Objet1', 3)).to.equal(8);
             expect(inventaire.quantité_en_stock('Objet1')).to.equal(8);
+            // contrôle de cohérence avec l'état du stock
+            expect(inventaire.stock).to.deep.equal([{ nom: 'Objet1', quantité: 8 }]);
         });
 
         it("l'ajout d'un objet sans nom provoque une erreur", () => {
@@ -192,6 +194,8 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(inventaire.ajoute('Objet1', 5)).to.equal(5);
             expect(inventaire.retire('Objet1', 2)).to.equal(3);
             expect(inventaire.quantité_en_stock('Objet1')).to.equal(3);
+            // contrôle de cohérence avec l'état du stock
+            expect(inventaire.stock).to.deep.equal([{ nom: 'Objet1', quantité: 3 }]);
         });
 
         it("On ne peut pas retirer plus de objets que ce qui est disponible dans l'inventaire", () => {

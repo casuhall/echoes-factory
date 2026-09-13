@@ -266,8 +266,8 @@ class Recette {
 class Inventaire {
   // nombre d'objets, classé par nom
   #objets = new Map();
-  /** @type {[nom:string,quantité:number][]} Stock courant avec les noms et quantités des objets */
-  get stock() { return [...this.#objets.entries()]; }
+  /** @type {{nom:string,quantité:number}[]} Stock courant avec les noms et quantités des objets */
+  get stock() { return Array.from(this.#objets, ([key, value]) => ({ "nom": key, "quantité": value })); }
 
   /**
    * Récupère la quantité en stock d'un objet donné.

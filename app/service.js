@@ -15,7 +15,7 @@ class Usine {
     }
     #gestionnaire_evenements;
     #inventaire = new Inventaire();
-    /** @type {[nom:string,quantité:number][]} Stock courant de l'usine */
+    /** @type {{nom:string,quantité:number}[]} Stock courant de l'usine */
     get stock() { return this.#inventaire.stock; }
     /** catalogue des objets pouvant être produits dans l'usine */
     #catalogue_produits = new Catalogue();
