@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="dark">
+
+<head>
+  <title>Gestion de l'usine</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./style/style.css" />
+  <style>
+    #stock-table td:nth-child(2) {
+      text-align: end;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div>
+      <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
+      <a href="/" class="btn ghost" id="nav-accueil">Accueil</a>
+      <a href="/marché.html" class="btn ghost" id="nav-marché">Marché</a>
+      <a href="/produits.html" class="btn ghost" id="nav-produits">Produits</a>
+      <a href="/stock.html" class="btn" id="nav-stock">Stock</a>
+    </div>
+  </nav>
+
+
+  <dialog id="ajout_unitaire_modal">
+    <form method="dialog">
+      <div class="grid">
+        <div>
+          <h2>Enregistrer un objet</h2>
+          <label for="nom_article_unitaire_input" class="form-label">Nom de l'objet</label>
+          <input type="text" id="nom_article_unitaire_input" class="form-control" />
+          <label for="nombre_article_unitaire_input">Nombre d'objets à ajouter au stock</label>
+          <input type="number" step="1" id="nombre_article_unitaire_input" />
+        </div>
+        <div>
+          <input id="btn_annuler_unitaire" type="submit" formnovalidate class="btn ghost" value="Annuler" />
+          <input id="btn_enregistrer_unitaire" type="submit" class="btn" value="Enregistrer" />
+        </div>
+      </div>
+    </form>
+  </dialog>
+  <dialog id="ajout_massif_modal">
+    <div class="grid">
+      <h5 class="modal-title">Ajouts d'objets en masse !</h5>
+      <form method="dialog">
+        <div>
+          <label for="saisie_massif_input" class="form-label">Lot d'objets à ajouter au stock</label>
+          <textarea id="saisie_massif_input" class="form-control"></textarea>
+        </div>
+        <div>
+          <input id="btn_annuler_massif" type="submit" formnovalidate class="btn ghost" value="Annuler" />
+          <input id="btn_enregistrer_massif" type="submit" class="btn" value="Enregistrer" />
+        </div>
+      </form>
+    </div>
+    </div>
+  </dialog>
+
+  <div class="grid">
+    <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn">Ajouter un objet</button>
+    <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Ajouter en masse</button>
+    <button id="btn_reset_stock" type="button" class="btn warning">Réinitialiser le stock</button>
+  </div>
+
+  <table class="table" id="stock-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Quantité</th>
+      </tr>
+    </thead>
+    <tbody id="stock-body">
+      <tr>
+        <td class="empty" colspan="2">Aucun objet en stock</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script type="module">
+    import { Usine, GestionnaireEvenements } from "./app/service.js"
+    import { decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT } from "./app/presentation.js"
+
+
+    // Binding des éléments d'IHM
+    const nomUsine = document.getElementById('nav-nomUsine');
+    const BOUTON_RESET = document.getElementById("btn_reset_stock");
+    const INPUT_NOM_ARTICLE_UNITAIRE = document.getElementById("nom_article_unitaire_input");
+    const INPUT_PRIX_ARTICLE_UNITAIRE = document.getElementById("nombre_article_unitaire_input");
+    const BOUTON_ANNULER_UNITAIRE = document.getElementById("btn_annuler_unitaire");
+    const BOUTON_ENREGISTRER_UNITAIRE = document.getElementById("btn_enregistrer_unitaire");
+    const INPUT_MASSIF = document.getElementById("saisie_massif_input");
+    const BOUTON_ANNULER_MASSIF = document.getElementById("btn_annuler_massif");
+    const BOUTON_ENREGISTRER_MASSIF = document.getElementById("btn_enregistrer_massif");
+    const STOCK_TABLE_BODY = document.getElementById("stock-body");
+
+    let usine;
+    let storedUsine = localStorage.getItem("usine");
+    if (storedUsine) {
+      usine = Usine.parse(storedUsine);
+    }
+    else {
+      usine = new Usine("ChangeIt", undefined, [], [], []);
+    }
+
+    BOUTON_RESET.addEventListener("click", () => {
+      usine.réinitialiseStock();
+      updateStorage();
+      présenterStock();
+    });
+
+    préparerSaisieUnitaire();
+    préparerSaisieMassive();
+    présenterStock();
+
+
+    // Fonction de réparation de la fenêtre modale de saisie unitaire
+    function préparerSaisieUnitaire() {
+      // Action à réaliser sur le click du bouton enregister
+      BOUTON_ENREGISTRER_UNITAIRE.addEventListener("click", () => {
+        // Propager l'évaluation dans l'usine
+        usine.ajouteAuStock(INPUT_NOM_ARTICLE_UNITAIRE.value, INPUT_PRIX_ARTICLE_UNITAIRE.value);
+        // Persister l'état de l'usine
+        updateStorage();
+        // Mettre ajour l'affichage
+        présenterStock();
+      });
+
+      // Action à réaliser sur le click du bouton annuler
+      BOUTON_ANNULER_UNITAIRE.addEventListener("click", () => {
+        INPUT_NOM_ARTICLE_UNITAIRE.value = null;
+        INPUT_PRIX_ARTICLE_UNITAIRE.value = null;
+      });
+    }
+
+    // Fonction de préparation de la saisie en masse
+    function préparerSaisieMassive() {
+      BOUTON_ENREGISTRER_MASSIF.addEventListener("click", () => {
+        let liste = decodeEchoesListe(INPUT_MASSIF.value);
+        for (const stack of liste) {
+          try {
+            usine.évaluer(stack.nom, stack.valeur / stack.quantité);
+          } catch (erreur) {
+            console.error("Échec à l'évaluation du prix", stack, erreur);
+          }
+        }
+        // Persister l'état de l'usine
+        updateStorage();
+        // Mettre ajour l'affichage
+        présenterStock();
+      });
+    }
+
+    // Fonction d'affichage du tableau à partir des données de l'usine
+    function présenterStock() {
+      let html_stock = (usine.stock.length > 0) ? "" : "<tr><td class='empty' colspan='2'>Inventaire désepérément vide</td></tr>";
+      for (const article of usine.stock) {
+        html_stock += `<tr><td>${article.nom}</td><td class="text-end">${NUMBER_FORMAT.format(article.quantité, "integer")}</td></tr>\n`
+      }
+      STOCK_TABLE_BODY.innerHTML = html_stock;
+    }
+
+    // Fonction de stockage des données de l'usine
+    function updateStorage() {
+      localStorage.setItem("usine", usine.toString());
+    }
+
+  </script>
+  <!-- End Example Code -->
+</body>
+
+</html>
