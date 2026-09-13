@@ -12,10 +12,10 @@
     <nav>
         <div>
             <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
-            <a href="/" class="btn ghost">Accueil</a>
-            <a href="/marché.html" class="btn ghost">Marché</a>
-            <a href="/produits.html" class="btn">Produits</a>
-            <a href="http://www.perdu.com/" class="btn ghost">Stock</a>
+            <a href="/" class="btn ghost" id="nav-accueil">Accueil</a>
+            <a href="/marché.html" class="btn ghost" id="nav-marché">Marché</a>
+            <a href="/produits.html" class="btn" id="nav-produits">Produits</a>
+            <a href="/stock.html" class="btn ghost" id="nav-stock">Stock</a>
         </div>
     </nav>
     <main id="ajoutProduitMain">
@@ -51,7 +51,7 @@
 
         const usine = Usine.parse(localStorage.getItem("usine") || "{}");
         document.getElementById("nav-nomUsine").innerText = usine.nom;
-    
+
         if (usine.produits.length > 0) {
             corpsTableauProduits.innerHTML = "";
             usine.produits.forEach(produit => {
@@ -62,12 +62,12 @@
                     <td>${NUMBER_FORMAT.format(produit.prix_estimé)}</td>
                     <td>${NUMBER_FORMAT.format(produit.rentabilité * 100)} %</td>
                     <td>${produit.commentaire || ''}</td>
-                `; 
+                `;
                 const actionsCell = document.createElement("td");
                 const editButton = document.createElement("button");
                 editButton.textContent = "✎";
-                editButton.classList.add("btn","ghost");
-                editButton.addEventListener("click", () => { 
+                editButton.classList.add("btn", "ghost");
+                editButton.addEventListener("click", () => {
                     localStorage.setItem("produitÀÉditer", JSON.stringify(produit));
                     window.location.href = `./edition_produit.html?produit=${produit.nom}`;
                 });

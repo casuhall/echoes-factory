@@ -105,6 +105,8 @@
       usine = new Usine("ChangeIt", undefined, [], [], []);
     }
 
+    nomUsine.textContent = usine.nom;
+
     BOUTON_RESET.addEventListener("click", () => {
       usine.réinitialiseStock();
       updateStorage();

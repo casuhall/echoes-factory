@@ -18,7 +18,7 @@
       <a href="/" class="btn ghost" id="nav-accueil">Accueil</a>
       <a href="/marché.html" class="btn" id="nav-marché">Marché</a>
       <a href="/produits.html" class="btn ghost" id="nav-produits">Produits</a>
-      <a href="http://www.perdu.com/" class="btn ghost" id="nav-stock">Stock</a>
+      <a href="/stock.html" class="btn ghost" id="nav-stock">Stock</a>
     </div>
   </nav>
 
@@ -98,6 +98,7 @@
       usine = new Usine("ChangeIt", undefined, [], [], []);
     }
 
+    nomUsine.textContent = usine.nom;
     préparerSaisieUnitaire();
     préparerSaisieMassive();
     présenterTarifs();
