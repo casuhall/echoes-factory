@@ -20,10 +20,27 @@ function decodeEchoesListe(value) {
   return liste;
 }
 
-const NUMBER_FORMAT = new Intl.NumberFormat(undefined, {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2
-});
+
+class NUMBER_FORMAT {
+  static floatFormat = new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  static integerFormat = new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  });
+  static format(value, type = "float") {
+    switch (type) {
+      case "integer":
+        return this.integerFormat.format(value);
+      case "float":
+        return this.floatFormat.format(value);
+      default:
+        throw new Error(`Type de formatage non supporté: ${type}`);
+    }
+  }
+}
 const UNICODE_DATE_FORMAT = new Intl.DateTimeFormat("fr-FR"); // pour formatage YYYY-MM-DD
 
 
