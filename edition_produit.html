@@ -2,450 +2,448 @@
 <html lang="fr">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Ajout d'un produit</title>
-    <link rel="stylesheet" href="./style/style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ajout d'un produit</title>
+  <link rel="stylesheet" href="./style/style.css" />
 </head>
 
 <body>
-    <nav>
+  <nav>
+    <div>
+      <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
+      <a href="/" class="btn ghost" id="nav-accueil">Accueil</a>
+      <a href="/marché.html" class="btn ghost" id="nav-marché">Marché</a>
+      <a href="/produits.html" class="btn" id="nav-produits">Produits</a>
+      <a href="/stock.html" class="btn ghost" id="nav-stock">Stock</a>
+    </div>
+  </nav>
+  <main id="ajoutProduitMain">
+    <input id="productNameInput" class="h1" type="text" placeholder="Ex : Nom du produit" required />
+
+    <section aria-labelledby="production-info">
+      <div class="grid" id="production-info">
         <div>
-            <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
-            <a href="/" class="btn ghost" id="nav-accueil">Accueil</a>
-            <a href="/marché.html" class="btn ghost" id="nav-marché">Marché</a>
-            <a href="/produits.html" class="btn" id="nav-produits">Produits</a>
-            <a href="/stock.html" class="btn ghost" id="nav-stock">Stock</a>
+          <label for="cost">Frais de fabrication (ISK)</label>
+          <input id="cost" type="number" min="1" step="1" placeholder="Ex : 12 000" />
         </div>
-    </nav>
-    <main id="ajoutProduitMain">
-        <input id="productNameInput" class="h1" type="text" placeholder="Ex : Nom du produit" required />
+        <div>
+          <label for="count">Nombre d'objets produits</label>
+          <input id="count" type="number" min="1" step="1" placeholder="Ex : 10" />
+        </div>
+        <div>
+          <label for="success">Chances de réussites (%)</label>
+          <div class="row">
+            <input id="success" type="number" min="0.01" max="100" step="0.01" placeholder="Ex : 85.5" value="100" />
+            <input id="successRange" type="range" min="0.1" max="100" step="0.01" style="flex:1" value="100" />
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <section aria-labelledby="production-info">
-            <div class="grid" id="production-info">
-                <div>
-                    <label for="cost">Frais de fabrication (ISK)</label>
-                    <input id="cost" type="number" min="1" step="1" placeholder="Ex : 12 000" />
-                </div>
-                <div>
-                    <label for="count">Nombre d'objets produits</label>
-                    <input id="count" type="number" min="1" step="1" placeholder="Ex : 10" />
-                </div>
-                <div>
-                    <label for="success">Chances de réussites (%)</label>
-                    <div class="row">
-                        <input id="success" type="number" min="0.01" max="100" step="0.01" placeholder="Ex : 85.5"
-                            value="100" />
-                        <input id="successRange" type="range" min="0.1" max="100" step="0.01" style="flex:1"
-                            value="100" />
-                    </div>
-                </div>
-            </div>
-        </section>
+    <section aria-labelledby="ingredients">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <h2 id="ingredients" style="margin:0;font-size:16px">Ingrédients</h2>
+        <button id="toggleAddIngredientForm" class="btn ghost" type="button">Ajouter un ingrédient</button>
+        <button id="toggleAllIngredientForm" class="btn ghost" type="button">Initialiser les
+          ingrédients</button>
+      </div>
 
-        <section aria-labelledby="ingredients">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-                <h2 id="ingredients" style="margin:0;font-size:16px">Ingrédients</h2>
-                <button id="toggleAddIngredientForm" class="btn ghost" type="button">Ajouter un ingrédient</button>
-                <button id="toggleAllIngredientForm" class="btn ghost" type="button">Initialiser les
-                    ingrédients</button>
-            </div>
+      <form id="ingredientForm" class="ingredients-form" style="display:none" onsubmit="return false"
+        aria-hidden="true">
+        <div class="grid">
+          <div>
+            <label for="ingName">Nom de l'ingrédient</label>
+            <input id="ingName" type="text" placeholder="Ex : Tritanium" />
+          </div>
+          <div>
+            <label for="ingQty">Quantité</label>
+            <input id="ingQty" type="number" min="0" step="1" placeholder="Ex : 2" />
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button id="addIngredientBtn" class="btn" type="button">Ajouter</button>
+          <button id="cancelIngredientBtn" class="btn ghost" type="button">Annuler</button>
+        </div>
+      </form>
 
-            <form id="ingredientForm" class="ingredients-form" style="display:none" onsubmit="return false"
-                aria-hidden="true">
-                <div class="grid">
-                    <div>
-                        <label for="ingName">Nom de l'ingrédient</label>
-                        <input id="ingName" type="text" placeholder="Ex : Tritanium" />
-                    </div>
-                    <div>
-                        <label for="ingQty">Quantité</label>
-                        <input id="ingQty" type="number" min="0" step="1" placeholder="Ex : 2" />
-                    </div>
-                </div>
-                <div style="margin-top:10px;display:flex;gap:8px">
-                    <button id="addIngredientBtn" class="btn" type="button">Ajouter</button>
-                    <button id="cancelIngredientBtn" class="btn ghost" type="button">Annuler</button>
-                </div>
-            </form>
-
-            <form id="ingredientsForm" class="ingredients-form" style="display:none" onsubmit="return false"
-                aria-hidden="true">
-                <div class="grid">
-                    <div>
-                        <label for="ingredientsArea">Ingrédients</label>
-                        <textarea id="ingredientsArea" placeholder='ID	Names	Quantity	Valuation 
+      <form id="ingredientsForm" class="ingredients-form" style="display:none" onsubmit="return false"
+        aria-hidden="true">
+        <div class="grid">
+          <div>
+            <label for="ingredientsArea">Ingrédients</label>
+            <textarea id="ingredientsArea" placeholder='ID	Names	Quantity	Valuation 
 1	Phantasm Blueprint	2	92105263.159999996 
 2	Datacore - Amarrian Starship Engineering	20	3439725.2000000002 
 3	Datacore - Laser Physics	40	81626.400000000009 
 4	Ship Upgrade Experiment Data	20	315495852.0 '></textarea>
-                    </div>
-                </div>
-                <div style="margin-top:10px;display:flex;gap:8px">
-                    <button id="addAllIngredientBtn" class="btn" type="button">Initialiser</button>
-                    <button id="cancelAllIngredientBtn" class="btn ghost" type="button">Annuler</button>
-                </div>
-            </form>
-            <div class="grid">
-                <table id="ingredientsTable" aria-live="polite">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Quantité</th>
-                            <th style="width:110px">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ingredientsBody">
-                        <tr class="empty">
-                            <td colspan="3">Aucun ingrédient défini</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-        <section id="boutons">
-            <div class="grid">
-                <div>
-                    <button id="annulerBtn" class="btn ghost" type="button">Retour aux produits</button>
-                </div>
-                <div class="right">
-                    <button id="saveBtn" class="btn" type="button">Enregistrer le produit</button>
-                </div>
-            </div>
-        </section>
-    </main>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button id="addAllIngredientBtn" class="btn" type="button">Initialiser</button>
+          <button id="cancelAllIngredientBtn" class="btn ghost" type="button">Annuler</button>
+        </div>
+      </form>
+      <div class="grid">
+        <table id="ingredientsTable" aria-live="polite">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Quantité</th>
+              <th style="width:110px">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ingredientsBody">
+            <tr class="empty">
+              <td colspan="3">Aucun ingrédient défini</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section id="boutons">
+      <div class="grid">
+        <div>
+          <button id="annulerBtn" class="btn ghost" type="button">Retour aux produits</button>
+        </div>
+        <div class="right">
+          <button id="saveBtn" class="btn" type="button">Enregistrer le produit</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    <script type="module">
-        import { decodeEchoesListe } from "./app/presentation.js"
-        import { Usine } from "./app/service.js"
+  <script type="module">
+    import { decodeEchoesListe } from "./app/presentation.js"
+    import { Usine } from "./app/service.js"
 
-        // ============================================================
-        // ÉLÉMENTS DU DOM
-        // ============================================================
+    // ============================================================
+    // ÉLÉMENTS DU DOM
+    // ============================================================
 
-        // Eléments de personnalisation de la page
-        const nomUsine = document.getElementById('nav-nomUsine');
+    // Eléments de personnalisation de la page
+    const nomUsine = document.getElementById('nav-nomUsine');
 
-        // Champs de saisie pour les paramètres de production
-        const champFraisFabrication = document.getElementById('cost');
-        const champNomProduit = document.getElementById('productNameInput');
-        const champNombreProduits = document.getElementById('count');
-        const champChancesReussite = document.getElementById('success');
-        const champCurseurChancesReussite = document.getElementById('successRange');
+    // Champs de saisie pour les paramètres de production
+    const champFraisFabrication = document.getElementById('cost');
+    const champNomProduit = document.getElementById('productNameInput');
+    const champNombreProduits = document.getElementById('count');
+    const champChancesReussite = document.getElementById('success');
+    const champCurseurChancesReussite = document.getElementById('successRange');
 
-        // Boutons et formulaires pour la gestion des ingrédients
-        const boutonAjouterIngredient = document.getElementById('toggleAddIngredientForm');
-        const boutonInitialiserIngredients = document.getElementById('toggleAllIngredientForm');
-        const formulaireAjoutIngredient = document.getElementById('ingredientForm');
-        const formulaireInitialisationIngredients = document.getElementById('ingredientsForm');
-        const zoneTextePlusieursIngredients = document.getElementById('ingredientsArea');
-        const champNomIngredient = document.getElementById('ingName');
-        const champQuantiteIngredient = document.getElementById('ingQty');
-        const boutonAjouterIngredientUnique = document.getElementById('addIngredientBtn');
-        const boutonAnnulerAjoutIngredient = document.getElementById('cancelIngredientBtn');
-        const boutonInitialiserPlusieursIngredients = document.getElementById('addAllIngredientBtn');
-        const boutonAnnulerInitialisation = document.getElementById('cancelAllIngredientBtn');
-        const corpsTableauIngredients = document.getElementById('ingredientsBody');
-        const boutonEnregistrer = document.getElementById('saveBtn');
-        const boutonAnnuler = document.getElementById('annulerBtn');
+    // Boutons et formulaires pour la gestion des ingrédients
+    const boutonAjouterIngredient = document.getElementById('toggleAddIngredientForm');
+    const boutonInitialiserIngredients = document.getElementById('toggleAllIngredientForm');
+    const formulaireAjoutIngredient = document.getElementById('ingredientForm');
+    const formulaireInitialisationIngredients = document.getElementById('ingredientsForm');
+    const zoneTextePlusieursIngredients = document.getElementById('ingredientsArea');
+    const champNomIngredient = document.getElementById('ingName');
+    const champQuantiteIngredient = document.getElementById('ingQty');
+    const boutonAjouterIngredientUnique = document.getElementById('addIngredientBtn');
+    const boutonAnnulerAjoutIngredient = document.getElementById('cancelIngredientBtn');
+    const boutonInitialiserPlusieursIngredients = document.getElementById('addAllIngredientBtn');
+    const boutonAnnulerInitialisation = document.getElementById('cancelAllIngredientBtn');
+    const corpsTableauIngredients = document.getElementById('ingredientsBody');
+    const boutonEnregistrer = document.getElementById('saveBtn');
+    const boutonAnnuler = document.getElementById('annulerBtn');
 
-        // ============================================================
-        // DONNÉES
-        // ============================================================
+    // ============================================================
+    // DONNÉES
+    // ============================================================
 
-        /**
-         * Liste des ingrédients ajoutés au produit
-         * @type {Array<{nom: string, quantité: number}>}
-         */
-        let ingredientsListe = [];
-        let storedUsine = localStorage.getItem("usine");
-        let usine;
-        if (storedUsine) {
-            usine = Usine.parse(storedUsine);
-        }
-        else {
-            usine = new Usine("ChangeIt", undefined, [], [], []);
-        }
-        nomUsine.innerText = usine.nom;
-        let nomProduitAEditer = new URLSearchParams(document.location.search).get("produit");
-        let recette = usine.produit(nomProduitAEditer)?.recette;
-        if (recette) {
-            champNomProduit.value = recette.nom;
-            champFraisFabrication.value = recette.frais;
-            champNombreProduits.value = recette.quantité_produite;
-            champChancesReussite.value = recette.chances_de_succès;
-            champCurseurChancesReussite.value = recette.chances_de_succès;
-            ingredientsListe = recette.ingrédients;
-        }
+    /**
+     * Liste des ingrédients ajoutés au produit
+     * @type {Array<{nom: string, quantité: number}>}
+     */
+    let ingredientsListe = [];
+    let storedUsine = localStorage.getItem("usine");
+    let usine;
+    if (storedUsine) {
+      usine = Usine.parse(storedUsine);
+    }
+    else {
+      usine = new Usine("ChangeIt", undefined, [], [], []);
+    }
+    nomUsine.innerText = usine.nom;
+    let nomProduitAEditer = new URLSearchParams(document.location.search).get("produit");
+    let recette = usine.produit(nomProduitAEditer)?.recette;
+    if (recette) {
+      champNomProduit.value = recette.nom;
+      champFraisFabrication.value = recette.frais;
+      champNombreProduits.value = recette.quantité_produite;
+      champChancesReussite.value = recette.chances_de_succès;
+      champCurseurChancesReussite.value = recette.chances_de_succès;
+      ingredientsListe = recette.ingrédients;
+    }
 
 
-        // ============================================================
-        // SYNCHRONISATION TAUX DE RÉUSSITE (champ numérique ↔ curseur)
-        // ============================================================
+    // ============================================================
+    // SYNCHRONISATION TAUX DE RÉUSSITE (champ numérique ↔ curseur)
+    // ============================================================
 
-        /**
-         * Synchronise le curseur quand le champ numérique du taux est modifié
-         */
-        champChancesReussite.addEventListener('input', () => {
-            let valeur = parseFloat(champChancesReussite.value || 0);
-            // Normalise la valeur entre 0 et 100%
-            if (valeur < 0) valeur = 0;
-            if (valeur > 100) valeur = 100;
-            champCurseurChancesReussite.value = valeur;
-        });
+    /**
+     * Synchronise le curseur quand le champ numérique du taux est modifié
+     */
+    champChancesReussite.addEventListener('input', () => {
+      let valeur = parseFloat(champChancesReussite.value || 0);
+      // Normalise la valeur entre 0 et 100%
+      if (valeur < 0) valeur = 0;
+      if (valeur > 100) valeur = 100;
+      champCurseurChancesReussite.value = valeur;
+    });
 
-        /**
-         * Synchronise le champ numérique quand le curseur est modifié
-         */
-        champCurseurChancesReussite.addEventListener('input', () => {
-            champChancesReussite.value = champCurseurChancesReussite.value;
-        });
+    /**
+     * Synchronise le champ numérique quand le curseur est modifié
+     */
+    champCurseurChancesReussite.addEventListener('input', () => {
+      champChancesReussite.value = champCurseurChancesReussite.value;
+    });
 
-        // ============================================================
-        // GESTION FORMULAIRE AJOUT INGRÉDIENT UNIQUE
-        // ============================================================
+    // ============================================================
+    // GESTION FORMULAIRE AJOUT INGRÉDIENT UNIQUE
+    // ============================================================
 
-        /**
-         * Bascule l'affichage du formulaire d'ajout d'un ingrédient
-         */
-        boutonAjouterIngredient.addEventListener('click', () => {
-            const estAffiche = formulaireAjoutIngredient.style.display !== 'none';
-            if (estAffiche) masquerFormulaireIngredient();
-            else afficherFormulaireIngredient();
-        });
+    /**
+     * Bascule l'affichage du formulaire d'ajout d'un ingrédient
+     */
+    boutonAjouterIngredient.addEventListener('click', () => {
+      const estAffiche = formulaireAjoutIngredient.style.display !== 'none';
+      if (estAffiche) masquerFormulaireIngredient();
+      else afficherFormulaireIngredient();
+    });
 
-        /**
-         * Masque le formulaire et annule la saisie
-         */
-        boutonAnnulerAjoutIngredient.addEventListener('click', masquerFormulaireIngredient);
+    /**
+     * Masque le formulaire et annule la saisie
+     */
+    boutonAnnulerAjoutIngredient.addEventListener('click', masquerFormulaireIngredient);
 
-        /**
-         * Affiche le formulaire d'ajout et place le focus sur le champ nom
-         */
-        function afficherFormulaireIngredient() {
-            formulaireAjoutIngredient.style.display = 'block';
-            formulaireAjoutIngredient.setAttribute('aria-hidden', 'false');
-            champNomIngredient.focus();
-            boutonAjouterIngredient.textContent = 'Masquer le formulaire';
-        }
+    /**
+     * Affiche le formulaire d'ajout et place le focus sur le champ nom
+     */
+    function afficherFormulaireIngredient() {
+      formulaireAjoutIngredient.style.display = 'block';
+      formulaireAjoutIngredient.setAttribute('aria-hidden', 'false');
+      champNomIngredient.focus();
+      boutonAjouterIngredient.textContent = 'Masquer le formulaire';
+    }
 
-        /**
-         * Masque le formulaire et réinitialise les champs
-         */
-        function masquerFormulaireIngredient() {
-            formulaireAjoutIngredient.style.display = 'none';
-            formulaireAjoutIngredient.setAttribute('aria-hidden', 'true');
-            boutonAjouterIngredient.textContent = 'Ajouter un ingrédient';
-            champNomIngredient.value = '';
-            champQuantiteIngredient.value = '';
-        }
+    /**
+     * Masque le formulaire et réinitialise les champs
+     */
+    function masquerFormulaireIngredient() {
+      formulaireAjoutIngredient.style.display = 'none';
+      formulaireAjoutIngredient.setAttribute('aria-hidden', 'true');
+      boutonAjouterIngredient.textContent = 'Ajouter un ingrédient';
+      champNomIngredient.value = '';
+      champQuantiteIngredient.value = '';
+    }
 
-        // ============================================================
-        // GESTION FORMULAIRE INITIALISATION PLUSIEURS INGRÉDIENTS
-        // ============================================================
+    // ============================================================
+    // GESTION FORMULAIRE INITIALISATION PLUSIEURS INGRÉDIENTS
+    // ============================================================
 
-        /**
-         * Bascule l'affichage du formulaire d'initialisation de plusieurs ingrédients
-         */
-        boutonInitialiserIngredients.addEventListener('click', () => {
-            const estAffiche = formulaireInitialisationIngredients.style.display !== 'none';
-            if (estAffiche) masquerFormulaireInitialisation();
-            else afficherFormulaireInitialisation();
-        });
+    /**
+     * Bascule l'affichage du formulaire d'initialisation de plusieurs ingrédients
+     */
+    boutonInitialiserIngredients.addEventListener('click', () => {
+      const estAffiche = formulaireInitialisationIngredients.style.display !== 'none';
+      if (estAffiche) masquerFormulaireInitialisation();
+      else afficherFormulaireInitialisation();
+    });
 
-        /**
-         * Annule l'initialisation
-         */
-        boutonAnnulerAjoutIngredient.addEventListener('click', masquerFormulaireInitialisation);
+    /**
+     * Annule l'initialisation
+     */
+    boutonAnnulerAjoutIngredient.addEventListener('click', masquerFormulaireInitialisation);
 
-        /**
-         * Affiche le formulaire d'initialisation et place le focus sur la zone texte
-         */
-        function afficherFormulaireInitialisation() {
-            formulaireInitialisationIngredients.style.display = 'block';
-            formulaireInitialisationIngredients.setAttribute('aria-hidden', 'false');
-            zoneTextePlusieursIngredients.focus();
-            boutonInitialiserIngredients.textContent = 'Masquer le formulaire';
-        }
+    /**
+     * Affiche le formulaire d'initialisation et place le focus sur la zone texte
+     */
+    function afficherFormulaireInitialisation() {
+      formulaireInitialisationIngredients.style.display = 'block';
+      formulaireInitialisationIngredients.setAttribute('aria-hidden', 'false');
+      zoneTextePlusieursIngredients.focus();
+      boutonInitialiserIngredients.textContent = 'Masquer le formulaire';
+    }
 
-        /**
-         * Masque le formulaire d'initialisation et réinitialise le contenu
-         */
-        function masquerFormulaireInitialisation() {
-            formulaireInitialisationIngredients.style.display = 'none';
-            formulaireInitialisationIngredients.setAttribute('aria-hidden', 'true');
-            boutonInitialiserIngredients.textContent = 'Ajouter plusieurs ingrédients';
-            zoneTextePlusieursIngredients.value = '';
-        }
+    /**
+     * Masque le formulaire d'initialisation et réinitialise le contenu
+     */
+    function masquerFormulaireInitialisation() {
+      formulaireInitialisationIngredients.style.display = 'none';
+      formulaireInitialisationIngredients.setAttribute('aria-hidden', 'true');
+      boutonInitialiserIngredients.textContent = 'Ajouter plusieurs ingrédients';
+      zoneTextePlusieursIngredients.value = '';
+    }
 
-        // ============================================================
-        // AJOUT D'UN INGRÉDIENT UNIQUE
-        // ============================================================
+    // ============================================================
+    // AJOUT D'UN INGRÉDIENT UNIQUE
+    // ============================================================
 
-        /**
-         * Ajoute un ingrédient unique à la liste
-         * Valide que le nom n'est pas vide et que la quantité est positive
-         */
-        boutonAjouterIngredientUnique.addEventListener('click', () => {
-            const nomIngredient = champNomIngredient.value.trim();
-            const quantiteIngredient = parseFloat(champQuantiteIngredient.value);
+    /**
+     * Ajoute un ingrédient unique à la liste
+     * Valide que le nom n'est pas vide et que la quantité est positive
+     */
+    boutonAjouterIngredientUnique.addEventListener('click', () => {
+      const nomIngredient = champNomIngredient.value.trim();
+      const quantiteIngredient = parseFloat(champQuantiteIngredient.value);
 
-            // Validation du nom
-            if (!nomIngredient) {
-                alert("Le nom de l'ingrédient est requis.");
-                champNomIngredient.focus();
-                return;
-            }
+      // Validation du nom
+      if (!nomIngredient) {
+        alert("Le nom de l'ingrédient est requis.");
+        champNomIngredient.focus();
+        return;
+      }
 
-            // Validation de la quantité
-            if (!isFinite(quantiteIngredient) || quantiteIngredient <= 0) {
-                alert("La quantité doit être un nombre strictement positif.");
-                champQuantiteIngredient.focus();
-                return;
-            }
+      // Validation de la quantité
+      if (!isFinite(quantiteIngredient) || quantiteIngredient <= 0) {
+        alert("La quantité doit être un nombre strictement positif.");
+        champQuantiteIngredient.focus();
+        return;
+      }
 
-            // Crée et ajoute l'ingrédient
-            const nouvelIngredient = {
-                nom: nomIngredient,
-                quantité: quantiteIngredient
-            };
-            ingredientsListe.push(nouvelIngredient);
-            afficherIngredients();
-            masquerFormulaireIngredient();
-        });
+      // Crée et ajoute l'ingrédient
+      const nouvelIngredient = {
+        nom: nomIngredient,
+        quantité: quantiteIngredient
+      };
+      ingredientsListe.push(nouvelIngredient);
+      afficherIngredients();
+      masquerFormulaireIngredient();
+    });
 
-        // ============================================================
-        // AJOUT DE PLUSIEURS INGRÉDIENTS (TEXTE BRUT)
-        // ============================================================
+    // ============================================================
+    // AJOUT DE PLUSIEURS INGRÉDIENTS (TEXTE BRUT)
+    // ============================================================
 
-        /**
-         * Initialise les ingrédients en décodant une liste au format texte
-         * Format attendu : ID	Names	Quantity	Valuation (séparés par des tabulations)
-         */
-        boutonInitialiserPlusieursIngredients.addEventListener('click', () => {
-            const texteBrut = zoneTextePlusieursIngredients.value.trim();
+    /**
+     * Initialise les ingrédients en décodant une liste au format texte
+     * Format attendu : ID	Names	Quantity	Valuation (séparés par des tabulations)
+     */
+    boutonInitialiserPlusieursIngredients.addEventListener('click', () => {
+      const texteBrut = zoneTextePlusieursIngredients.value.trim();
 
-            try {
-                const ingredientsDécodés = decodeEchoesListe(texteBrut);
+      try {
+        const ingredientsDécodés = decodeEchoesListe(texteBrut);
 
-                // Valide qu'au moins un ingrédient a été trouvé
-                if (ingredientsDécodés.length === 0) {
-                    alert("Aucun ingrédient valide trouvé. Veuillez vérifier le format.");
-                    zoneTextePlusieursIngredients.focus();
-                    return;
-                }
-
-                // Ajoute les ingrédients décodés à la liste
-                ingredientsDécodés.forEach(element => {
-                    const nouveauElement = {
-                        nom: element.nom,
-                        quantité: element.quantité
-                    };
-                    ingredientsListe.push(nouveauElement);
-                });
-
-                afficherIngredients();
-                masquerFormulaireInitialisation();
-            } catch (erreur) {
-                console.error("Erreur lors du décodage de la liste d'ingrédients:", erreur);
-                alert("Format de liste d'ingrédients invalide. Veuillez vérifier et réessayer.");
-                zoneTextePlusieursIngredients.focus();
-            }
-        });
-
-        // ============================================================
-        // AFFICHAGE DU TABLEAU D'INGRÉDIENTS
-        // ============================================================
-
-        /**
-         * Rend le tableau des ingrédients avec les données de la liste
-         * Si la liste est vide, affiche un message "Aucun ingrédient défini"
-         */
-        function afficherIngredients() {
-            corpsTableauIngredients.innerHTML = '';
-
-            // Affiche un message si aucun ingrédient
-            if (ingredientsListe.length === 0) {
-                const ligneVide = document.createElement('tr');
-                ligneVide.className = 'empty';
-                ligneVide.innerHTML = '<td colspan="4">Aucun ingrédient défini</td>';
-                corpsTableauIngredients.appendChild(ligneVide);
-                return;
-            }
-
-            // Ajoute une ligne par ingrédient
-            ingredientsListe.forEach(ingredient => {
-                const ligne = document.createElement('tr');
-
-                // Colonne : Nom
-                const celluleNom = document.createElement('td');
-                celluleNom.textContent = ingredient.nom;
-
-                // Colonne : Quantité (formatée avec locale et max 6 décimales)
-                const celluleQuantite = document.createElement('td');
-                celluleQuantite.textContent = Number(ingredient.quantité).toLocaleString(undefined, { maximumFractionDigits: 6 });
-
-                // Colonne : Actions
-                const celluleActions = document.createElement('td');
-                celluleActions.className = 'actions';
-
-                const boutonSupprimer = document.createElement('button');
-                boutonSupprimer.type = 'button';
-                boutonSupprimer.className = 'btn ghost';
-                boutonSupprimer.textContent = 'Supprimer';
-                boutonSupprimer.addEventListener('click', () => {
-                    // Filtre l'ingrédient supprimé de la liste
-                    ingredientsListe = ingredientsListe.filter(i => i.nom !== ingredient.nom);
-                    afficherIngredients();
-                });
-
-                celluleActions.appendChild(boutonSupprimer);
-
-                // Assemble la ligne complète
-                ligne.appendChild(celluleNom);
-                ligne.appendChild(celluleQuantite);
-                ligne.appendChild(celluleActions);
-                corpsTableauIngredients.appendChild(ligne);
-            });
+        // Valide qu'au moins un ingrédient a été trouvé
+        if (ingredientsDécodés.length === 0) {
+          alert("Aucun ingrédient valide trouvé. Veuillez vérifier le format.");
+          zoneTextePlusieursIngredients.focus();
+          return;
         }
 
-        // ============================================================
-        // ENREGISTREMENT DE LA LIGNE DE PRODUCTION
-        // ============================================================
-
-        /**
-         * Enregistre les données de la ligne de production
-         * Collecte les frais, nombre de produits, taux de réussite et ingrédients
-         */
-        boutonEnregistrer.addEventListener('click', () => {
-            const recette = {
-                nom: champNomProduit.value.trim(),
-                frais: parseFloat(champFraisFabrication.value || 0),
-                quantité_produite: parseInt(champNombreProduits.value || 0),
-                chances_de_succès: parseFloat(champChancesReussite.value || 0),
-                ingrédients: ingredientsListe
-            };
-
-            if (nomProduitAEditer)
-                usine.modifieProduit(recette);
-            else
-                usine.ajouteProduit(recette);
-            localStorage.setItem("usine", usine.toString());
-
-            window.location.href = "./produits.html";
-
-        });
-        boutonAnnuler.addEventListener('click', () => {
-            window.location.href = "./produits.html";
+        // Ajoute les ingrédients décodés à la liste
+        ingredientsDécodés.forEach(element => {
+          const nouveauElement = {
+            nom: element.nom,
+            quantité: element.quantité
+          };
+          ingredientsListe.push(nouveauElement);
         });
 
-        // ============================================================
-        // INITIALISATION
-        // ============================================================
-
-        // Affiche le tableau vide au chargement
         afficherIngredients();
-    </script>
+        masquerFormulaireInitialisation();
+      } catch (erreur) {
+        console.error("Erreur lors du décodage de la liste d'ingrédients:", erreur);
+        alert("Format de liste d'ingrédients invalide. Veuillez vérifier et réessayer.");
+        zoneTextePlusieursIngredients.focus();
+      }
+    });
+
+    // ============================================================
+    // AFFICHAGE DU TABLEAU D'INGRÉDIENTS
+    // ============================================================
+
+    /**
+     * Rend le tableau des ingrédients avec les données de la liste
+     * Si la liste est vide, affiche un message "Aucun ingrédient défini"
+     */
+    function afficherIngredients() {
+      corpsTableauIngredients.innerHTML = '';
+
+      // Affiche un message si aucun ingrédient
+      if (ingredientsListe.length === 0) {
+        const ligneVide = document.createElement('tr');
+        ligneVide.className = 'empty';
+        ligneVide.innerHTML = '<td colspan="4">Aucun ingrédient défini</td>';
+        corpsTableauIngredients.appendChild(ligneVide);
+        return;
+      }
+
+      // Ajoute une ligne par ingrédient
+      ingredientsListe.forEach(ingredient => {
+        const ligne = document.createElement('tr');
+
+        // Colonne : Nom
+        const celluleNom = document.createElement('td');
+        celluleNom.textContent = ingredient.nom;
+
+        // Colonne : Quantité (formatée avec locale et max 6 décimales)
+        const celluleQuantite = document.createElement('td');
+        celluleQuantite.textContent = Number(ingredient.quantité).toLocaleString(undefined, { maximumFractionDigits: 6 });
+
+        // Colonne : Actions
+        const celluleActions = document.createElement('td');
+        celluleActions.className = 'actions';
+
+        const boutonSupprimer = document.createElement('button');
+        boutonSupprimer.type = 'button';
+        boutonSupprimer.className = 'btn ghost';
+        boutonSupprimer.textContent = 'Supprimer';
+        boutonSupprimer.addEventListener('click', () => {
+          // Filtre l'ingrédient supprimé de la liste
+          ingredientsListe = ingredientsListe.filter(i => i.nom !== ingredient.nom);
+          afficherIngredients();
+        });
+
+        celluleActions.appendChild(boutonSupprimer);
+
+        // Assemble la ligne complète
+        ligne.appendChild(celluleNom);
+        ligne.appendChild(celluleQuantite);
+        ligne.appendChild(celluleActions);
+        corpsTableauIngredients.appendChild(ligne);
+      });
+    }
+
+    // ============================================================
+    // ENREGISTREMENT DE LA LIGNE DE PRODUCTION
+    // ============================================================
+
+    /**
+     * Enregistre les données de la ligne de production
+     * Collecte les frais, nombre de produits, taux de réussite et ingrédients
+     */
+    boutonEnregistrer.addEventListener('click', () => {
+      const recette = {
+        nom: champNomProduit.value.trim(),
+        frais: parseFloat(champFraisFabrication.value || 0),
+        quantité_produite: parseInt(champNombreProduits.value || 0),
+        chances_de_succès: parseFloat(champChancesReussite.value || 0),
+        ingrédients: ingredientsListe
+      };
+
+      if (nomProduitAEditer)
+        usine.modifieProduit(recette);
+      else
+        usine.ajouteProduit(recette);
+      localStorage.setItem("usine", usine.toString());
+
+      window.location.href = "./produits.html";
+
+    });
+    boutonAnnuler.addEventListener('click', () => {
+      window.location.href = "./produits.html";
+    });
+
+    // ============================================================
+    // INITIALISATION
+    // ============================================================
+
+    // Affiche le tableau vide au chargement
+    afficherIngredients();
+  </script>
 </body>
 
 </html>
