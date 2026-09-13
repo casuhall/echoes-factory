@@ -40,6 +40,14 @@ describe('Usine - Gestion complète', () => {
             expect(produit_épée).to.exist;
             expect(produit_épée.nom).to.be.equal("Épée");
         });
+        it(`Il est possible d'ajouter des objets à l'inventaire de l'usine`, () => {
+            try { // catch des exceptions innatendu pour faire échouer le test
+                usine.ajouteAuStock("ObjetTest", 5);
+            } catch (e) { console.error(e); expect.fail(`Une exception inattendue a été levée lors de l'ajout d'un objet à l'inventaire : ${e.message}`); }
+            const stock_objet_test = usine.stock.find(s => s.nom === "ObjetTest");
+            expect(stock_objet_test).to.exist;
+            expect(stock_objet_test.quantité).to.be.equal(5);
+        });
     });
 
     describe('Comportement attendu d une usine préexistante', () => {
@@ -63,7 +71,8 @@ describe('Usine - Gestion complète', () => {
             ]);
             usine = new Usine("Une usine toute neuve", undefined,
                 [recette_simple, recette_non_tarifée, recette_complexe],
-                [new Tarif('Ingredient1', 10), new Tarif('Ingredient2', 20), new Tarif('Simple', 180), new Tarif("Complexe", 300)],);
+                [new Tarif('Ingredient1', 10), new Tarif('Ingredient2', 20), new Tarif('Simple', 180), new Tarif("Complexe", 300)],
+                [{ nom: 'Ingredient1', quantité: 5 }, { nom: 'Ingredient2', quantité: 10 }, { nom: 'Simple', quantité: 2 }]);
         });
 
         it('Les produits créés à l initialisation sont tarifés correctement', () => {
@@ -92,8 +101,14 @@ describe('Usine - Gestion complète', () => {
         });
 
         it('Il est possible de sérialiser et désérialiser une usine sans perdre d information', () => {
-            const usine_sérialisée = usine.toString();
-            const usine_désérialisée = Usine.parse(usine_sérialisée);
+            let usine_sérialisée, usine_désérialisée;
+            try{
+                usine_sérialisée = usine.toString();
+                usine_désérialisée = Usine.parse(usine_sérialisée);
+            }catch(e){
+                console.error(e);
+                expect.fail(`Une exception inattendue a été levée lors de la sérialisation/désérialisation de l'usine : ${e.message}`);
+            }
             expect(usine_désérialisée).to.exist;
             expect(usine_désérialisée.nom).to.equal(usine.nom);
             expect(usine_désérialisée.produits.length).to.equal(usine.produits.length);
@@ -115,7 +130,12 @@ describe('Usine - Gestion complète', () => {
             for (let i = 0; i < usine.stock.length; i++) {
                 const stock_original = usine.stock[i];
                 const stock_désérialisé = usine_désérialisée.stock[i];
+                expect(stock_désérialisé).to.exist;
+                // double vérifiaction en cas de nom vide ou null
+                expect(stock_désérialisé.nom).to.exist; 
                 expect(stock_désérialisé.nom).to.equal(stock_original.nom);
+                // double vérifiaction en cas de quantité vide ou null
+                expect(stock_désérialisé.quantité).to.exist;
                 expect(stock_désérialisé.quantité).to.equal(stock_original.quantité);
             }
         });
@@ -146,7 +166,7 @@ describe('Usine - Gestion complète', () => {
             expect(produit_complexe.prix_estimé).to.equal(300);
             expect(produit_complexe.coût_reviens).to.equal(250); // 50 + 2*100 = 250
             expect(produit_complexe.rentabilité).to.equal(0.2); // (300-250)/250 = -50/250 = 0,2
-         });
+        });
     });
 
     describe("Fiabilisation de l'initialisation d'une usine existante", () => {

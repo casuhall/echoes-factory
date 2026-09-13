@@ -48,9 +48,9 @@ class Usine {
         }
         for (const stack of stock) {
             try {
-                this.#inventaire.ajoute(stack.nom, Number.parseFloat(stack.quantité));
+                this.ajouteAuStock(stack.nom, Number.parseFloat(stack.quantité));
             } catch (error) {
-                console.log(`Stack non inscrite à l'inventaire : ${JSON.stringify(stack)}. Cause : ${error.message}.`);
+                console.warn(`Stack non inscrite à l'inventaire : ${JSON.stringify(stack)}. Cause : ${error.message}.`);
             }
         }
         for (const recette of recettes) {
@@ -170,6 +170,20 @@ class Usine {
         this.#gestionnaire_evenements.produit("maj_produit", nomProduit);
     }
 
+    /** Fonction pour réinitialiser le stock */
+    réinitialiseStock() {
+        this.#inventaire = new Inventaire();
+    }
+
+    /** Fonction d'ajout d'objets au stock.
+     * @param {string} nom Nom de l'objet à ajouter au stock
+     * @param {number} quantité Quantité de l'objet à ajouter au stock
+     * @throws {Error} Si la quantité n'est pas un nombre valide ou le nom est vide
+     */
+    ajouteAuStock(nom, quantité) {
+        this.#inventaire.ajoute(nom, Number.parseFloat(quantité));
+    }
+
     toString() {
         return `{"nom": "${this.#nom}", "recettes": [${this.recettes.map(recette => recette.toString()).join(",")}], "stock": [${this.stock.map(stack => `{"nom": "${stack.nom}", "quantité": ${stack.quantité}}`)}], "tarifs": [${this.tarifs.map(tarif => tarif.toString())}]}`;
     }
@@ -179,7 +193,7 @@ class Usine {
             let objet = JSON.parse(string);
             return new Usine(objet.nom, undefined, objet.recettes, objet.tarifs, objet.stock);
         } catch (error) {
-            console.info(`Erreur lors de l'interprétation de la représentation de l'usine :
+            console.warn(`Erreur lors de l'interprétation de la représentation de l'usine :
     ${string}`)
             throw error
         }
