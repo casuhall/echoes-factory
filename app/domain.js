@@ -283,11 +283,12 @@ class Inventaire {
    * @param {string} objet Nom de l'objet à ajouter
    * @param {number} quantité Quantité positive à ajouter
    * @returns {number} Quantité totale en stock après ajout
-   * @throws {Error} Si la quantité n'est pas un entier positif
+   * @throws {Error} Si la quantité n'est pas un entier positif ou le nom est vide
    */
   ajoute(objet, quantité) {
+    if (!objet || !String(objet).trim()) throw new Error(`Nom d'objet obligatoire.`)
     if (!quantité || quantité < 0 || Number.isInteger(quantité) === false)
-      throw new Error(`Nombre entier positif attendu. fournis : quantité=${quantité}`)
+      throw new Error(`Nombre entier positif attendu. Fournis : quantité=${quantité}`)
     let nouveau_stock = this.quantité_en_stock(objet) + quantité;
     this.#objets.set(objet, nouveau_stock);
     return nouveau_stock;
@@ -302,7 +303,9 @@ class Inventaire {
    */
   retire(objet, quantité) {
     if (!quantité || quantité < 0 || Number.isInteger(quantité) === false)
-      throw new Error(`Nombre entier positif attendu. fournis : quantité=${quantité}`)
+      throw new Error(`Nombre entier positif attendu. Fournis : quantité=${quantité}`)
+    if (!objet || typeof objet !== "string")
+      throw new Error(`Nom d'objet invalide. Fournis : objet=${objet}`)
     let stock = this.quantité_en_stock(objet);
     if (stock < quantité) {
       throw new Error(`Impossible de retirer ${quantité} ${objet}. Seuls ${stock} disponibles`)

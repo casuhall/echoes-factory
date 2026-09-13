@@ -181,6 +181,13 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(inventaire.quantité_en_stock('Objet1')).to.equal(8);
         });
 
+        it("l'ajout d'un objet sans nom provoque une erreur", () => {
+            expect(() => inventaire.ajoute('', 5)).to.throw(Error, /Nom d'objet obligatoire\./);
+            expect(() => inventaire.ajoute('   ', 5)).to.throw(Error, /Nom d'objet obligatoire\./);
+            expect(() => inventaire.ajoute(null, 5)).to.throw(Error, /Nom d'objet obligatoire\./);
+            expect(() => inventaire.ajoute(undefined, 5)).to.throw(Error, /Nom d'objet obligatoire\./);
+        });
+
         it("On peut retirer des objets de l'inventaire", () => {
             expect(inventaire.ajoute('Objet1', 5)).to.equal(5);
             expect(inventaire.retire('Objet1', 2)).to.equal(3);
@@ -194,10 +201,10 @@ describe('Fonctionnement des objets du domaine.', () => {
         });
 
         it("On ne peut pas ajouter ou retirer une quantité négative ou fractionnée de objets", () => {
-            expect(() => inventaire.ajoute('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu\. fournis : quantité=-1/);
-            expect(() => inventaire.retire('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu\. fournis : quantité=-1/);
-            expect(() => inventaire.ajoute('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu\. fournis : quantité=1\.5/);
-            expect(() => inventaire.retire('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu\. fournis : quantité=1\.5/);
+            expect(() => inventaire.ajoute('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu\. Fournis : quantité=-1/);
+            expect(() => inventaire.retire('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu\. Fournis : quantité=-1/);
+            expect(() => inventaire.ajoute('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu\. Fournis : quantité=1\.5/);
+            expect(() => inventaire.retire('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu\. Fournis : quantité=1\.5/);
         });
     });
 });
