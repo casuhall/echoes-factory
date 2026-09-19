@@ -72,6 +72,18 @@ textarea {
     resize: vertical
 }
 
+.red {
+    color: #c11515
+}
+
+.green {
+    color: #16a34a
+}
+
+.right {
+    text-align: right
+}
+
 .row {
     display: flex;
     gap: 8px;

@@ -28,9 +28,8 @@
         <thead>
           <tr>
             <th>Produit</th>
-            <th>Prix de revient (ISK)</th>
-            <th>Prix estimé (ISK)</th>
             <th>Rentabilité</th>
+            <th>Gain estimé</th>
             <th>Commentaire</th>
             <th>Actions</th>
           </tr>
@@ -58,9 +57,8 @@
         const ligne = document.createElement("tr");
         ligne.innerHTML = `
                     <td>${produit.nom}</td>
-                    <td>${NUMBER_FORMAT.format(produit.coût_reviens)}</td>
-                    <td>${NUMBER_FORMAT.format(produit.prix_estimé)}</td>
-                    <td>${NUMBER_FORMAT.format(produit.rentabilité * 100)} %</td>
+                    <td class="right">${NUMBER_FORMAT.format(produit.rentabilité * 100)} %</td>
+                    <td class="${(produit.statut === "BUY")? "red" : "green" } right">${NUMBER_FORMAT.format(produit.prix_estimé - produit.coût_reviens)}</td>
                     <td>${produit.commentaire || ''}</td>
                 `;
         const actionsCell = document.createElement("td");
