@@ -143,9 +143,9 @@
         let liste = decodeEchoesListe(INPUT_MASSIF.value);
         for (const stack of liste) {
           try {
-            usine.évaluer(stack.nom, stack.valeur / stack.quantité);
+            usine.ajouteAuStock(stack.nom, stack.quantité);
           } catch (erreur) {
-            console.error("Échec à l'évaluation du prix", stack, erreur);
+            console.error("Échec à l'ajout de l'article au stock ", stack, erreur);
           }
         }
         // Persister l'état de l'usine
