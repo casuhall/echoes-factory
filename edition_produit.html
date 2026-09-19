@@ -340,10 +340,16 @@
             quantité: element.quantité
           };
           ingredientsListe.push(nouveauElement);
+          // on en profite pour évaluer le tarif de l'ingrédient et l'ajouter au marché si nécessaire
+          usine.évaluer(element.nom, element.valeur / element.quantité);
         });
 
         afficherIngredients();
         masquerFormulaireInitialisation();
+
+        // Sauvegarde l'usine mise à jour dans le localStorage en cas d'ajout de nouveaux ingrédients au marché
+        localStorage.setItem("usine", usine.toString());
+
       } catch (erreur) {
         console.error("Erreur lors du décodage de la liste d'ingrédients:", erreur);
         alert("Format de liste d'ingrédients invalide. Veuillez vérifier et réessayer.");

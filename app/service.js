@@ -126,7 +126,7 @@ class Usine {
         if (!recette) throw new Error(`Recette nécessaire pour la mise à jour d'un produit`);
         // retrait temporaire du produit au catalogue
         let old_produit = this.#catalogue_produits.retirer(recette.nom);
-        if(!old_produit) throw new Error(`La recette ne semble correspondre à aucun produit au catalogue : ${recette}`);
+        if (!old_produit) throw new Error(`La recette ne semble correspondre à aucun produit au catalogue : ${recette}`);
         try {
             this.ajouteProduit(recette);
         } catch (error) { // en cas d'erreur à la création de la nouvelle version du produit

@@ -144,6 +144,7 @@
         for (const stack of liste) {
           try {
             usine.ajouteAuStock(stack.nom, stack.quantité);
+            usine.évaluer(stack.nom, stack.valeur / stack.quantité);
           } catch (erreur) {
             console.error("Échec à l'ajout de l'article au stock ", stack, erreur);
           }
