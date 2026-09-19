@@ -7,7 +7,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="./style/style.css" />
   <style>
-    #tarifs-table td:nth-child(2) { text-align: end; }
+    #stock-table td:nth-child(2) {
+      text-align: end;
+    }
   </style>
 </head>
 
@@ -16,9 +18,9 @@
     <div>
       <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
       <a href="/" class="btn ghost" id="nav-accueil">Accueil</a>
-      <a href="/marché.html" class="btn" id="nav-marché">Marché</a>
+      <a href="/marché.html" class="btn ghost" id="nav-marché">Marché</a>
       <a href="/produits.html" class="btn ghost" id="nav-produits">Produits</a>
-      <a href="/stock.html" class="btn ghost" id="nav-stock">Stock</a>
+      <a href="/stock.html" class="btn" id="nav-stock">Stock</a>
     </div>
   </nav>
 
@@ -27,11 +29,11 @@
     <form method="dialog">
       <div class="grid">
         <div>
-          <h2>Enregistrer un prix</h2>
-          <label for="nom_article_unitaire_input" class="form-label">Nom de l'article</label>
+          <h2>Enregistrer un objet</h2>
+          <label for="nom_article_unitaire_input" class="form-label">Nom de l'objet</label>
           <input type="text" id="nom_article_unitaire_input" class="form-control" />
-          <label for="prix_article_unitaire_input">Prix de l'article</label>
-          <input type="number" step="0.01" id="prix_article_unitaire_input" />
+          <label for="nombre_article_unitaire_input">Nombre d'objets à ajouter au stock</label>
+          <input type="number" step="1" id="nombre_article_unitaire_input" />
         </div>
         <div>
           <input id="btn_annuler_unitaire" type="submit" formnovalidate class="btn ghost" value="Annuler" />
@@ -42,10 +44,10 @@
   </dialog>
   <dialog id="ajout_massif_modal">
     <div class="grid">
-      <h5 class="modal-title">Mise à jour de tarifs en masse !</h5>
+      <h5 class="modal-title">Ajouts d'objets en masse !</h5>
       <form method="dialog">
         <div>
-          <label for="saisie_massif_input" class="form-label">Lot d'objets à évaluer</label>
+          <label for="saisie_massif_input" class="form-label">Lot d'objets à ajouter au stock</label>
           <textarea id="saisie_massif_input" class="form-control"></textarea>
         </div>
         <div>
@@ -58,19 +60,23 @@
   </dialog>
 
   <div class="grid">
-    <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn">Enregistrer un prix</button>
-    <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Enregistrer en masse</button>
+    <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn">Ajouter un objet</button>
+    <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Ajouter en masse</button>
+    <button id="btn_reset_stock" type="button" class="btn warning">Réinitialiser le stock</button>
   </div>
 
-  <table class="table" id="tarifs-table">
+  <table class="table" id="stock-table">
     <thead>
       <tr>
         <th>Nom</th>
-        <th>Prix</th>
-        <th>Date d'effet</th>
+        <th>Quantité</th>
       </tr>
     </thead>
-    <tbody id="tarifs-body"></tbody>
+    <tbody id="stock-body">
+      <tr>
+        <td class="empty" colspan="2">Aucun objet en stock</td>
+      </tr>
+    </tbody>
   </table>
 
   <script type="module">
@@ -80,14 +86,15 @@
 
     // Binding des éléments d'IHM
     const nomUsine = document.getElementById('nav-nomUsine');
+    const BOUTON_RESET = document.getElementById("btn_reset_stock");
     const INPUT_NOM_ARTICLE_UNITAIRE = document.getElementById("nom_article_unitaire_input");
-    const INPUT_PRIX_ARTICLE_UNITAIRE = document.getElementById("prix_article_unitaire_input");
+    const INPUT_PRIX_ARTICLE_UNITAIRE = document.getElementById("nombre_article_unitaire_input");
     const BOUTON_ANNULER_UNITAIRE = document.getElementById("btn_annuler_unitaire");
     const BOUTON_ENREGISTRER_UNITAIRE = document.getElementById("btn_enregistrer_unitaire");
     const INPUT_MASSIF = document.getElementById("saisie_massif_input");
     const BOUTON_ANNULER_MASSIF = document.getElementById("btn_annuler_massif");
     const BOUTON_ENREGISTRER_MASSIF = document.getElementById("btn_enregistrer_massif");
-    const TARIF_TABLE_BODY = document.getElementById("tarifs-body");
+    const STOCK_TABLE_BODY = document.getElementById("stock-body");
 
     let usine;
     let storedUsine = localStorage.getItem("usine");
@@ -99,9 +106,16 @@
     }
 
     nomUsine.textContent = usine.nom;
+
+    BOUTON_RESET.addEventListener("click", () => {
+      usine.réinitialiseStock();
+      updateStorage();
+      présenterStock();
+    });
+
     préparerSaisieUnitaire();
     préparerSaisieMassive();
-    présenterTarifs();
+    présenterStock();
 
 
     // Fonction de réparation de la fenêtre modale de saisie unitaire
@@ -109,11 +123,11 @@
       // Action à réaliser sur le click du bouton enregister
       BOUTON_ENREGISTRER_UNITAIRE.addEventListener("click", () => {
         // Propager l'évaluation dans l'usine
-        usine.évaluer(INPUT_NOM_ARTICLE_UNITAIRE.value, INPUT_PRIX_ARTICLE_UNITAIRE.value);
+        usine.ajouteAuStock(INPUT_NOM_ARTICLE_UNITAIRE.value, INPUT_PRIX_ARTICLE_UNITAIRE.value);
         // Persister l'état de l'usine
         updateStorage();
         // Mettre ajour l'affichage
-        présenterTarifs();
+        présenterStock();
       });
 
       // Action à réaliser sur le click du bouton annuler
@@ -129,25 +143,25 @@
         let liste = decodeEchoesListe(INPUT_MASSIF.value);
         for (const stack of liste) {
           try {
-            usine.évaluer(stack.nom, stack.valeur / stack.quantité);
+            usine.ajouteAuStock(stack.nom, stack.quantité);
           } catch (erreur) {
-            console.error("Échec à l'évaluation du prix", stack, erreur);
+            console.error("Échec à l'ajout de l'article au stock ", stack, erreur);
           }
         }
         // Persister l'état de l'usine
         updateStorage();
         // Mettre ajour l'affichage
-        présenterTarifs();
+        présenterStock();
       });
     }
 
     // Fonction d'affichage du tableau à partir des données de l'usine
-    function présenterTarifs() {
-      let html_tarif = (usine.tarifs.length > 0) ? "\n" : "<tr><td class='text-center' colspan='3'>Aucun tarif enregistré</td></tr>";
-      for (const tarif of usine.tarifs) {
-        html_tarif += `<tr><td>${tarif.nom}</td><td class="text-end">${NUMBER_FORMAT.format(tarif.montant)}</td><td>${tarif.date_effet.toLocaleDateString("fr-FR")}</td></tr>\n`
+    function présenterStock() {
+      let html_stock = (usine.stock.length > 0) ? "" : "<tr><td class='empty' colspan='2'>Inventaire désepérément vide</td></tr>";
+      for (const article of usine.stock) {
+        html_stock += `<tr><td>${article.nom}</td><td class="text-end">${NUMBER_FORMAT.format(article.quantité, "integer")}</td></tr>\n`
       }
-      TARIF_TABLE_BODY.innerHTML = html_tarif;
+      STOCK_TABLE_BODY.innerHTML = html_stock;
     }
 
     // Fonction de stockage des données de l'usine

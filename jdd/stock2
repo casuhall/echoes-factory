@@ -1,0 +1,525 @@
+ID	Names	Quantity	Valuation 
+1	Caldari Navy Small Missile Launcher	3	9517353.8999999985 
+2	Caldari Navy Large Missile Launcher	1	385867.78000000003 
+3	Caldari Navy Medium Rapid Missile Launcher	1	3150606.0299999998 
+4	Caldari Navy Large Rapid Missile Launcher	3	1708699.29 
+5	'Aurora' Fleet Cynosural Field Generator	1	2126927.54 
+6	Caldari Navy Small Shield Extender	1	500378.66999999998 
+7	Caldari Navy Medium Shield Extender	2	22195603.699999999 
+8	Caldari Navy Medium Shield Booster	2	4524897.4800000004 
+9	Caldari Navy Large Shield Booster	2	962498.78000000003 
+10	Federation Navy Medium Microwarpdrive	1	10897207.01 
+11	Caldari Navy Warp Disruptors	1	734042.31999999995 
+12	Caldari Navy Stasis Webifier	1	764956.44999999995 
+13	Caldari Navy Adaptive Invulnerability Field	8	5286611.6799999997 
+14	Caldari Navy Warp Scrambler	1	1299999.0 
+15	Caldari Navy Guidance Disruptor	3	12166170.449999999 
+16	Dread Guristas Guidance Disruptor	1	3202687.46 
+17	Caldari Navy Ballistic Control System	3	3432069.0600000001 
+18	Dread Guristas Ballistic Control System	1	57473.68 
+19	Ship Shield Strength Adjustment v1.0	1	9861110.3900000006 
+20	Datacore - Hydromagnetic Physics	25	3128133.25 
+21	Datacore - Plasma Physics	22	3026716.0 
+22	Datacore - Electromagnetic Physics	3	9578.7899999999991 
+23	Datacore - High Energy Physics	12	46677.360000000001 
+24	Datacore - Nuclear Physics	22	27706457.239999998 
+25	Datacore - Rocket Science	8	25612.240000000002 
+26	Datacore - Mechanical Engineering	12	128882.39999999999 
+27	Datacore - Laser Physics	8	12310.879999999999 
+28	Datacore - Caldari Starship Engineering	8	1049902.24 
+29	Datacore - Quantum Physics	31	2084547.2600000002 
+30	Metal Scraps	3	2915.6700000000001 
+31	Ancient Remains	7	700000.0 
+32	Production Process Decryptor	5	58177421.549999997 
+33	Production Symmetry Decryptor	11	69763854.270000011 
+34	Production Accelerant Decryptor	10	72804838.299999997 
+35	Reverse Process Decryptor	2	254141765.91999999 
+36	Reverse Symmetry Decryptor	3	35499355.890000001 
+37	Reverse Accelerant Decryptor	4	8763712.5999999996 
+38	Tritanium	201168228	201168228.0 
+39	Pyerite	2907721	5815442.0 
+40	Mexallon	99445	565842.05000000005 
+41	Charred Micro Circuit	375	165652.5 
+42	Fried Interface Circuit	205	755172.84999999998 
+43	Tripped Power Circuit	270	19788.300000000003 
+44	Burned Logic Circuit	57	67518840.420000002 
+45	Smashed Trigger Unit	279	17699.759999999998 
+46	Damaged Close-in Weapon System	246	57856.739999999998 
+47	Scorched Telemetry Processor	41	7037.2399999999998 
+48	Damaged Artificial Neural Network	37	607392.73999999999 
+49	Contaminated Lorentz Fluid	580	26262.400000000001 
+50	Conductive Polymer	392	5554.6400000000003 
+51	Contaminated Nanite Polymer	472	20475.360000000001 
+52	Defective Current Pump	597	13432.5 
+53	Integrated Trigger Unit	24	29726235.119999994 
+54	Integrated Hull Modification Device	17	465813203.04999995 
+55	Integrated Thermoplastic	85	5048115.1499999994 
+56	Integrated Simulation Network	29	37115045.059999995 
+57	Power Generator	58	79809.740000000005 
+58	Capacitor Control Center	67	283337.64000000001 
+59	Capital Burned Logic Circuit	9	942345.71999999997 
+60	Capital Damaged Artificial Neural Network	17	6890320.8300000001 
+61	Capital Contaminated Lorentz Fluid	17	2681458.96 
+62	Capital Conductive Polymer	80	5831040.0 
+63	Capital Contaminated Nanite Compound	33	33500412.0 
+64	Capital Defective Current Pump	71	24448622.800000001 
+65	Armor Support Core	1	12527147.49 
+66	Liquid Ozone	138830	58906957.299999997 
+67	Enriched Uranium Concentrate	1163	80737867.410000011 
+68	Guristas Ship Debris	4	1726377.6399999999 
+69	Fullerite-C50	272251	50154079.219999999 
+70	Fullerite-C60	226440	105188173.19999999 
+71	Compressed Fullerite-C60	50	239633.5 
+72	Veldspar	48	144.0 
+73	Rich Veldspar	13771	317008.41999999998 
+74	Scordite	27	91.260000000000005 
+75	Rich Scordite	6494	165467.12 
+76	Pyroxeres	1661	153044.54000000001 
+77	Rich Pyroxeres	12661	11291079.800000001 
+78	Plagioclase	18	111.95999999999999 
+79	Omber	24	828.48000000000002 
+80	Kernite	972	39540.959999999999 
+81	Jaspet	88	87604.880000000005 
+82	Rich Jaspet	708	4649917.4400000004 
+83	Hemorphite	127	228427.28 
+84	Rich Hemorphite	906	7047157.9199999999 
+85	Hedbergite	95	53675.949999999997 
+86	Rich Hedbergite	1429	7059860.1799999997 
+87	Spodumain	9	1897.7400000000002 
+88	Rich Spodumain	3090	5741065.5 
+89	Dark Ochre	72	8570.1599999999999 
+90	Rich Dark Ochre	440	463078.0 
+91	Gneiss	34	4111.6199999999999 
+92	Rich Gneiss	4578	4855381.0199999996 
+93	Crokite	77	279268.22000000003 
+94	Rich Crokite	571	9224779.0800000001 
+95	Bistot	122	114094.39999999999 
+96	Rich Bistot	2988	22888797.120000001 
+97	Rich Arkonor	450	2106715.5 
+98	Mercoxit	99	369475.91999999998 
+99	Rich Mercoxit	508	21066653.32 
+100	Gray Moon Ore	2612	6369100.7999999998 
+101	Brown Moon Ore	72	115322.39999999999 
+102	Black Moon Ore	97	96137.669999999998 
+103	Motley Moon Ore	11	23103.189999999999 
+104	Pink Star Crystal	471	916377.59999999998 
+105	Purple Star Crystal	90	166815.0 
+106	Blue Star Crystal	55	208175.0 
+107	Chromatic Star Crystal	93	1141809.3600000001 
+108	Griffin Blueprint	7	113673.0 
+109	Bantam Blueprint	1	454562.3280000001 
+110	Condor II Blueprint	22	357258.0 
+111	Heron Explorer Blueprint	2	31999998.800000001 
+112	Burst Blueprint	1	688105.99000000011 
+113	Hound Blueprint	5	4285714.2999999998 
+114	Slasher II Interceptor Blueprint	11	57918367.099999994 
+115	Crucifier Blueprint	111	1803306.0 
+116	Inquisitor II Blueprint	1	364421.78300000005 
+117	Executioner II Blueprint	20	324920.0 
+118	Executioner II Interceptor Blueprint	1	912819.25326086965 
+119	Atron Interceptor Blueprint	3	9513461.5500000007 
+120	Nemesis II Blueprint	1	2178494.1640000003 
+121	Atron II Interceptor Blueprint	2	34666666.340000004 
+122	Imicus Explorer Blueprint	2	21125000.0 
+123	Nemesis III Blueprint	1	2626665.8330000006 
+124	Daredevil Blueprint	1	6030000.0 
+125	Cormorant Interdictor Blueprint	10	7876988.3499999996 
+126	Corax Blueprint	1	26299.0 
+127	Cormorant II Blueprint	72	1557900.0 
+128	Cormorant Navy Issue Blueprint	2	533604.30000000005 
+129	Corax Assault Blueprint	1	650149.41200000013 
+130	Corax II Assault Blueprint	1	1261551.5819148936 
+131	Thrasher Guardian Blueprint	1	979289.32200000004 
+132	Talwar Blueprint	1	22963.0 
+133	Talwar II Assault Blueprint	1	2606467.038297873 
+134	Algos Blueprint	3	68889.0 
+135	Corax Command Blueprint	1	1009229.3420000001 
+136	Moa II Guardian Blueprint	150	312361492.97872347 
+137	Caracal Navy Issue Blueprint	2	2806831.3680000002 
+138	Caracal Sniper Blueprint	1	1957465.3560000001 
+139	Blackbird Covert Ops Blueprint	4	5675154.8040000014 
+140	Stabber Blueprint	1	1400333.3300000001 
+141	Stabber Fleet Issue Blueprint	2	5998823.3399999999 
+142	Stabber Sniper Blueprint	1	3629175.1755319159 
+143	Bellicose Covert Ops Blueprint	1	551826.47999999998 
+144	Stabber II Blueprint	1	3838771.2000000002 
+145	Scythe II Blueprint	2	8989633.0857142862 
+146	Rupture Interdictor Blueprint	1	29983332.670000002 
+147	Maller Guardian Blueprint	1	1641134.8470000001 
+148	Maller II Guardian Blueprint	1	1568036.6460000002 
+149	Omen Blueprint	2	2027259.7400000002 
+150	Thorax Guardian Blueprint	1	253088.38 
+151	Celestis Blueprint	10	32055824.460000001 
+152	Exequror Blueprint	2	9663121.3140000012 
+153	Vexor Navy Issue Blueprint	9	31168376.010000002 
+154	Celestis II Covert Ops Blueprint	1	6535368.9720000001 
+155	Thorax Prototype Blueprint	2	6506004.2080000006 
+156	Exequror II Blueprint	1	7623700.241666669 
+157	Vexor II Blueprint	3	19700888.246875003 
+158	Gila Blueprint	1	48222222.219999999 
+159	Ashimmu Blueprint	1	56129483.0 
+160	Phantasm Blueprint	1	54086889.149999999 
+161	Naga Blueprint	7	167999995.79999998 
+162	Naga II Blueprint	1	3208631.4333333336 
+163	Drake Logistics Blueprint	2	6749342.7466666671 
+164	Ferox Blueprint	2	18326666.66 
+165	Drake Blueprint	9	168157894.77000001 
+166	Drake Guardian Blueprint	1	2180036.4500000002 
+167	Naga III Blueprint	1	3796092.9573170729 
+168	Cyclone Guardian Blueprint	1	7917487.0116279079 
+169	Tornado Blueprint	4	4000000.0 
+170	Tornado II Blueprint	2	16244443.285714291 
+171	Hurricane Logistics Blueprint	1	7731449.4400000004 
+172	Cyclone Blueprint	1	24363635.359999999 
+173	Hurricane Blueprint	1	24999999.0 
+174	Hurricane Guardian Blueprint	2	14994442.381395349 
+175	Tornado III Blueprint	1	7862939.2975609768 
+176	Prophecy Guardian Blueprint	1	4192300.907142858 
+177	Oracle Blueprint	2	49999998.0 
+178	Oracle II Blueprint	1	23721776.890000001 
+179	Prophecy Blueprint	12	89538461.519999996 
+180	Harbinger Blueprint	1	2626180.7383720931 
+181	Prophecy C Blueprint	1	2716016.5874999999 
+182	Harbinger Prototype Blueprint	2	24475906.399999999 
+183	Harbinger Guardian Blueprint	1	4348285.7127906978 
+184	Oracle III Blueprint	2	49326666.0 
+185	Myrmidon Guardian Blueprint	1	12013217.34 
+186	Brutix Logistics Blueprint	4	44054709.404444456 
+187	Myrmidon Blueprint	1	9142856.4299999997 
+188	Brutix Blueprint	5	149937495.0 
+189	Brutix Guardian Blueprint	1	12826742.231395349 
+190	Scorpion Blueprint	2	48899998.340000004 
+191	Raven Blueprint	2	32788732.399999999 
+192	Rokh Blueprint	2	34639999.759999998 
+193	Scorpion II Blueprint	2	51328666.340000004 
+194	Raven Striker Blueprint	2	22248358.620000001 
+195	Tempest Blueprint	1	20128571.43 
+196	Typhoon Blueprint	3	92249997.0 
+197	Tempest Striker Blueprint	2	43428570.859999999 
+198	Typhoon II Blueprint	3	30259010.864634145 
+199	Armageddon Blueprint	6	300000000.0 
+200	Apocalypse Blueprint	1	25266665.670000002 
+201	Armageddon II Blueprint	2	11727427.478048783 
+202	Apocalypse Striker Blueprint	3	39733333.32 
+203	Dominix Blueprint	3	74999998.5 
+204	Megathron Blueprint	2	71966665.340000004 
+205	Hyperion Blueprint	3	119850000.0 
+206	Megathron Striker Blueprint	3	106124988.98999999 
+207	Rattlesnake Blueprint	2	194464284.18000001 
+208	Badger II Blueprint	10	206725663.69999999 
+209	Wreathe Blueprint	1	6333333.0 
+210	Mammoth Blueprint	32	173768577.91999999 
+211	Sigil II Blueprint	2	5315726.9199999999 
+212	Nereus Blueprint	5	27201979.690217391 
+213	Nereus II Blueprint	1	20150919.059999999 
+214	Nereus High Mobility Blueprint	7	530170.90000000002 
+215	Nereus Combat Blueprint	3	429766.72199999995 
+216	Nereus Hauling Blueprint	13	104000000.0 
+217	Humpback Hauling Blueprint	1	29666666.329999998 
+218	Humpback Combat Blueprint	1	14111109.890000001 
+219	Retriever Blueprint	4	7260304.4000000004 
+220	Procurer Blueprint	7	33536708.309999999 
+221	Covetor Blueprint	6	44228571.420000002 
+222	Venture Blueprint	323	4654430.0 
+223	Venture II Blueprint	1	906249.25 
+224	Covetor II Blueprint	3	35214522.960000001 
+225	Noctis Blueprint	1	10400000.0 
+226	Noctis II Blueprint	1	64333333.189999998 
+227	Orca Blueprint	2	129795884.90000001 
+228	Providence Blueprint	1	115149444.28 
+229	Rorqual Blueprint	1	1251504800.0 
+230	MK7 Interdiction Sphere Launcher Blueprint	1	11555554.939999999 
+231	MK9 Interdiction Sphere Launcher Blueprint	1	79206444.569999993 
+232	MK5 Cloaking Device Blueprint	13	890322.29000000004 
+233	MK7 Cloaking Device Blueprint	24	1968000.0 
+234	MK9 Cloaking Device Blueprint	4	594892.68000000005 
+235	‘Starlight’ Covert Cynosural Field Generator Blueprint	1	1219999.4399999999 
+236	MK7 Warp Disruption Field Generator Blueprint	4	640672.0 
+237	MK9 Warp Disruption Field Generator Blueprint	1	62968253.899999999 
+238	Federation Navy Entosis Link Blueprint	19	117946879.5 
+239	MK5 Covert Ops Cloaking Device Blueprint	18	1249411.6799999999 
+240	MK7 Covert Ops Cloaking Device Blueprint	20	5587500.0 
+241	MK9 Covert Ops Cloaking Device Blueprint	6	5599065.4199999999 
+242	MK7 Mining Foreman Link Blueprint	2	550056.0 
+243	MK9 Mining Foreman Link Blueprint	1	229415.0 
+244	'Interruptive' Capital Stasis Grappler Blueprint	4	10546511.640000001 
+245	Abatis 200mm Titanium Armor Blueprint	1	918621.0 
+246	Citadella 200mm Titanium Armor Blueprint	1	2000000.0 
+247	MK7 Small Shield Field Module Blueprint	6	232224.0 
+248	MK7 Medium Shield Field Module Blueprint	8	1238536.0 
+249	MK9 Medium Shield Field Module Blueprint	4	1597472.0 
+250	MK7 Large Shield Field Module Blueprint	4	2477068.0 
+251	MK9 Large Shield Field Module Blueprint	3	6572549.8799999999 
+252	MK7 Small Group Shield Booster Blueprint	11	343321.0 
+253	MK9 Small Group Shield Booster Blueprint	4	331116.0 
+254	MK7 Medium Group Shield Booster Blueprint	14	350000.0 
+255	MK9 Medium Group Shield Booster Blueprint	6	1986684.0 
+256	MK7 Large Group Shield Booster  Blueprint	8	3994968.0 
+257	MK9 Large Group Shield Booster  Blueprint	2	1834782.6000000001 
+258	Decentralized Command   Carrier Command Module Blueprint	1	52393439.0 
+259	Railgun Collision Accelerator I Blueprint	17	38370.529999999999 
+260	Railgun Collision Accelerator II Blueprint	12	396604.55999999994 
+261	Railgun Collision Accelerator III Blueprint	7	1286576.2 
+262	Railgun Ambit Extension I Blueprint	15	60564.899999999994 
+263	Railgun Ambit Extension II Blueprint	7	92126.229999999996 
+264	Railgun Ambit Extension III Blueprint	2	146467.45999999999 
+265	Railgun Discharge Elutriation I Blueprint	11	23905.970000000001 
+266	Railgun Discharge Elutriation II Blueprint	4	30608.0 
+267	Railgun Discharge Elutriation III Blueprint	4	405413.88 
+268	Railgun Burst Aerator I Blueprint	12	138155.88 
+269	Railgun Burst Aerator II Blueprint	2	26460.0 
+270	Railgun Burst Aerator III Blueprint	5	37884976.100000001 
+271	Algid Railgun Administrations Unit I Blueprint	16	37097.440000000002 
+272	Algid Railgun Administrations Unit II Blueprint	9	60498.0 
+273	Algid Railgun Administrations Unit III Blueprint	6	315578.88 
+274	Laser Collision Accelerator I Blueprint	2	14209.879999999999 
+275	Laser Discharge Elutriation I Blueprint	6	24714.0 
+276	Laser Discharge Elutriation II Blueprint	8	54712.0 
+277	Algid Energy Administrations Unit I Blueprint	6	21840.0 
+278	Capital Cannon Collision Accelerator Blueprint  I	1	428736.78999999998 
+279	Warhead Flare Catalyst I Blueprint	3	17820.720000000001 
+280	Warhead Flare Catalyst II Blueprint	7	112000.0 
+281	Warhead Calefaction Catalyst I Blueprint	14	99008.0 
+282	Warhead Calefaction Catalyst II Blueprint	3	58635.0 
+283	Warhead Calefaction Catalyst III Blueprint	8	9182755.2799999993 
+284	Warhead Rigor Catalyst I Blueprint	11	64305.120000000003 
+285	Warhead Rigor Catalyst II Blueprint	9	154386.0 
+286	Warhead Rigor Catalyst III Blueprint	8	1930000.0 
+287	Rocket Fuel Cache Partition I Blueprint	19	85994.0 
+288	Rocket Fuel Cache Partition II Blueprint	3	37116.0 
+289	Rocket Fuel Cache Partition III Blueprint	13	2600000.0 
+290	Hydraulic Bay Thrusters I Blueprint	5	21215.0 
+291	Hydraulic Bay Thrusters II Blueprint	1	11748.0 
+292	Bay Loading Accelerator I Blueprint	20	988209.0 
+293	Bay Loading Accelerator II Blueprint	4	3330251.2400000002 
+294	Bay Loading Accelerator III Blueprint	3	31598258.969999999 
+295	Capital Warhead Flare Catalyst I Blueprint	11	16500000.0 
+296	Capital Warhead Calefaction Catalyst I Blueprint	14	14000.0 
+297	Capital Warhead Rigor Catalyst I Blueprint	5	7500000.0 
+298	Capital Rocket Fuel Cache Partition I Blueprint	4	6000000.0 
+299	Capital Hydraulic Bay Thrusters I Blueprint	7	10500000.0 
+300	Capital Bay Loading Accelerator I Blueprint	5	7082269.6999999993 
+301	Core Defense Operational Solidifier I Blueprint	5	17915.0 
+302	Core Defense Operational Solidifier II Blueprint	11	11.0 
+303	Core Defense Charge Economizer I Blueprint	6	34509.479999999996 
+304	Core Defense Charge Economizer II Blueprint	7	235388.23000000001 
+305	Core Defense Capacitor Safeguard I Blueprint	3	14427.0 
+306	Core Defense Capacitor Safeguard II Blueprint	4	53228.0 
+307	Core Defense Field Extender I Blueprint	21	39748.799999999996 
+308	Core Defense Field Extender II Blueprint	15	7641723.9000000004 
+309	Anti-Explosive Screen Reinforcer I Blueprint	6	33948.0 
+310	Anti-Explosive Screen Reinforcer II Blueprint	20	311900.0 
+311	Anti-Explosive Screen Reinforcer III Blueprint	2	384504.21999999997 
+312	Anti-EM Screen Reinforcer I Blueprint	10	56566.699999999997 
+313	Anti-EM Screen Reinforcer II Blueprint	3	3021508.5899999999 
+314	Anti-EM Screen Reinforcer III Blueprint	1	145261431.36000001 
+315	Anti-Kinetic Screen Reinforcer I Blueprint	13	73329.229999999996 
+316	Anti-Kinetic Screen Reinforcer II Blueprint	18	180000.0 
+317	Anti-Thermal Screen Reinforcer I Blueprint	17	96186.0 
+318	Anti-Thermal Screen Reinforcer II Blueprint	5	663415.15000000002 
+319	Anti-Thermal Screen Reinforcer III Blueprint	1	45370081.020000003 
+320	Capital Core Defense Operational Solidifier I Blueprint	15	6856102.3499999996 
+321	Capital Core Defense Charge Economizer I Blueprint	4	3992391.9199999999 
+322	Capital Core Defense Capacitor Safeguard I Blueprint	12	3706990.9199999999 
+323	Capital Core Defense Extender I Blueprint	6	17826606.600000001 
+324	Capital Anti-Explosive Screen Reinforcer I Blueprint	13	11796929.82 
+325	Capital Anti-EM Screen Reinforcer I Blueprint	19	50508095.959999993 
+326	Capital Anti-Kinetic Screen Reinforcer I Blueprint	7	8139215.7000000011 
+327	Capital Anti-Thermal Screen Reinforcer I Blueprint	3	10347964.83 
+328	Remote Shield Booster Stabilizer I Blueprint	6	6000000.0 
+329	Remote Shield Booster Stabilizer II Blueprint	1	4200000.0 
+330	Remote Shield Booster Stabilizer III Blueprint	1	39400000.0 
+331	Remote Shield Booster Economizer I Blueprint	6	6000000.0 
+332	Remote Shield Booster Economizer II Blueprint	2	8400000.0 
+333	Remote Shield Booster Economizer III Blueprint	1	39400000.0 
+334	Remote Shield Booster Amplifier I Blueprint	4	4000000.0 
+335	Remote Shield Booster Amplifier II Blueprint	5	21000000.0 
+336	Remote Shield Booster Amplifier III Blueprint	1	3567567.5699999998 
+337	Remote Shield Booster Enhancer I Blueprint	7	7000000.0 
+338	Remote Shield Booster Enhancer II Blueprint	4	16800000.0 
+339	Remote Shield Booster Enhancer III Blueprint	1	25.0 
+340	Nanobot Accelerator I Blueprint	8	5543.3599999999997 
+341	Nanobot Accelerator II Blueprint	8	53776.0 
+342	Auxiliary Nano Pump I Blueprint	8	11832.4 
+343	Repair Augmentor I Blueprint	20	62400.0 
+344	Repair Augmentor II Blueprint	2	2.0 
+345	Trimark Armor Pump I Blueprint	2	9600.0 
+346	Trimark Armor Pump II Blueprint	1	16006.5 
+347	Trimark Armor Pump III Blueprint	1	9560592.9800000004 
+348	Anti-Explosive Pump I Blueprint	3	11013.0 
+349	Anti-EM Pump I Blueprint	3	11013.0 
+350	Anti-Kinetic Pump I Blueprint	6	20192.52 
+351	Anti-Thermal Pump I Blueprint	3	11013.0 
+352	Remote Armor Repairer Amplifier I Blueprint	1	1000000.0 
+353	Remote Armor Repairer Enhancer I Blueprint	1	1000000.0 
+354	Dynamic Fuel Valve I Blueprint	14	107058.0 
+355	Auxiliary Thrusters I Blueprint	15	77284.5 
+356	Polycarbon Engine Housing I Blueprint	12	43929.959999999999 
+357	Cargohold Optimization I Blueprint	1	15793.15 
+358	Cargohold Optimization III Blueprint	1	47775899.520000003 
+359	Higgs Anchor I Blueprint	5	5.0 
+360	Warp Core Optimizer I Blueprint	16	41104.0 
+361	Warp Core Optimizer II Blueprint	5	5264435.1500000004 
+362	Hyperspatial Velocity Optimizer I Blueprint	8	36381.360000000001 
+363	Semiconductor Memory Cell I Blueprint	5	49529.699999999997 
+364	Semiconductor Memory Cell II Blueprint	1	1128245.6200000001 
+365	Capacitor Control Circuit I Blueprint	18	119537.28 
+366	Capacitor Control Circuit II Blueprint	2	4357266.8200000003 
+367	Targeting System Subcontroller I Blueprint	32	480000.0 
+368	Targeting System Subcontroller II Blueprint	13	273494.90999999997 
+369	Targeting System Subcontroller III Blueprint	3	10609486.08 
+370	Capital Semiconductor Memory Cell I Blueprint	7	39006248.189999998 
+371	Capital Capacitor Control Circuit I Blueprint	7	60337889.920000002 
+372	Capital Ancillary Current Router I Blueprint	13	390000.0 
+373	Capital Targeting System Subcontroller I Blueprint	19	61186627.959999993 
+374	Gravity Capacitor Upgrade I Blueprint	7	33049.239999999998 
+375	Emission Scope Sharpener I Blueprint	3	15000.0 
+376	Emission Scope Sharpener II Blueprint	5	5.0 
+377	Miner Efficiency Upgrade II Blueprint	2	139263.12 
+378	Mining Drone Efficiency Upgrade I	1	41710.879999999997 
+379	Mining Drone Circulation Accelerator I	1	5000.0 
+380	Mining Drone Distance Controller III	1	1000000.0 
+381	Transverse Bulkhead I Blueprint	4	6852.0 
+382	Anti-Explosive Transverse Bulkhead II Blueprint	3	11677.17 
+383	Anti-EM Transverse Bulkhead I Blueprint	5	20190.0 
+384	Anti-EM Transverse Bulkhead II Blueprint	3	1500.0 
+385	Anti-Kinetic Transverse Bulkhead I Blueprint Blueprint	1	1.0 
+386	Anti-Thermal Transverse Bulkhead II Blueprint	1	393.16000000000003 
+387	Drone Firepower Augmentor I Blueprint	16	1600000.0 
+388	Drone Firepower Augmentor II Blueprint	11	4181110.6699999999 
+389	Drone Firepower Augmentor III Blueprint	1	15587538.939999999 
+390	Drone Scope Chip I Blueprint	31	108097.0 
+391	Drone Scope Chip II Blueprint	17	172635.0 
+392	Drone Scope Chip III Blueprint	8	8800000.0 
+393	Drone Speed Augmentor I Blueprint	6	3240000.0 
+394	Drone Speed Augmentor II Blueprint	9	27194406.93 
+395	Drone Speed Augmentor III Blueprint	1	154174231.44999999 
+396	Drone Control Range Augmentor I Blueprint	20	83200.0 
+397	Drone Control Range Augmentor II Blueprint	6	101565.72 
+398	Drone Control Range Augmentor III Blueprint	13	9473215.3100000005 
+399	Fighter Firepower Augmentor I Blueprint	13	19500000.0 
+400	Fighter Range Extender I Blueprint	7	10500000.0 
+401	Fighter Burst Aerator I Blueprint	5	15671232.449999999 
+402	Fighter Control Range Augmentor I Blueprint	4	6000000.0 
+403	Drone Flight Accelerator Blueprint I	14	58240.0 
+404	Drone Flight Accelerator Blueprint II	16	193376.0 
+405	Drone Flight Accelerator Blueprint III	7	700.0 
+406	Drone Defense Enhancer Blueprint I	19	16876.75 
+407	Drone Defense Enhancer Blueprint II	5	60430.0 
+408	Drone Defense Enhancer Blueprint III	6	102887.82000000001 
+409	Fighter Flight Accelerator Blueprint I	5	132972.45000000001 
+410	Fighter Defense Enhancer Blueprint I	2	3000000.0 
+411	Lightweight Ship Firepower Booster Blueprint I	6	188571426.84 
+412	Lightweight Ship Range Extender Blueprint I	8	12000000.0 
+413	Lightweight Ship Burst Aerator Blueprint I	5	14909838.75 
+414	Lightweight Ship Flight Accelerator Blueprint I	8	8415302.0 
+415	Lightweight Ship Defense Enhancer Blueprint I	5	7500000.0 
+416	Drone Shield Booster Stabilizer Blueprint I	4	8000000.5999999996 
+417	Drone Shield Booster Stabilizer Blueprint II	2	3810666.6600000001 
+418	Drone Shield Booster Stabilizer Blueprint III	3	37764000.0 
+419	Drone Shield Booster Amplifier Blueprint I	6	18.0 
+420	Drone Shield Booster Amplifier Blueprint II	2	20.0 
+421	Drone Shield Booster Amplifier Blueprint III	1	7436232.9100000001 
+422	2P Combat Integrated Module - Blueprint	16	1565048.48 
+423	2P Engineering Integrated Module - Blueprint	14	406715.26000000001 
+424	2P Engineering Integrated Module U Blueprint	1	2488039.02 
+425	3P Engineering Integrated Module - Blueprint	3	2059149.27 
+426	MK3 Acolyte Blueprint	50	233665.50000000003 
+427	MK5 Acolyte Blueprint	23	490256.5 
+428	MK7 Acolyte Blueprint	28	196000.0 
+429	Prototype Acolyte Blueprint	35	3602760.0 
+430	MK3 Hornet Blueprint	146	629625.0 
+431	MK5 Hornet Blueprint	175	3897775.0 
+432	MK7 Hornet Blueprint	227	8181534.0 
+433	Prototype Hornet Blueprint	193	19635434.0 
+434	Assault Hornet Blueprint	12	4171764.7200000002 
+435	Offense Hornet Blueprint	4	2133440.0 
+436	MK3 Hobgoblin Blueprint	219	23174.580000000002 
+437	MK5 Hobgoblin Blueprint	208	260000.0 
+438	MK7 Hobgoblin Blueprint	92	92000.0 
+439	Prototype Hobgoblin Blueprint	42	4280220.0 
+440	MK3 Warrior Blueprint	31	3260.8899999999999 
+441	MK5 Warrior Blueprint	11	200167.0 
+442	MK7 Warrior Blueprint	24	862608.0 
+443	Prototype Warrior Blueprint	19	1929431.0 
+444	Assault Warrior Blueprint	3	999788.3400000002 
+445	Prototype Infiltrator Blueprint	1	205871.0 
+446	Assault Infiltrator Blueprint	1	589283.12 
+447	MK5 Vespa Blueprint	97	97000.0 
+448	MK7 Vespa Blueprint	142	492069.76000000001 
+449	Prototype Vespa Blueprint	29	31354968.489999998 
+450	Assault Vespa Blueprint	11	4739241.54 
+451	Offense Vespa Blueprint	4	1882844.8 
+452	MK5 Hammerhead Blueprint	152	5567608.0 
+453	MK7 Hammerhead Blueprint	83	5546275.8000000007 
+454	Prototype Hammerhead Blueprint	13	94397820.920000002 
+455	MK5 Valkyrie Blueprint	18	646740.0 
+456	MK7 Valkyrie Blueprint	1	71884.0 
+457	MK7 Praetor Blueprint	2	560434.78000000003 
+458	MK7 Wasp Blueprint	149	42961617.0 
+459	Prototype Wasp Blueprint	23	18719746.0 
+460	Assault Wasp Blueprint	8	14715554.800000001 
+461	Offense Wasp Blueprint	1	3583673.4700000002 
+462	MK7 Ogre Blueprint	70	20197730.0 
+463	Prototype Ogre Blueprint	7	23696522.43 
+464	MK7 Berserker Blueprint	10	2875350.0 
+465	Prototype Berserker Blueprint	12	28281369.239999998 
+466	MK7 Curator Blueprint	7	140000.0 
+467	Prototype Curator Blueprint	5	5030.0 
+468	MK7 Warden Blueprint	90	32437440.0 
+469	Prototype Warden Blueprint	6	6036.0 
+470	Sniper Warden Blueprint	8	8993103.4399999995 
+471	Offense Warden Blueprint	1	1427402.5600000001 
+472	MK7 Guard Blueprint	46	16591004.0 
+473	Prototype Guard Blueprint	5	5095490.0 
+474	MK7 Bouncer Blueprint	20	7188360.0 
+475	Prototype Bouncer Blueprint	15	15090.0 
+476	'Beatnik' Superheavy Armor Maintenance Drone Blueprint	12	5040000.0 
+477	Imperial Navy Superheavy Armor Maintenance Drone Blueprint	3	473999907.0 
+478	'Micro' Large Shield Maintenance Drone Blueprint	1	3499999.3300000001 
+479	'Micro' Superheavy Shield Maintenance Drone Blueprint	5	6921085.5999999996 
+480	Caldari Navy Superheavy Shield Maintenance Drone Blueprint	4	37166554.240000002 
+481	Sea Urchin Heavy Mining Drone Blueprint	5	75271671.650000006 
+482	Starfish Mining Drone Blueprint	9	31386857.129999999 
+483	Manta Ray Heavy Exhumer Drone Blueprint	2	31718627.359999999 
+484	Electric Ray Exhumer Drone Blueprint	4	121000000.0 
+485	Imperial Navy 'Knight' Blueprint	3	3232323.0 
+486	Assault Equite Blueprint	2	10000000.0 
+487	Federation Navy Satyr Blueprint	2	820289.85999999999 
+488	Republic Fleet Gram Blueprint	1	1210288.3 
+489	Assault Gram Blueprint	4	150720000.0 
+490	Imperial Navy Templar Blueprint	3	15.0 
+491	Caldari Navy Dragonfly Blueprint	1	2445161.29 
+492	Assault Dragonfly Blueprint	1	5604688.0 
+493	Federation Navy Firbolg Blueprint	2	24190140.84 
+494	Republic Fleet Einherji Blueprint	2	2742400.0 
+495	Lightweight Condor Blueprint	1	24318035.969999999 
+496	Lightweight Coercer Blueprint	1	240909093.78999999 
+497	Crawler Neural Compiler Blueprint	158	292676.04000000004 
+498	Capsuleer Outpost Blueprint	2	20000000.0 
+499	Tax Center Blueprint	1	50000000.0 
+500	Bounty Management Center Blueprint	1	50000000.0 
+501	Base Detection Array Blueprint	1	50000000.0 
+502	Cynosural Jammer Tower Blueprint	1	50000000.0 
+503	Enhanced Standup Large Missile Launcher Blueprint	2	90000000.0 
+504	Enhanced Standup Stasis Webifier Blueprint	3	60000000.0 
+505	Enhanced Standup Warp Scrambler Blueprint	1	30000000.0 
+506	Enhanced Standup Energy Neutralizer Blueprint	2	90000000.0 
+507	Resource Extraction Management Center Blueprint	2	60000000.0 
+508	Structure Construction Parts Blueprint	95	950000.0 
+509	Structure Hangar Array Blueprint	245	2450000.0 
+510	Structure Storage Bay Blueprint	133	1330000.0 
+511	Structure Laboratory Blueprint	132	1320000.0 
+512	Structure Factory Blueprint	1	10000.0 
+513	Structure Repair Facility Blueprint	42	420000.0 
+514	Structure Reprocessing Plant Blueprint	1066	10660000.0 
+515	Structure Docking Bay Blueprint	186	1860000.0 
+516	Structure Market Network Blueprint	109	1090000.0 
+517	Structure Medical Center Blueprint	161	1610000.0 
+518	Structure Office Center Blueprint	140	1400000.0 
+519	Structure Mission Network Blueprint	168	1680000.0 
+520	Structure Electromagnetic Sensor Blueprint	172	1720000.0 
+521	Structure Acceleration Coils Blueprint	183	1830000.0 
+522	Structure Advertisement Nexus Blueprint	174	1740000.0 
+523	Fullero-Ferrocene Blueprint	325	65000000.0 
+524	Fullerene Intercalated Graphite Blueprint	105	50400000.0 
