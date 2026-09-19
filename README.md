@@ -12,8 +12,8 @@ Fonctionnalitées prévues :
   - [ ] Gestion des ISK ? (traitement isolé ? objet comme un autre ?)
   - [X] Réinitialisation
 - [ ] Analyse et présentation d'un tableau de rentabilité comparé pour les plans de fabrication connus
-  - [ ] Rentabilité
-  - [X] Gain attendu
+  - [X] Rentabilité
+  - [ ] Gain attendu
   - [ ] Investissement restant nécessaire
   - [ ] Date de référence (date minimum de validité des estimations utilisées)
 - [ ] Création d'un tableau de bord de production
