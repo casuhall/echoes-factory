@@ -17,6 +17,16 @@ class Usine {
     #inventaire = new Inventaire();
     /** @type {{nom:string,quantité:number}[]} Stock courant de l'usine */
     get stock() { return this.#inventaire.stock; }
+    /** @type {Number} Liquidités disponibles. */
+    #liquidités = 0;
+    /** @type {Number} Liquidités disponibles. */
+    get liquidités() { return this.#liquidités; }
+    set liquidités(montant) {
+        let _montant = Number.parseFloat(montant);
+        if (Number.isNaN(_montant) || !Number.isInteger(_montant) || _montant < 0)
+            throw new Error(`Le montant doit être un entier positif. Montant reçu : ${montant}`);
+        this.#liquidités = _montant;
+    }
     /** catalogue des objets pouvant être produits dans l'usine */
     #catalogue_produits = new Catalogue();
     /** @type {Produit[]} Ensemble des produits étudiés */
@@ -33,8 +43,9 @@ class Usine {
      * @param {Recette[]} [recettes] Liste des recettes à inscrire au livre de recettes
      * @param {Tarif[]} [tarifs] Liste des tarifs initiaux du marché
      * @param {{nom:string,quantité:number}[]} [stock] Stock initial de l'usine
+     * @param {Number} [liquidités] Liquidités initiales de l'usine
      */
-    constructor(nom, gestionnaire_evenements = new GestionnaireEvenements(), recettes = [], tarifs = [], stock = []) {
+    constructor(nom, gestionnaire_evenements = new GestionnaireEvenements(), recettes = [], tarifs = [], stock = [], liquidités = 0) {
         this.#nom = nom || "Jhon Doe";
         this.#gestionnaire_evenements = gestionnaire_evenements;
         gestionnaire_evenements.consomme("maj_produit", this.maj_ingrédient_produit.bind(this));
@@ -43,7 +54,7 @@ class Usine {
             try {
                 this.évaluer(tarif.nom, Number.parseFloat(tarif.montant), tarif.date_effet);
             } catch (error) {
-                console.log(`Tarif non inscrit au marché : ${JSON.stringify(tarif)}. Cause : ${error.message}.`);
+                console.warn(`Tarif non inscrit au marché : ${JSON.stringify(tarif)}. Cause : ${error.message}.`);
             }
         }
         for (const stack of stock) {
@@ -57,8 +68,13 @@ class Usine {
             try {
                 this.ajouteProduit(recette);
             } catch (error) {
-                console.log(`Recette non inscrite au livre de recette : ${recette?.nom}. Cause : ${error.message}.`);
+                console.warn(`Recette non inscrite au livre de recette : ${recette?.nom}. Cause : ${error.message}.`);
             }
+        }
+        try {
+            this.liquidités = Number.parseFloat(liquidités);
+        } catch (error) {
+            console.warn(`Liquidités non initialisées : ${liquidités}. Cause : ${error.message}.`);
         }
     }
 
@@ -185,13 +201,13 @@ class Usine {
     }
 
     toString() {
-        return `{"nom": "${this.#nom}", "recettes": [${this.recettes.map(recette => recette.toString()).join(",")}], "stock": [${this.stock.map(stack => `{"nom": "${stack.nom}", "quantité": ${stack.quantité}}`)}], "tarifs": [${this.tarifs.map(tarif => tarif.toString())}]}`;
+        return `{"nom": "${this.#nom}", "recettes": [${this.recettes.map(recette => recette.toString()).join(",")}], "stock": [${this.stock.map(stack => `{"nom": "${stack.nom}", "quantité": ${stack.quantité}}`)}], "tarifs": [${this.tarifs.map(tarif => tarif.toString())}], "liquidités": ${this.liquidités}}`;
     }
 
     static parse(string) {
         try {
             let objet = JSON.parse(string);
-            return new Usine(objet.nom, undefined, objet.recettes, objet.tarifs, objet.stock);
+            return new Usine(objet.nom, undefined, objet.recettes, objet.tarifs, objet.stock, objet.liquidités);
         } catch (error) {
             console.warn(`Erreur lors de l'interprétation de la représentation de l'usine :
     ${string}`)

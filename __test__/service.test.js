@@ -12,11 +12,12 @@ describe('Usine - Gestion complète', () => {
             usine = new Usine("Usine Vide");
         });
 
-        it('Sur une usine vide, Les catalogues, stocks et marchés sont initialisés à vide', () => {
+        it('Sur une usine vide, Les catalogues, stocks, liquidités et marchés sont initialisés à vide', () => {
             expect(usine.produits).to.exist;
             expect(usine.produits.length).to.be.equal(0);
             expect(usine.stock).to.exist;
             expect(usine.stock.length).to.be.equal(0);
+            expect(usine.liquidités).to.be.equal(0);
             expect(usine.tarifs).to.exist;
             expect(usine.tarifs.length).to.be.equal(0);
         });
@@ -48,6 +49,24 @@ describe('Usine - Gestion complète', () => {
             expect(stock_objet_test).to.exist;
             expect(stock_objet_test.quantité).to.be.equal(5);
         });
+
+        it('Il est possible de modifier les liquidités disponibles de l usine', () => {
+            try { // catch des exceptions innatendu pour faire échouer le test
+                usine.liquidités = 10000;
+            } catch (e) { console.error(e); expect.fail(`Une exception inattendue a été levée lors de l'ajout de liquidités : ${e.message}`); }
+            expect(usine.liquidités).to.be.equal(10000);
+        });
+        it(`Il est impossible d'affecté autre chose qu'un nombre entier positif aux liquidités disponibles de l'usine`, () => {
+            expect(() => { usine.liquidités = -1000 }).to.throw(/Le montant doit être un entier positif. Montant reçu : .*/);
+            expect(() => { usine.liquidités = 10.5 }).to.throw(/Le montant doit être un entier positif. Montant reçu : .*/);
+            expect(() => { usine.liquidités = -0.5 }).to.throw(/Le montant doit être un entier positif. Montant reçu : .*/);
+            expect(() => { usine.liquidités = NaN }).to.throw(/Le montant doit être un entier positif. Montant reçu : .*/);
+            expect(() => { usine.liquidités = "deux milles" }).to.throw(/Le montant doit être un entier positif. Montant reçu : .*/);
+            usine.liquidités = "300";
+            expect(usine.liquidités).to.be.equal(300);
+            usine.liquidités = 3000;
+            expect(usine.liquidités).to.be.equal(3000);
+        });
     });
 
     describe('Comportement attendu d une usine préexistante', () => {
@@ -72,7 +91,7 @@ describe('Usine - Gestion complète', () => {
             usine = new Usine("Une usine toute neuve", undefined,
                 [recette_simple, recette_non_tarifée, recette_complexe],
                 [new Tarif('Ingredient1', 10), new Tarif('Ingredient2', 20), new Tarif('Simple', 180), new Tarif("Complexe", 300)],
-                [{ nom: 'Ingredient1', quantité: 5 }, { nom: 'Ingredient2', quantité: 10 }, { nom: 'Simple', quantité: 2 }]);
+                [{ nom: 'Ingredient1', quantité: 5 }, { nom: 'Ingredient2', quantité: 10 }, { nom: 'Simple', quantité: 2 }], 1000);
         });
 
         it('Les produits créés à l initialisation sont tarifés correctement', () => {
@@ -102,10 +121,10 @@ describe('Usine - Gestion complète', () => {
 
         it('Il est possible de sérialiser et désérialiser une usine sans perdre d information', () => {
             let usine_sérialisée, usine_désérialisée;
-            try{
+            try {
                 usine_sérialisée = usine.toString();
                 usine_désérialisée = Usine.parse(usine_sérialisée);
-            }catch(e){
+            } catch (e) {
                 console.error(e);
                 expect.fail(`Une exception inattendue a été levée lors de la sérialisation/désérialisation de l'usine : ${e.message}`);
             }
@@ -132,12 +151,13 @@ describe('Usine - Gestion complète', () => {
                 const stock_désérialisé = usine_désérialisée.stock[i];
                 expect(stock_désérialisé).to.exist;
                 // double vérifiaction en cas de nom vide ou null
-                expect(stock_désérialisé.nom).to.exist; 
+                expect(stock_désérialisé.nom).to.exist;
                 expect(stock_désérialisé.nom).to.equal(stock_original.nom);
                 // double vérifiaction en cas de quantité vide ou null
                 expect(stock_désérialisé.quantité).to.exist;
                 expect(stock_désérialisé.quantité).to.equal(stock_original.quantité);
             }
+            expect(usine_désérialisée.liquidités).to.equal(usine.liquidités);
         });
 
         it("Un produit existant doit pouvoir être supprimer. La suppréssion doit se répercuter sur les autres produits si nécessaires", () => {
