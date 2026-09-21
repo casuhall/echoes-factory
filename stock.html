@@ -24,7 +24,6 @@
     </div>
   </nav>
 
-
   <dialog id="ajout_unitaire_modal">
     <form method="dialog">
       <div class="grid">
@@ -59,32 +58,34 @@
     </div>
   </dialog>
 
-  <div class="grid">
-    <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn">Ajouter un objet</button>
-    <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Ajouter en masse</button>
-    <button id="btn_reset_stock" type="button" class="btn warning">Réinitialiser</button>
-  </div>
-  <section class="grid">
-    <h3>Liquidités disponibles</h3>
-    <P id="p-liquidités" class="right"></P>
-    <input type="number" step="1" min="0" id="liquidités_input" class="right" hidden />
-  </section>
-  <section>
-    <h3>Objets en stock</h3>
-    <table class="table" id="stock-table">
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Quantité</th>
-        </tr>
-      </thead>
-      <tbody id="stock-body">
-        <tr>
-          <td class="empty" colspan="2">Aucun objet en stock</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <main>
+    <div class="grid">
+      <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn">Ajouter un objet</button>
+      <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Ajouter en masse</button>
+      <button id="btn_reset_stock" type="button" class="btn warning">Réinitialiser</button>
+    </div>
+    <section class="grid">
+      <h3>Liquidités disponibles</h3>
+      <P id="p-liquidités" class="right"></P>
+      <input type="number" step="1" min="0" id="liquidités_input" class="right" hidden />
+    </section>
+    <section>
+      <h3>Objets en stock</h3>
+      <table class="table" id="stock-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Quantité</th>
+          </tr>
+        </thead>
+        <tbody id="stock-body">
+          <tr>
+            <td class="empty" colspan="2">Aucun objet en stock</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
 
   <script type="module">
     import { Usine, GestionnaireEvenements } from "./app/service.js"
