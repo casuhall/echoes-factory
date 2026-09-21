@@ -62,22 +62,29 @@
   <div class="grid">
     <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn">Ajouter un objet</button>
     <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Ajouter en masse</button>
-    <button id="btn_reset_stock" type="button" class="btn warning">Réinitialiser le stock</button>
+    <button id="btn_reset_stock" type="button" class="btn warning">Réinitialiser</button>
   </div>
-
-  <table class="table" id="stock-table">
-    <thead>
-      <tr>
-        <th>Nom</th>
-        <th>Quantité</th>
-      </tr>
-    </thead>
-    <tbody id="stock-body">
-      <tr>
-        <td class="empty" colspan="2">Aucun objet en stock</td>
-      </tr>
-    </tbody>
-  </table>
+  <section class="grid">
+    <h3>Liquidités disponibles</h3>
+    <P id="p-liquidités" class="right"></P>
+    <input type="number" step="1" min="0" id="liquidités_input" class="right" hidden />
+  </section>
+  <section>
+    <h3>Objets en stock</h3>
+    <table class="table" id="stock-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Quantité</th>
+        </tr>
+      </thead>
+      <tbody id="stock-body">
+        <tr>
+          <td class="empty" colspan="2">Aucun objet en stock</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
   <script type="module">
     import { Usine, GestionnaireEvenements } from "./app/service.js"
@@ -95,6 +102,7 @@
     const BOUTON_ANNULER_MASSIF = document.getElementById("btn_annuler_massif");
     const BOUTON_ENREGISTRER_MASSIF = document.getElementById("btn_enregistrer_massif");
     const STOCK_TABLE_BODY = document.getElementById("stock-body");
+    const INPUT_LIQUIDITÉS = document.getElementById("liquidités_input");
 
     let usine;
     let storedUsine = localStorage.getItem("usine");
@@ -115,8 +123,8 @@
 
     préparerSaisieUnitaire();
     préparerSaisieMassive();
+    présenterLiquidités();
     présenterStock();
-
 
     // Fonction de réparation de la fenêtre modale de saisie unitaire
     function préparerSaisieUnitaire() {
@@ -153,6 +161,22 @@
         updateStorage();
         // Mettre ajour l'affichage
         présenterStock();
+      });
+    }
+
+    function présenterLiquidités() {
+      document.getElementById("p-liquidités").textContent = NUMBER_FORMAT.format(usine.liquidités, "integer");
+      document.getElementById("p-liquidités").addEventListener("click", (event) => {
+        event.target.hidden = true;
+        INPUT_LIQUIDITÉS.value = usine.liquidités;
+        INPUT_LIQUIDITÉS.hidden = false;
+      });
+      INPUT_LIQUIDITÉS.addEventListener("change", (event) => {
+        usine.liquidités = INPUT_LIQUIDITÉS.value;
+        updateStorage();
+        event.target.hidden = true;
+        document.getElementById("p-liquidités").textContent = NUMBER_FORMAT.format(usine.liquidités, "integer");
+        document.getElementById("p-liquidités").hidden = false;
       });
     }
 

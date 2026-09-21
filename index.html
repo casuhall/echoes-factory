@@ -37,6 +37,10 @@
         <label for="input-nbStock">Nombre de type d'objets en stock</label>
         <input id="input-nbStock" type="number" readonly></input>
       </div>
+      <div>
+        <label for="input-liquidités">Liquidités disponibles</label>
+        <input id="input-liquidités" type="number" readonly></input>
+      </div>
     </div>
   </main>
 
@@ -51,7 +55,7 @@
     init();
 
     // Auclic sur le bouton "reset", supression de l'usine persistée pour la remplacer par une usine vide
-    document.querySelector("#input-nomUsine").addEventListener("blur", (event) => {
+    document.querySelector("#input-nomUsine").addEventListener("change", (event) => {
       save();
     });
     // Auclic sur le bouton "reset", supression de l'usine persistée pour la remplacer par une usine vide
@@ -69,6 +73,7 @@
       document.getElementById("input-nbProduits").value = usine.produits.length;
       document.getElementById("input-nbMarché").value = usine.tarifs.length;
       document.getElementById("input-nbStock").value = usine.stock.length;
+      document.getElementById("input-liquidités").value = usine.liquidités;
     }
     function save() {
       usine.nom = document.querySelector("#input-nomUsine").value;
