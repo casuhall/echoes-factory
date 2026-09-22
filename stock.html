@@ -70,17 +70,21 @@
       <input type="number" step="1" min="0" id="liquidités_input" class="right" hidden />
     </section>
     <section>
-      <h3>Objets en stock</h3>
+      <div class="grid">
+        <h3>Objets en stock</h3>
+        <input type="text" name="Search" id="search_input" placeholder="Rechercher un objet..." />
+      </div>
       <table class="table" id="stock-table">
         <thead>
           <tr>
             <th>Nom</th>
             <th>Quantité</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody id="stock-body">
           <tr>
-            <td class="empty" colspan="2">Aucun objet en stock</td>
+            <td class="empty" colspan="3">Aucun objet en stock</td>
           </tr>
         </tbody>
       </table>
@@ -89,7 +93,7 @@
 
   <script type="module">
     import { Usine, GestionnaireEvenements } from "./app/service.js"
-    import { decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT } from "./app/presentation.js"
+    import { decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT, initialiserElement } from "./app/presentation.js"
 
 
     // Binding des éléments d'IHM
@@ -117,6 +121,7 @@
     nomUsine.textContent = usine.nom;
 
     BOUTON_RESET.addEventListener("click", () => {
+      usine.liquidités = 0;
       usine.réinitialiseStock();
       updateStorage();
       présenterStock();
@@ -162,6 +167,7 @@
         updateStorage();
         // Mettre ajour l'affichage
         présenterStock();
+        INPUT_MASSIF.value = null;
       });
     }
 
@@ -172,7 +178,7 @@
         INPUT_LIQUIDITÉS.value = usine.liquidités;
         INPUT_LIQUIDITÉS.hidden = false;
       });
-      INPUT_LIQUIDITÉS.addEventListener("change", (event) => {
+      INPUT_LIQUIDITÉS.addEventListener("blur", (event) => {
         usine.liquidités = INPUT_LIQUIDITÉS.value;
         updateStorage();
         event.target.hidden = true;
@@ -183,11 +189,22 @@
 
     // Fonction d'affichage du tableau à partir des données de l'usine
     function présenterStock() {
-      let html_stock = (usine.stock.length > 0) ? "" : "<tr><td class='empty' colspan='2'>Inventaire désepérément vide</td></tr>";
-      for (const article of usine.stock) {
-        html_stock += `<tr><td>${article.nom}</td><td class="text-end">${NUMBER_FORMAT.format(article.quantité, "integer")}</td></tr>\n`
+      if (usine.stock.length === 0) {
+        STOCK_TABLE_BODY.innerHTML = "<tr><td class='empty' colspan='3'>Inventaire désepérément vide</td></tr>";
+      } else {
+        STOCK_TABLE_BODY.replaceChildren();
       }
-      STOCK_TABLE_BODY.innerHTML = html_stock;
+
+      const fragment = document.createDocumentFragment();
+      for (const article of usine.stock) {
+        const ligne = initialiserElement("tr");
+        const nom = initialiserElement("td", [], article.nom);
+        const quantité = initialiserElement("td", ["text-end"], NUMBER_FORMAT.format(article.quantité, "integer"));
+
+        ligne.append(nom, quantité);
+        fragment.appendChild(ligne);
+      }
+      STOCK_TABLE_BODY.appendChild(fragment);
     }
 
     // Fonction de stockage des données de l'usine

@@ -41,7 +41,36 @@ class NUMBER_FORMAT {
     }
   }
 }
+
 const UNICODE_DATE_FORMAT = new Intl.DateTimeFormat("fr-FR"); // pour formatage YYYY-MM-DD
 
+/**
+ * Initialise un élément HTML en utilisant le type, les classes CSS, le contenu textuel et les événements fournis.
+ *
+ * @param {string} typeElement Type HTML, par exemple "button" ou "td".
+ * @param {string[]} classes Classes CSS à appliquer.
+ * @param {string} contenu Contenu textuel de l'élément.
+ * @param {{trigger: string, listener: EventListener}[]} evenements Couples [événement, callback].
+ * @returns {HTMLElement} Élément HTML initialisé.
+ */
+function initialiserElement(typeElement, classes = [], contenu = "", evenements = []) {
+  // 1. Création de l'élément.
+  const element = document.createElement(typeElement);
 
-export { decodeEchoesListe, NUMBER_FORMAT, UNICODE_DATE_FORMAT }
+  // 2. Application des classes CSS.
+  element.classList.add(...classes);
+
+  // 3. Définition du contenu textuel.
+  element.textContent = contenu;
+
+  // 4. Association des événements.
+  for (const { trigger, listener } of evenements) {
+    element.addEventListener(trigger, listener);
+  }
+
+  return element;
+}
+
+
+
+export { decodeEchoesListe, NUMBER_FORMAT, UNICODE_DATE_FORMAT, initialiserElement };

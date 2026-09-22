@@ -1,6 +1,7 @@
 import { expect } from 'chai';
+import {JSDOM} from 'jsdom';
 import { Usine } from '../app/service.js';
-import { decodeEchoesListe } from '../app/presentation.js';
+import { decodeEchoesListe, initialiserElement } from '../app/presentation.js';
 
 describe('Presentation', () => {
 
@@ -22,6 +23,8 @@ describe('Presentation', () => {
 
     beforeEach(() => {
         localStorage.clear();
+        global.document = (new JSDOM()).window.document;
+
     });
 
     describe('decodeEchoesListe', () => {
@@ -43,6 +46,24 @@ describe('Presentation', () => {
             ];
             const result = decodeEchoesListe(input);
             expect(result).to.deep.equal(expected);
+        });
+    });
+
+    describe(`Outils de générationd d'objets HTML`, () => {
+        it('Devrait créer un élément HTML avec les classes et le contenu spécifiés', () => {
+            const typeElement = "div";
+            const classes = ["class1", "class2"];
+            const contenu = "Contenu de test";
+            const evenements = [
+                { trigger: "click", listener: () => {} }
+            ];
+
+            const element = initialiserElement(typeElement, classes, contenu, evenements);
+
+            expect(element.tagName.toLowerCase()).to.equal(typeElement);
+            expect(element.classList.contains("class1")).to.be.true;
+            expect(element.classList.contains("class2")).to.be.true;
+            expect(element.textContent).to.equal(contenu);
         });
     });
 

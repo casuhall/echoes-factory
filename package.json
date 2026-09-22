@@ -6,6 +6,7 @@
   "type": "module",
   "devDependencies": {
     "chai": "4.3.8",
+    "jsdom": "^30.1.0",
     "mocha": "^12.0.0",
     "nodemon": "3.1.4",
     "nyc": "^18.0.0",
