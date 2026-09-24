@@ -139,12 +139,18 @@ describe('Usine - Gestion complète', () => {
                 expect(produit_désérialisé.nom).to.equal(produit_original.nom);
                 expect(produit_désérialisé.coût_reviens).to.equal(produit_original.coût_reviens);
                 expect(produit_désérialisé.prix_estimé).to.equal(produit_original.prix_estimé);
+                produit_désérialisé.date_effet.setMilliseconds(0);
+                produit_original.date_effet.setMilliseconds(0);
+                expect(produit_désérialisé.date_effet).to.deep.equal(produit_original.date_effet);
             }
             for (let i = 0; i < usine.tarifs.length; i++) {
                 const tarif_original = usine.tarifs[i];
                 const tarif_désérialisé = usine_désérialisée.tarifs[i];
                 expect(tarif_désérialisé.nom).to.equal(tarif_original.nom);
                 expect(tarif_désérialisé.montant).to.equal(tarif_original.montant);
+                tarif_désérialisé.date_effet.setMilliseconds(0);
+                tarif_original.date_effet.setMilliseconds(0);
+                expect(tarif_désérialisé.date_effet).to.deep.equal(tarif_original.date_effet);
             }
             for (let i = 0; i < usine.stock.length; i++) {
                 const stock_original = usine.stock[i];

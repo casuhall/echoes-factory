@@ -62,7 +62,11 @@ class Tarif {
   /** @type {Date} Sockage interne de la date d'effet */
   #date_effet;
   /** @type {Date} Date de l'évaluation. réplicat pour maintenir l'immutabilité du tarif */
-  get date_effet() { return new Date(this.#date_effet); };
+  get date_effet() {
+    let result = new Date(this.#date_effet);
+    result.setMilliseconds(0); // pour éviter les problèmes de comparaison de date avec les tests unitaires
+    return result;
+  };
 
   /** 
    * @param {string} nom Nom de l'objet évalué.
@@ -83,7 +87,8 @@ class Tarif {
 
   /** Formatage de l'objet sous forme de chaîne de caractère compréhensible. */
   toString() {
-    return `{"nom":"${this.#nom}","montant":"${this.#montant}","date_effet":"${this.#date_effet.toLocaleDateString()}"}`
+    return `{"nom":"${this.#nom}","montant":"${this.#montant}","date_effet":"${this.#date_effet.toISOString()}"}`
+
   }
 }
 
@@ -107,7 +112,7 @@ class Tarification {
       throw new Error(`Objet à mettre à jour obligatoire. Fournis : objet=${objet}`);
     let tarif = this.#tarifs.get(objet)
     if (tarif && tarif.date_effet > date)
-      throw new Error(`Un tarif plus recent existe déjà. Date de tarif existant : ${tarif.date_effet.toLocaleDateString()}, date de mise à jour souhaitée : ${date.toLocaleDateString()}`);
+      throw new Error(`Un tarif plus recent existe déjà. Date de tarif existant : ${tarif.date_effet.toISOString()}, date de mise à jour souhaitée : ${date.toISOString()}`);
     let nouveau_tarif = new Tarif(objet, prix, date);
     this.#tarifs.set(objet, nouveau_tarif);
     return nouveau_tarif;
@@ -311,7 +316,7 @@ class Inventaire {
       throw new Error(`Impossible de retirer ${quantité} ${objet}. Seuls ${stock} disponibles`)
     }
     let nouveau_stock = stock - quantité;
-    if(nouveau_stock === 0) {
+    if (nouveau_stock === 0) {
       this.#objets.delete(objet);
     } else {
       this.#objets.set(objet, nouveau_stock);
@@ -351,7 +356,11 @@ class Produit {
 
   #date_effet = new Date();
   /** @type {Date} Date de l'évaluation la plus ancienne */
-  get date_effet() { return new Date(this.#date_effet); };
+  get date_effet() {
+    let result = new Date(this.#date_effet);
+    result.setMilliseconds(0);
+    return result;
+  };
   #updateDateEffet(date) { this.#date_effet = (date < this.#date_effet) ? new Date(date) : this.#date_effet; }
 
   #commentaire = '';
@@ -421,7 +430,7 @@ class Produit {
   }
 
   toString() {
-    return `{"nom":"${this.#nom}","statut":"${this.#statut}","prix_estimé":${this.#prix_estimé},"coût_reviens":${this.#coût_reviens},"rentabilité":${this.#rentabilité},"date_effet":"${this.#date_effet.toLocaleDateString()}","commentaire":"${this.#commentaire}","recette":${this.#recette}}`;
+    return `{"nom":"${this.#nom}","statut":"${this.#statut}","prix_estimé":${this.#prix_estimé},"coût_reviens":${this.#coût_reviens},"rentabilité":${this.#rentabilité},"date_effet":"${this.#date_effet.toISOString()}","commentaire":"${this.#commentaire}","recette":${this.#recette}}`;
   }
 }
 
