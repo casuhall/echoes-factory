@@ -7,7 +7,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="./style/style.css" />
   <style>
-    #tarifs-table td:nth-child(2) { text-align: end; }
+    #tarifs-table td:nth-child(2) {
+      text-align: end;
+    }
   </style>
 </head>
 
@@ -25,53 +27,53 @@
 
   <dialog id="ajout_unitaire_modal">
     <form method="dialog">
+      <h2>Enregistrer un prix</h2>
       <div class="grid">
         <div>
-          <h2>Enregistrer un prix</h2>
           <label for="nom_article_unitaire_input" class="form-label">Nom de l'article</label>
           <input type="text" id="nom_article_unitaire_input" class="form-control" />
+        </div>
+        <div>
           <label for="prix_article_unitaire_input">Prix de l'article</label>
           <input type="number" step="0.01" id="prix_article_unitaire_input" />
         </div>
-        <div>
-          <input id="btn_annuler_unitaire" type="submit" formnovalidate class="btn ghost" value="Annuler" />
-          <input id="btn_enregistrer_unitaire" type="submit" class="btn" value="Enregistrer" />
-        </div>
+        <input id="btn_annuler_unitaire" type="submit" formnovalidate class="btn ghost" value="Annuler" />
+        <input id="btn_enregistrer_unitaire" type="submit" class="btn" value="Enregistrer" />
       </div>
     </form>
   </dialog>
   <dialog id="ajout_massif_modal">
-    <div class="grid">
-      <h5 class="modal-title">Mise à jour de tarifs en masse !</h5>
-      <form method="dialog">
-        <div>
-          <label for="saisie_massif_input" class="form-label">Lot d'objets à évaluer</label>
-          <textarea id="saisie_massif_input" class="form-control"></textarea>
-        </div>
-        <div>
-          <input id="btn_annuler_massif" type="submit" formnovalidate class="btn ghost" value="Annuler" />
-          <input id="btn_enregistrer_massif" type="submit" class="btn" value="Enregistrer" />
-        </div>
-      </form>
-    </div>
+    <h5 class="modal-title">Mise à jour de tarifs en masse !</h5>
+    <form method="dialog">
+      <div class="grid">
+        <label for="saisie_massif_input" class="form-label">Lot d'objets à évaluer</label>
+        <textarea id="saisie_massif_input" class="form-control"></textarea>
+      </div>
+      <div class="grid">
+        <input id="btn_annuler_massif" type="submit" formnovalidate class="btn ghost" value="Annuler" />
+        <input id="btn_enregistrer_massif" type="submit" class="btn" value="Enregistrer" />
+      </div>
+    </form>
     </div>
   </dialog>
 
-  <div class="grid">
-    <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn">Enregistrer un prix</button>
-    <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Enregistrer en masse</button>
-  </div>
+  <main>
+    <div class="grid">
+      <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn">Enregistrer un prix</button>
+      <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Enregistrer en masse</button>
+    </div>
 
-  <table class="table" id="tarifs-table">
-    <thead>
-      <tr>
-        <th>Nom</th>
-        <th>Prix</th>
-        <th>Date d'effet</th>
-      </tr>
-    </thead>
-    <tbody id="tarifs-body"></tbody>
-  </table>
+    <table class="table" id="tarifs-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Prix</th>
+          <th>Date d'effet</th>
+        </tr>
+      </thead>
+      <tbody id="tarifs-body"></tbody>
+    </table>
+  </main>
 
   <script type="module">
     import { Usine, GestionnaireEvenements } from "./app/service.js"

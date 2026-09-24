@@ -1,7 +1,16 @@
 :root {
     font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
     line-height: 1.4;
-    color: #222
+    color: #222;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: auto;
 }
 
 body {
@@ -9,23 +18,22 @@ body {
     background: #f7f8fa
 }
 
+dialog,
 main {
     background: #fff;
     box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
-}
-
-dialog,
-main {
     border-radius: 8px;
 }
 
 dialog {
-    border: 1px
+    border: 1px;
+    width: 80%;
 }
 
 main,
 nav,
-footer {
+footer,
+dialog {
     max-width: 920px;
     margin: auto;
     padding: 18px;
@@ -69,7 +77,10 @@ textarea {
     border: 1px solid #d7dbe0;
     border-radius: 6px;
     font-size: 14px;
-    resize: vertical
+    resize: vertical;
+    /* Attention ceci est un hack pour que le textarea prenne toute la largeur du grid. */
+    grid-column-start: 1;
+    grid-column-end: full;
 }
 
 .red {
