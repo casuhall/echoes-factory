@@ -198,17 +198,28 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(inventaire.stock).to.deep.equal([{ nom: 'Objet1', quantité: 3 }]);
         });
 
+        it("Retirer tous les objets d'un même type fait disparaître cet objet de l'inventaire", () => {
+            expect(inventaire.ajoute('Objet1', 5)).to.equal(5);
+            expect(inventaire.quantité_en_stock('Objet1')).to.equal(5);
+            expect(inventaire.retire('Objet1', 5)).to.equal(0);
+            expect(inventaire.quantité_en_stock('Objet1')).to.equal(0);
+            // contrôle de cohérence avec l'état du stock
+            expect(inventaire.stock).to.deep.equal([]);
+        });
+
         it("On ne peut pas retirer plus de objets que ce qui est disponible dans l'inventaire", () => {
             expect(inventaire.ajoute('Objet1', 5)).to.equal(5);
             expect(() => inventaire.retire('Objet1', 6)).to.throw(Error, /Impossible de retirer 6 Objet1. Seuls 5 disponibles/);
             expect(inventaire.quantité_en_stock('Objet1')).to.equal(5);
         });
 
-        it("On ne peut pas ajouter ou retirer une quantité négative ou fractionnée de objets", () => {
-            expect(() => inventaire.ajoute('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu\. Fournis : quantité=-1/);
-            expect(() => inventaire.retire('Objet1', -1)).to.throw(Error, /Nombre entier positif attendu\. Fournis : quantité=-1/);
-            expect(() => inventaire.ajoute('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu\. Fournis : quantité=1\.5/);
-            expect(() => inventaire.retire('Objet1', 1.5)).to.throw(Error, /Nombre entier positif attendu\. Fournis : quantité=1\.5/);
+        it("On ne peut pas ajouter ou retirer une quantité nulle, négative ou fractionnée de objets", () => {
+            expect(() => inventaire.ajoute('Objet1', 0)).to.throw(Error, /Nombre entier strictement positif attendu\. Fournis : quantité=0/);
+            expect(() => inventaire.retire('Objet1', 0)).to.throw(Error, /Nombre entier strictement positif attendu\. Fournis : quantité=0/);
+            expect(() => inventaire.ajoute('Objet1', -1)).to.throw(Error, /Nombre entier strictement positif attendu\. Fournis : quantité=-1/);
+            expect(() => inventaire.retire('Objet1', -1)).to.throw(Error, /Nombre entier strictement positif attendu\. Fournis : quantité=-1/);
+            expect(() => inventaire.ajoute('Objet1', 1.5)).to.throw(Error, /Nombre entier strictement positif attendu\. Fournis : quantité=1\.5/);
+            expect(() => inventaire.retire('Objet1', 1.5)).to.throw(Error, /Nombre entier strictement positif attendu\. Fournis : quantité=1\.5/);
         });
     });
 });

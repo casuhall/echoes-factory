@@ -287,8 +287,8 @@ class Inventaire {
    */
   ajoute(objet, quantité) {
     if (!objet || !String(objet).trim()) throw new Error(`Nom d'objet obligatoire.`)
-    if (!quantité || quantité < 0 || Number.isInteger(quantité) === false)
-      throw new Error(`Nombre entier positif attendu. Fournis : quantité=${quantité}`)
+    if (!quantité || quantité <= 0 || Number.isInteger(quantité) === false)
+      throw new Error(`Nombre entier strictement positif attendu. Fournis : quantité=${quantité}`)
     let nouveau_stock = this.quantité_en_stock(objet) + quantité;
     this.#objets.set(objet, nouveau_stock);
     return nouveau_stock;
@@ -302,8 +302,8 @@ class Inventaire {
    * @throws {Error} Si la quantité demandée dépasse le stock disponible
    */
   retire(objet, quantité) {
-    if (!quantité || quantité < 0 || Number.isInteger(quantité) === false)
-      throw new Error(`Nombre entier positif attendu. Fournis : quantité=${quantité}`)
+    if (!quantité || quantité <= 0 || Number.isInteger(quantité) === false)
+      throw new Error(`Nombre entier strictement positif attendu. Fournis : quantité=${quantité}`)
     if (!objet || typeof objet !== "string")
       throw new Error(`Nom d'objet invalide. Fournis : objet=${objet}`)
     let stock = this.quantité_en_stock(objet);
@@ -311,7 +311,11 @@ class Inventaire {
       throw new Error(`Impossible de retirer ${quantité} ${objet}. Seuls ${stock} disponibles`)
     }
     let nouveau_stock = stock - quantité;
-    this.#objets.set(objet, nouveau_stock);
+    if(nouveau_stock === 0) {
+      this.#objets.delete(objet);
+    } else {
+      this.#objets.set(objet, nouveau_stock);
+    }
     return nouveau_stock;
   }
 }
