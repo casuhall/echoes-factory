@@ -14,6 +14,7 @@ class Usine {
         this.#nom = nom
     }
     #gestionnaire_evenements;
+    /** @type {Inventaire} Inventaire de l'usine */
     #inventaire = new Inventaire();
     /** @type {{nom:string,quantité:number}[]} Stock courant de l'usine */
     get stock() { return this.#inventaire.stock; }
@@ -59,7 +60,7 @@ class Usine {
         }
         for (const stack of stock) {
             try {
-                this.ajouteAuStock(stack.nom, Number.parseFloat(stack.quantité));
+                this.stocker(stack.nom, Number.parseFloat(stack.quantité));
             } catch (error) {
                 console.warn(`Stack non inscrite à l'inventaire : ${JSON.stringify(stack)}. Cause : ${error.message}.`);
             }
@@ -186,18 +187,31 @@ class Usine {
         this.#gestionnaire_evenements.produit("maj_produit", nomProduit);
     }
 
-    /** Fonction pour réinitialiser le stock */
-    réinitialiseStock() {
-        this.#inventaire = new Inventaire();
+    /** Fonction pour destocker un nombre d'objet, un objet entièrement, ou tout le stock.
+     * @param {string} objet Nom de l'objet à retirer du stock
+     * @param {number} quantité Quantité de l'objet à retirer du stock
+     * @returns {number|undefined} Nouvelle quantité de l'objet dans le stock après retrait (undefined en cas de réinitialisation totale)
+     * @throws {Error} Si la quantité n'est pas un nombre valide ou le nom est vide
+     */
+    destocker(objet, quantité) {
+        if (!objet) {
+            // Si aucun objet n'est précisé, on vide tout le stock
+            this.#inventaire = new Inventaire();
+        } else {
+            let _quantité = (quantité) ? Number.parseFloat(quantité)
+                : this.#inventaire.quantité_en_stock(objet);
+            return this.#inventaire.retire(objet, _quantité);
+        }
     }
 
     /** Fonction d'ajout d'objets au stock.
      * @param {string} nom Nom de l'objet à ajouter au stock
      * @param {number} quantité Quantité de l'objet à ajouter au stock
+     * @returns {number} Nouvelle quantité de l'objet dans le stock après ajout
      * @throws {Error} Si la quantité n'est pas un nombre valide ou le nom est vide
      */
-    ajouteAuStock(nom, quantité) {
-        this.#inventaire.ajoute(nom, Number.parseFloat(quantité));
+    stocker(nom, quantité) {
+        return this.#inventaire.ajoute(nom, Number.parseFloat(quantité));
     }
 
     toString() {

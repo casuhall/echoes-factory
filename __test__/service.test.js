@@ -43,7 +43,7 @@ describe('Usine - Gestion complète', () => {
         });
         it(`Il est possible d'ajouter des objets à l'inventaire de l'usine`, () => {
             try { // catch des exceptions innatendu pour faire échouer le test
-                usine.ajouteAuStock("ObjetTest", 5);
+                usine.stocker("ObjetTest", 5);
             } catch (e) { console.error(e); expect.fail(`Une exception inattendue a été levée lors de l'ajout d'un objet à l'inventaire : ${e.message}`); }
             const stock_objet_test = usine.stock.find(s => s.nom === "ObjetTest");
             expect(stock_objet_test).to.exist;
@@ -186,6 +186,22 @@ describe('Usine - Gestion complète', () => {
             expect(produit_complexe.prix_estimé).to.equal(300);
             expect(produit_complexe.coût_reviens).to.equal(250); // 50 + 2*100 = 250
             expect(produit_complexe.rentabilité).to.equal(0.2); // (300-250)/250 = -50/250 = 0,2
+        });
+
+        it("il est possible de supprimer l'ensemble du stock de l'usine", () => {
+            usine.destocker();
+            expect(usine.stock).to.exist;
+            expect(usine.stock).to.deep.equal([]);
+        });
+
+        it("il est possible de supprimer simplement un objet du stock de l'usine", () => {
+            expect(usine.stocker("ObjetTest", 5)).to.equal(5);
+            expect(usine.stocker("ObjetTest2", 3)).to.equal(3);
+            expect(usine.stock).to.deep.include({ nom: "ObjetTest", quantité: 5 });
+            expect(usine.stock).to.deep.include({ nom: "ObjetTest2", quantité: 3 });
+            usine.destocker("ObjetTest", 5);
+            expect(usine.stock).to.not.deep.include({ nom: "ObjetTest", quantité: 5 });
+            expect(usine.stock).to.deep.include({ nom: "ObjetTest2", quantité: 3 });
         });
     });
 

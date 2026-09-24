@@ -79,7 +79,7 @@
           <tr>
             <th>Nom</th>
             <th>Quantité</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="stock-body">
@@ -122,7 +122,7 @@
 
     BOUTON_RESET.addEventListener("click", () => {
       usine.liquidités = 0;
-      usine.réinitialiseStock();
+      usine.destocker();
       updateStorage();
       présenterStock();
     });
@@ -137,7 +137,7 @@
       // Action à réaliser sur le click du bouton enregister
       BOUTON_ENREGISTRER_UNITAIRE.addEventListener("click", () => {
         // Propager l'évaluation dans l'usine
-        usine.ajouteAuStock(INPUT_NOM_ARTICLE_UNITAIRE.value, INPUT_PRIX_ARTICLE_UNITAIRE.value);
+        usine.stocker(INPUT_NOM_ARTICLE_UNITAIRE.value, INPUT_PRIX_ARTICLE_UNITAIRE.value);
         // Persister l'état de l'usine
         updateStorage();
         // Mettre ajour l'affichage
@@ -157,7 +157,7 @@
         let liste = decodeEchoesListe(INPUT_MASSIF.value);
         for (const stack of liste) {
           try {
-            usine.ajouteAuStock(stack.nom, stack.quantité);
+            usine.stocker(stack.nom, stack.quantité);
             usine.évaluer(stack.nom, stack.valeur / stack.quantité);
           } catch (erreur) {
             console.error("Échec à l'ajout de l'article au stock ", stack, erreur);
@@ -200,8 +200,13 @@
         const ligne = initialiserElement("tr");
         const nom = initialiserElement("td", [], article.nom);
         const quantité = initialiserElement("td", ["text-end"], NUMBER_FORMAT.format(article.quantité, "integer"));
-
-        ligne.append(nom, quantité);
+        
+        const actions = initialiserElement("td");
+        const modifier = initialiserElement("button", ["btn", "btn-primary"], "✎");
+        const supprimer = initialiserElement("button", ["btn", "warning"], "🗑");
+        actions.appendChild(modifier);
+        actions.appendChild(supprimer);
+        ligne.append(nom, quantité, actions);
         fragment.appendChild(ligne);
       }
       STOCK_TABLE_BODY.appendChild(fragment);
