@@ -71,6 +71,27 @@ function initialiserElement(typeElement, classes = [], contenu = "", evenements 
   return element;
 }
 
+const NOTIFICATION = initialiserElement("dialog");
 
+function prépareNotification() {
+  NOTIFICATION.setAttribute("open", "true");
+  NOTIFICATION.id = 'notification';
+  // à décommenter pour vérifier le rendu des messages
+  // NOTIFICATION.innerHTML = `  <dialog id="notification" open>
+  //   <p class="info">Une super info</p>
+  //   <p class="warn">Attention !</p>
+  //   <p class="error">Trop tard 😑</p>
+  // </dialog>`
+  document.body.prepend(NOTIFICATION)
+}
 
-export { decodeEchoesListe, NUMBER_FORMAT, UNICODE_DATE_FORMAT, initialiserElement };
+function notifier(message, level) {
+  let p_message = initialiserElement("p", [level], message);
+  NOTIFICATION.append(p_message);
+  setTimeout(() => { p_message.remove() }, 5000);
+}
+
+export {
+  decodeEchoesListe, NUMBER_FORMAT, UNICODE_DATE_FORMAT,
+  initialiserElement, prépareNotification, notifier
+};

@@ -18,6 +18,43 @@ body {
     background: #f7f8fa
 }
 
+#notification{
+    background: none;
+    box-shadow: none;
+}
+
+p.info,
+p.warn,
+p.error {
+    margin: 8px 0;
+    padding: 10px 12px;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+    border: 1px solid;
+    border-left-width: 4px;
+    border-radius: 6px;
+}
+
+p.info {
+    background: #eff6ff;
+    color: #1e40af;
+    border-color: #93c5fd;
+    border-left-color: #0b74de;
+}
+
+p.warn {
+    background: #fffbeb;
+    color: #92400e;
+    border-color: #fcd34d;
+    border-left-color: #d97706;
+}
+
+p.error {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #fca5a5;
+    border-left-color: #c11515;
+}
+
 dialog,
 main {
     background: #fff;

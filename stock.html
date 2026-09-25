@@ -26,18 +26,34 @@
 
   <dialog id="ajout_unitaire_modal">
     <form method="dialog">
-      <div class="grid">
-        <div>
-          <h2>Enregistrer un objet</h2>
-          <label for="nom_article_unitaire_input" class="form-label">Nom de l'objet</label>
-          <input type="text" id="nom_article_unitaire_input" class="form-control" />
-          <label for="nombre_article_unitaire_input">Nombre d'objets à ajouter au stock</label>
-          <input type="number" step="1" id="nombre_article_unitaire_input" />
+      <h2>Enregistrer un objet</h2>
+      <div>
+        <div class="grid">
+          <div class="grid">
+            <label for="nom_article_unitaire_input" class="form-label">Nom de l'objet</label>
+            <input type="text" id="nom_article_unitaire_input" class="form-control" />
+          </div>
+          <div class="grid">
+            <label for="nombre_article_unitaire_input">Nombre d'objets à ajouter au stock</label>
+            <input type="number" step="1" id="nombre_article_unitaire_input" />
+          </div>
         </div>
-        <div>
+        <div class="grid">
           <input id="btn_annuler_unitaire" type="submit" formnovalidate class="btn ghost" value="Annuler" />
           <input id="btn_enregistrer_unitaire" type="submit" class="btn" value="Enregistrer" />
         </div>
+    </form>
+  </dialog>
+  <dialog id="modif_modal">
+    <form method="dialog">
+      <h5 id="modif_title">Modifier les stocks de l'objet</h5>
+      <div class="grid">
+        <input type="number" step="1" id="nombre_article_modif_input"
+          placeholder="Nombre d'objets à ajouter/retirer du stock" />
+      </div>
+      <div class="grid">
+        <input id="btn_enregistrer_modif" type="submit" class="btn" value="Enregistrer" />
+        <input id="btn_annuler_modif" type="submit" formnovalidate class="btn ghost" value="Annuler" />
       </div>
     </form>
   </dialog>
@@ -90,12 +106,16 @@
 
   <script type="module">
     import { Usine, GestionnaireEvenements } from "./app/service.js"
-    import { decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT, initialiserElement } from "./app/presentation.js"
-
+    import {
+      decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT,
+      initialiserElement, prépareNotification, notifier
+    } from "./app/presentation.js"
+    prépareNotification();
 
     // Binding des éléments d'IHM
     const nomUsine = document.getElementById('nav-nomUsine');
     const BOUTON_RESET = document.getElementById("btn_reset_stock");
+    const NOTIF = document.getElementById("notification");
     const INPUT_NOM_ARTICLE_UNITAIRE = document.getElementById("nom_article_unitaire_input");
     const INPUT_PRIX_ARTICLE_UNITAIRE = document.getElementById("nombre_article_unitaire_input");
     const BOUTON_ANNULER_UNITAIRE = document.getElementById("btn_annuler_unitaire");
@@ -197,10 +217,42 @@
         const ligne = initialiserElement("tr");
         const nom = initialiserElement("td", [], article.nom);
         const quantité = initialiserElement("td", ["text-end"], NUMBER_FORMAT.format(article.quantité, "integer"));
-        
+
         const actions = initialiserElement("td");
-        const modifier = initialiserElement("button", ["btn", "btn-primary"], "✎");
-        const supprimer = initialiserElement("button", ["btn", "warning"], "🗑");
+        const modifier = initialiserElement("button", ["btn", "btn-primary"], "✎", [{
+          trigger: "click", listener: () => {
+            document.getElementById("modif_title").textContent = `Modifier les stocks de l'objet "${article.nom}" (quantité actuelle : ${NUMBER_FORMAT.format(article.quantité, "integer")})`;
+            document.getElementById("btn_enregistrer_modif").onclick = () => {
+              try {
+                let quantité = parseInt(document.getElementById("nombre_article_modif_input").value);
+                if (quantité > 0) {
+                  usine.stocker(article.nom, quantité);
+                } else if (quantité < 0) {
+                  usine.destocker(article.nom, -quantité);
+                }
+                updateStorage();
+                présenterStock();
+              } catch (error) {
+                notifier(error.message, "error");
+              }
+            }
+          }
+        }]);
+        modifier.setAttribute("command", "show-modal");
+        modifier.setAttribute("commandfor", "modif_modal");
+        const supprimer = initialiserElement("button", ["btn", "warning"], "🗑", [{
+          trigger: "click", listener: () => {
+            try {
+              if (confirm(`Êtes-vous sûr de vouloir supprimer l'objet "${article.nom}" ?`)) {
+                usine.destocker(article.nom);
+                updateStorage();
+                présenterStock();
+              }
+            } catch (error) {
+              notifier(error.message, "error");
+            }
+          }
+        }]);
         actions.appendChild(modifier);
         actions.appendChild(supprimer);
         ligne.append(nom, quantité, actions);
