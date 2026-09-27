@@ -138,7 +138,7 @@
 
     BOUTON_RESET.addEventListener("click", () => {
       usine.liquidités = 0;
-      usine.destocker();
+      usine.déstocker();
       updateStorage();
       présenterStock();
     });
@@ -227,7 +227,7 @@
                 if (quantité > 0) {
                   usine.stocker(article.nom, quantité);
                 } else if (quantité < 0) {
-                  usine.destocker(article.nom, -quantité);
+                  usine.déstocker(article.nom, -quantité);
                 }
                 updateStorage();
                 présenterStock();
@@ -243,7 +243,7 @@
           trigger: "click", listener: () => {
             try {
               if (confirm(`Êtes-vous sûr de vouloir supprimer l'objet "${article.nom}" ?`)) {
-                usine.destocker(article.nom);
+                usine.déstocker(article.nom);
                 updateStorage();
                 présenterStock();
               }

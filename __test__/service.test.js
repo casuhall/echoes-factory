@@ -195,7 +195,7 @@ describe('Usine - Gestion complète', () => {
         });
 
         it("il est possible de supprimer l'ensemble du stock de l'usine", () => {
-            usine.destocker();
+            usine.déstocker();
             expect(usine.stock).to.exist;
             expect(usine.stock).to.deep.equal([]);
         });
@@ -205,7 +205,7 @@ describe('Usine - Gestion complète', () => {
             expect(usine.stocker("ObjetTest2", 3)).to.equal(3);
             expect(usine.stock).to.deep.include({ nom: "ObjetTest", quantité: 5 });
             expect(usine.stock).to.deep.include({ nom: "ObjetTest2", quantité: 3 });
-            usine.destocker("ObjetTest", 5);
+            usine.déstocker("ObjetTest", 5);
             expect(usine.stock).to.not.deep.include({ nom: "ObjetTest", quantité: 5 });
             expect(usine.stock).to.deep.include({ nom: "ObjetTest2", quantité: 3 });
         });

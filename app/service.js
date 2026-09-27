@@ -187,13 +187,13 @@ class Usine {
         this.#gestionnaire_evenements.produit("maj_produit", nomProduit);
     }
 
-    /** Fonction pour destocker un nombre d'objet, un objet entièrement, ou tout le stock.
+    /** Fonction pour déstocker un nombre d'objet, un objet entièrement, ou tout le stock.
      * @param {string} objet Nom de l'objet à retirer du stock
      * @param {number} quantité Quantité de l'objet à retirer du stock
      * @returns {number|undefined} Nouvelle quantité de l'objet dans le stock après retrait (undefined en cas de réinitialisation totale)
      * @throws {Error} Si la quantité n'est pas un nombre valide ou le nom est vide
      */
-    destocker(objet, quantité) {
+    déstocker(objet, quantité) {
         if (!objet) {
             // Si aucun objet n'est précisé, on vide tout le stock
             this.#inventaire = new Inventaire();
