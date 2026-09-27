@@ -82,14 +82,11 @@ function prépareNotification() {
   //   <p class="error">Trop tard 😑</p>
   // </dialog>`
   document.body.prepend(notification)
+  return notification;
 }
 
 function notifier(message, level) {
-  let notification = document.getElementById("notification");
-  if (!notification) {
-    prépareNotification();
-    notification = document.getElementById("notification");
-  }
+  let notification = document.getElementById("notification") ?? prépareNotification();
   let p_message = initialiserElement("p", [level], message);
   notification.append(p_message);
   setTimeout(() => { p_message.remove() }, 5000);
