@@ -77,7 +77,7 @@ Ce plan de tâches couvre l'ensemble du projet Echoes Factory. Les fonctionnalit
     - Déclencher `Usine.évaluer()` pour chaque ligne valide de toute saisie TSV dans le stock (Exigence 3.8)
     - _Exigences : 7.1, 7.2, 7.3, 7.6, 7.7, 7.8, 7.9, 7.10, 7.11, 8.3, 8.4, 3.8_
 
-- [ ] 5. Point de contrôle — vérification de l'état initial
+- [x] 5. Point de contrôle — vérification de l'état initial
   - Exécuter `npm test` et s'assurer que tous les tests existants passent avant d'implémenter les nouvelles fonctionnalités.
 
 - [ ] 6. Amélioration UI — recherche et tri dans les listes

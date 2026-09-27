@@ -1,0 +1,120 @@
+{
+  "pbtResults": {
+    "1. Write bug condition exploration test": {
+      "status": "passed",
+      "failingExample": "P1 — AssertionError: L'attribut href est absent ou nul sur le tag &lt;link&gt;: expected null not to be null\nP2 — AssertionError: expected null to equal './style/style.css'\n\nContre-exemple : JSDOM parse index.html et document.querySelector('link[rel=\"stylesheet\"]') retourne un élément dont getAttribute('href') === null. Le navigateur voit deux attributs distincts — `h` (sans valeur) et `ref=\"./style/style.css\"` — au lieu d'un seul attribut `href`, ce qui confirme que la feuille de style n'est pas chargée.",
+      "lastRunTimestamp": 1790527670487
+    }
+  },
+  "executionHistory": {
+    "1. Write bug condition exploration test": [
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527617078
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527623124
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527677950
+      }
+    ],
+    "2. Write preservation property tests (BEFORE implementing fix)": [
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527617506
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527680392
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527744142
+      }
+    ],
+    "3.1 Implémenter le correctif": [
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527617831
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527746792
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527765553
+      }
+    ],
+    "3.2 Verify bug condition exploration test now passes": [
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527618100
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527770517
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527804385
+      }
+    ],
+    "3.3 Verify preservation tests still pass": [
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527618375
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527807175
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527832007
+      }
+    ],
+    "4. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527618777
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527835048
+      },
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527855362
+      }
+    ],
+    "3. Fix : réunir l'attribut href sur une seule ligne dans index.html": [
+      {
+        "executionId": "8ae3bfa4-a18d-4eed-963b-e7df73159af4",
+        "chatSessionId": "sess_7db016e5-d129-4236-8f18-75f53d50c2f2",
+        "timestamp": 1790527832437
+      }
+    ]
+  }
+}
