@@ -44,7 +44,10 @@
   </main>
   <script type="module">
     import { Usine } from "./app/service.js"
-    import { NUMBER_FORMAT, UNICODE_DATE_FORMAT } from "./app/presentation.js"
+    import {
+      decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT,
+      initialiserElement, notifier
+    } from "./app/presentation.js"
 
     const corpsTableauProduits = document.getElementById('produitsBody');
 

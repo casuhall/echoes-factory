@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import {JSDOM} from 'jsdom';
+import { JSDOM } from 'jsdom';
 import { Usine } from '../app/service.js';
 import { decodeEchoesListe, initialiserElement } from '../app/presentation.js';
 
@@ -7,13 +7,13 @@ describe('Presentation', () => {
 
     const localStorage = {
         _store: {},
-         getItem: function(key) {
+        getItem: function (key) {
             return this._store[key];
         },
-        setItem: function(key, value) {
+        setItem: function (key, value) {
             this._store[key] = value;
         },
-        clear: function() {
+        clear: function () {
             for (let key in this._store) {
                 delete this._store[key];
             }
@@ -24,7 +24,6 @@ describe('Presentation', () => {
     beforeEach(() => {
         localStorage.clear();
         global.document = (new JSDOM()).window.document;
-
     });
 
     describe('decodeEchoesListe', () => {
@@ -55,7 +54,7 @@ describe('Presentation', () => {
             const classes = ["class1", "class2"];
             const contenu = "Contenu de test";
             const evenements = [
-                { trigger: "click", listener: () => {} }
+                { trigger: "click", listener: () => { } }
             ];
 
             const element = initialiserElement(typeElement, classes, contenu, evenements);

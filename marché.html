@@ -77,8 +77,10 @@
 
   <script type="module">
     import { Usine, GestionnaireEvenements } from "./app/service.js"
-    import { decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT } from "./app/presentation.js"
-
+    import {
+      decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT,
+      initialiserElement, notifier
+    } from "./app/presentation.js"
 
     // Binding des éléments d'IHM
     const nomUsine = document.getElementById('nav-nomUsine');

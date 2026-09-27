@@ -71,23 +71,27 @@ function initialiserElement(typeElement, classes = [], contenu = "", evenements 
   return element;
 }
 
-const NOTIFICATION = initialiserElement("dialog");
-
 function prépareNotification() {
-  NOTIFICATION.setAttribute("open", "true");
-  NOTIFICATION.id = 'notification';
+  let notification = initialiserElement("dialog");
+  notification.setAttribute("open", "true");
+  notification.id = 'notification';
   // à décommenter pour vérifier le rendu des messages
-  // NOTIFICATION.innerHTML = `  <dialog id="notification" open>
+  // notification.innerHTML = `  <dialog id="notification" open>
   //   <p class="info">Une super info</p>
   //   <p class="warn">Attention !</p>
   //   <p class="error">Trop tard 😑</p>
   // </dialog>`
-  document.body.prepend(NOTIFICATION)
+  document.body.prepend(notification)
 }
 
 function notifier(message, level) {
+  let notification = document.getElementById("notification");
+  if (!notification) {
+    prépareNotification();
+    notification = document.getElementById("notification");
+  }
   let p_message = initialiserElement("p", [level], message);
-  NOTIFICATION.append(p_message);
+  notification.append(p_message);
   setTimeout(() => { p_message.remove() }, 5000);
 }
 

@@ -50,6 +50,7 @@
 
   <script type="module">
     import { Usine } from "./app/service.js"
+    import { notifier } from "./app/presentation.js"
     const usine = Usine.parse(localStorage.getItem("usine") || new Usine("He's alive !").toString());
 
     init();
