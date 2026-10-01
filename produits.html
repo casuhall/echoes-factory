@@ -23,20 +23,23 @@
     <div class="actions">
       <a href="./edition_produit.html" class="btn">Ajouter un produit</a>
     </div>
+    <div class="grid" style="margin-bottom:12px;">
+      <input type="text" id="search_produits" placeholder="Rechercher un produit..." />
+    </div>
     <div>
       <table>
         <thead>
           <tr>
-            <th>Produit</th>
-            <th>Rentabilité</th>
-            <th>Gain estimé</th>
+            <th id="th-nom" style="cursor:pointer;user-select:none;">Produit</th>
+            <th id="th-rentabilité" style="cursor:pointer;user-select:none;">Rentabilité</th>
+            <th id="th-gain" style="cursor:pointer;user-select:none;">Gain estimé</th>
             <th>Commentaire</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody id="produitsBody">
           <tr class="empty">
-            <td colspan="6">Aucun produit défini</td>
+            <td colspan="5">Aucun produit défini</td>
           </tr>
         </tbody>
       </table>
@@ -48,22 +51,77 @@
       decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT,
       initialiserElement, notifier
     } from "./app/presentation.js"
+    import { filtrerProduits, trierProduits } from "./app/produitsSortFilter.js"
 
     const corpsTableauProduits = document.getElementById('produitsBody');
+    const searchInput = document.getElementById('search_produits');
 
     const usine = Usine.parse(localStorage.getItem("usine") || "{}");
     document.getElementById("nav-nomUsine").innerText = usine.nom;
 
-    if (usine.produits.length > 0) {
+    // État de tri : { colonne: 'nom'|'rentabilité'|'gain', direction: 'asc'|'desc' }
+    let triCourant = { colonne: null, direction: 'asc' };
+
+    const COLONNES_TRIABLES = {
+      'th-nom':         { clé: 'nom' },
+      'th-rentabilité': { clé: 'rentabilité' },
+      'th-gain':        { clé: 'gain' },
+    };
+
+    // Mise à jour des indicateurs visuels sur les en-têtes
+    function mettreÀJourIndicateurs() {
+      for (const id of Object.keys(COLONNES_TRIABLES)) {
+        const th = document.getElementById(id);
+        const clé = COLONNES_TRIABLES[id].clé;
+        if (triCourant.colonne === clé) {
+          th.textContent = th.textContent.replace(/ [▲▼]$/, '');
+          th.textContent += triCourant.direction === 'asc' ? ' ▲' : ' ▼';
+        } else {
+          th.textContent = th.textContent.replace(/ [▲▼]$/, '');
+        }
+      }
+    }
+
+    // Attacher les écouteurs de clic sur les en-têtes triables
+    for (const [id, config] of Object.entries(COLONNES_TRIABLES)) {
+      document.getElementById(id).addEventListener('click', () => {
+        if (triCourant.colonne === config.clé) {
+          triCourant.direction = triCourant.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+          triCourant.colonne = config.clé;
+          triCourant.direction = 'asc';
+        }
+        mettreÀJourIndicateurs();
+        afficherProduits();
+      });
+    }
+
+    // Filtrer et trier les produits, puis rendre le tableau
+    function afficherProduits() {
+      const filtre = searchInput.value.trim();
+
+      let produitsFiltrésTriés = filtrerProduits(usine.produits, filtre);
+
+      if (triCourant.colonne !== null) {
+        produitsFiltrésTriés = trierProduits(produitsFiltrésTriés, triCourant.colonne, triCourant.direction);
+      }
+
+      if (produitsFiltrésTriés.length === 0) {
+        corpsTableauProduits.innerHTML = `<tr class="empty"><td colspan="5">${
+          filtre ? 'Aucun produit ne correspond à la recherche' : 'Aucun produit défini'
+        }</td></tr>`;
+        return;
+      }
+
       corpsTableauProduits.innerHTML = "";
-      usine.produits.forEach(produit => {
+      produitsFiltrésTriés.forEach(produit => {
         const ligne = document.createElement("tr");
         ligne.innerHTML = `
-                    <td>${produit.nom}</td>
-                    <td class="right">${NUMBER_FORMAT.format(produit.rentabilité * 100)} %</td>
-                    <td class="${(produit.statut === "BUY")? "red" : "green" } right">${NUMBER_FORMAT.format(produit.prix_estimé - produit.coût_reviens)}</td>
-                    <td>${produit.commentaire || ''}</td>
-                `;
+          <td>${produit.nom}</td>
+          <td class="right">${NUMBER_FORMAT.format(produit.rentabilité * 100)} %</td>
+          <td class="${(produit.statut === "BUY") ? "red" : "green"} right">${NUMBER_FORMAT.format(produit.prix_estimé - produit.coût_reviens)}</td>
+          <td>${produit.commentaire || ''}</td>
+        `;
         const actionsCell = document.createElement("td");
         const editButton = document.createElement("button");
         editButton.textContent = "✎";
@@ -85,10 +143,15 @@
         actionsCell.appendChild(editButton);
         actionsCell.appendChild(deleteButton);
         ligne.appendChild(actionsCell);
-
         corpsTableauProduits.appendChild(ligne);
       });
     }
+
+    // Recherche en temps réel
+    searchInput.addEventListener('input', afficherProduits);
+
+    // Affichage initial
+    afficherProduits();
   </script>
 </body>
 

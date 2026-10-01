@@ -63,12 +63,16 @@
       <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Enregistrer en masse</button>
     </div>
 
+    <div class="grid">
+      <input type="search" id="recherche-tarifs" class="form-control" placeholder="Rechercher par nom…" />
+    </div>
+
     <table class="table" id="tarifs-table">
       <thead>
         <tr>
-          <th>Nom</th>
-          <th>Prix</th>
-          <th>Date d'effet</th>
+          <th id="th-nom" style="cursor:pointer" data-col="nom">Nom</th>
+          <th id="th-prix" style="cursor:pointer" data-col="prix">Prix</th>
+          <th id="th-date" style="cursor:pointer" data-col="date">Date d'effet</th>
         </tr>
       </thead>
       <tbody id="tarifs-body"></tbody>
@@ -81,6 +85,7 @@
       decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT,
       initialiserElement, notifier
     } from "./app/presentation.js"
+    import { filtrerTarifs, trierTarifs } from "./app/marchéSortFilter.js"
 
     // Binding des éléments d'IHM
     const nomUsine = document.getElementById('nav-nomUsine');
@@ -92,6 +97,13 @@
     const BOUTON_ANNULER_MASSIF = document.getElementById("btn_annuler_massif");
     const BOUTON_ENREGISTRER_MASSIF = document.getElementById("btn_enregistrer_massif");
     const TARIF_TABLE_BODY = document.getElementById("tarifs-body");
+    const RECHERCHE_INPUT = document.getElementById("recherche-tarifs");
+    const TH_NOM = document.getElementById("th-nom");
+    const TH_PRIX = document.getElementById("th-prix");
+    const TH_DATE = document.getElementById("th-date");
+
+    // État local de tri — { col: "nom"|"prix"|"date", dir: "asc"|"desc" } | null
+    let triEtat = null;
 
     let usine;
     let storedUsine = localStorage.getItem("usine");
@@ -105,6 +117,7 @@
     nomUsine.textContent = usine.nom;
     préparerSaisieUnitaire();
     préparerSaisieMassive();
+    préparerTriEtRecherche();
     présenterTarifs();
 
 
@@ -147,11 +160,60 @@
 
     // Fonction d'affichage du tableau à partir des données de l'usine
     function présenterTarifs() {
-      let html_tarif = (usine.tarifs.length > 0) ? "\n" : "<tr><td class='text-center' colspan='3'>Aucun tarif enregistré</td></tr>";
-      for (const tarif of usine.tarifs) {
+      const filtre = RECHERCHE_INPUT ? RECHERCHE_INPUT.value : "";
+
+      // Filtrage par nom (partiel, insensible à la casse)
+      let tarifs = filtrerTarifs(usine.tarifs, filtre);
+
+      // Tri par colonne
+      if (triEtat) {
+        const { col, dir } = triEtat;
+        tarifs = trierTarifs(tarifs, col, dir);
+      }
+
+      let html_tarif = (tarifs.length > 0) ? "\n" : "<tr><td class='text-center' colspan='3'>Aucun tarif enregistré</td></tr>";
+      for (const tarif of tarifs) {
         html_tarif += `<tr><td>${tarif.nom}</td><td class="text-end">${NUMBER_FORMAT.format(tarif.montant)}</td><td class="right">${UNICODE_DATE_FORMAT.format(tarif.date_effet)}</td></tr>\n`
       }
       TARIF_TABLE_BODY.innerHTML = html_tarif;
+
+      // Mise à jour des indicateurs visuels de tri
+      mettreAJourIndicateursTri();
+    }
+
+    // Mise à jour des flèches de tri dans les en-têtes
+    function mettreAJourIndicateursTri() {
+      const ths = { nom: TH_NOM, prix: TH_PRIX, date: TH_DATE };
+      const labels = { nom: "Nom", prix: "Prix", date: "Date d'effet" };
+      for (const [col, th] of Object.entries(ths)) {
+        if (!th) continue;
+        if (triEtat && triEtat.col === col) {
+          th.textContent = labels[col] + " " + (triEtat.dir === "asc" ? "▲" : "▼");
+        } else {
+          th.textContent = labels[col];
+        }
+      }
+    }
+
+    // Branchement du tri par colonne et du champ de recherche
+    function préparerTriEtRecherche() {
+      // Tri par clic sur les en-têtes
+      for (const th of [TH_NOM, TH_PRIX, TH_DATE]) {
+        th.addEventListener("click", () => {
+          const col = th.dataset.col;
+          if (triEtat && triEtat.col === col) {
+            triEtat = { col, dir: triEtat.dir === "asc" ? "desc" : "asc" };
+          } else {
+            triEtat = { col, dir: "asc" };
+          }
+          présenterTarifs();
+        });
+      }
+
+      // Recherche en temps réel
+      RECHERCHE_INPUT.addEventListener("input", () => {
+        présenterTarifs();
+      });
     }
 
     // Fonction de stockage des données de l'usine

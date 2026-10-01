@@ -12,6 +12,303 @@
         "chatSessionId": "sess_24315c89-a897-42c6-a232-06c112d41027",
         "timestamp": 1790516885731
       }
+    ],
+    "6.1 Ajouter le tri par colonne et la recherche par nom dans `stock.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528111760
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528140455
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528254527
+      }
+    ],
+    "6.2 Écrire les tests unitaires du tri et du filtre du stock": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528112157
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528562101
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790529055685
+      }
+    ],
+    "6.3 Ajouter le tri par colonne dans `produits.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528112617
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528141196
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528255126
+      }
+    ],
+    "6.4 Écrire les tests unitaires du tri par colonne des produits": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528113059
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528562603
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790529055943
+      }
+    ],
+    "6.5 Ajouter un champ de recherche dans `produits.html` pour filtrer les produits par nom": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528113457
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528141884
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528255770
+      }
+    ],
+    "6.6 Écrire les tests unitaires du filtre de recherche des produits": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528113835
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528563384
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790529056693
+      }
+    ],
+    "6.7 Ajouter le tri par colonne et la recherche par nom dans `marché.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528114222
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528142368
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528256365
+      }
+    ],
+    "6.8 Écrire les tests unitaires du tri et du filtre du marché": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528114731
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528564034
+      },
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790529057044
+      }
+    ],
+    "7. Point de contrôle — vérification des améliorations UI": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528115241
+      }
+    ],
+    "8.1 Implémenter le bouton « Exporter » dans `index.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528115935
+      }
+    ],
+    "8.2 Implémenter le formulaire d'import JSON dans `index.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528116468
+      }
+    ],
+    "9.1 Afficher la date d'effet du tarif le plus ancien dans la ligne produit de `produits.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528116988
+      }
+    ],
+    "9.2 Signaler visuellement les estimations périmées dans `produits.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528117576
+      }
+    ],
+    "10. Point de contrôle — vérification des nouvelles fonctionnalités": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528118081
+      }
+    ],
+    "11.1 Implémenter la classe `Planificateur` dans `app/service.js` (ou `app/planificateur.js`)": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528118666
+      }
+    ],
+    "11.2 Écrire les tests unitaires du `Planificateur`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528119121
+      }
+    ],
+    "11.3 Implémenter la réservation de composants dans l'`Inventaire`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528119653
+      }
+    ],
+    "11.4 Écrire les tests unitaires de la réservation de stock": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528120093
+      }
+    ],
+    "11.5 Implémenter le suivi des fabrications en cours dans l'`Usine`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528120707
+      }
+    ],
+    "11.6 Écrire les tests d'intégration du suivi de production": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528121244
+      }
+    ],
+    "12.1 Créer la page `planification.html` avec le formulaire de sélection produit + quantité cible": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528121830
+      }
+    ],
+    "12.2 Implémenter la surcharge utilisateur achat/fabrication dans `planification.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528122352
+      }
+    ],
+    "12.3 Écrire les tests unitaires de la surcharge achat/fabrication": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528122904
+      }
+    ],
+    "12.4 Afficher les ressources et liquidités restantes estimées dans `planification.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528123780
+      }
+    ],
+    "12.5 Implémenter la détection des déficits dans le `Planificateur`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528124242
+      }
+    ],
+    "12.6 Écrire les tests unitaires de la détection des déficits": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528124788
+      }
+    ],
+    "12.7 Afficher les déficits visuellement dans `planification.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528125346
+      }
+    ],
+    "12.8 Implémenter la priorisation des étapes réalisables dans le `Planificateur`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528125899
+      }
+    ],
+    "12.10 Afficher le résumé des fabrications en cours sur `index.html`": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528126375
+      }
+    ],
+    "13. Point de contrôle final — validation complète": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790528126975
+      }
+    ],
+    "6. Amélioration UI — recherche et tri dans les listes": [
+      {
+        "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
+        "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
+        "timestamp": 1790529057155
+      }
     ]
   }
 }

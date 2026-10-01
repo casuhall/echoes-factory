@@ -80,39 +80,39 @@ Ce plan de tâches couvre l'ensemble du projet Echoes Factory. Les fonctionnalit
 - [x] 5. Point de contrôle — vérification de l'état initial
   - Exécuter `npm test` et s'assurer que tous les tests existants passent avant d'implémenter les nouvelles fonctionnalités.
 
-- [ ] 6. Amélioration UI — recherche et tri dans les listes
-  - [ ] 6.1 Ajouter le tri par colonne et la recherche par nom dans `stock.html`
+- [x] 6. Amélioration UI — recherche et tri dans les listes
+  - [x] 6.1 Ajouter le tri par colonne et la recherche par nom dans `stock.html`
     - Clic sur un en-tête de colonne → tri croissant/décroissant alterné ; les deux comportements sont cumulables
     - Champ texte filtrant les lignes du tableau en temps réel sur le nom de l'objet (correspondance partielle, insensible à la casse)
     - L'état de tri (colonne + direction) est géré localement dans la page, sans persistance
     - _Exigences : 8.5, 8.6_
-  - [ ]* 6.2 Écrire les tests unitaires du tri et du filtre du stock
+  - [x] 6.2 Écrire les tests unitaires du tri et du filtre du stock
     - Tester le filtrage avec saisie vide, partielle et sans correspondance
     - Tester l'alternance croissant/décroissant et les différentes colonnes triables
     - _Exigences : 8.5, 8.6_
-  - [ ] 6.3 Ajouter le tri par colonne dans `produits.html`
+  - [x] 6.3 Ajouter le tri par colonne dans `produits.html`
     - Clic sur en-tête de colonne → tri croissant/décroissant alterné
     - _Exigences : 8.7_
-  - [ ]* 6.4 Écrire les tests unitaires du tri par colonne des produits
+  - [x] 6.4 Écrire les tests unitaires du tri par colonne des produits
     - Tester l'alternance croissant/décroissant et les différentes colonnes
     - _Exigences : 8.7_
-  - [ ] 6.5 Ajouter un champ de recherche dans `produits.html` pour filtrer les produits par nom
+  - [x] 6.5 Ajouter un champ de recherche dans `produits.html` pour filtrer les produits par nom
     - Filtrer les produits affichés en temps réel selon la saisie
     - _Exigences : 8.7_
-  - [ ]* 6.6 Écrire les tests unitaires du filtre de recherche des produits
+  - [x] 6.6 Écrire les tests unitaires du filtre de recherche des produits
     - Tester le filtrage avec saisie vide, partielle et sans correspondance
     - _Exigences : 8.7_
-  - [ ] 6.7 Ajouter le tri par colonne et la recherche par nom dans `marché.html`
+  - [x] 6.7 Ajouter le tri par colonne et la recherche par nom dans `marché.html`
     - Clic sur un en-tête de colonne → tri croissant/décroissant alterné
     - Champ texte filtrant les tarifs en temps réel sur le nom de l'objet (correspondance partielle, insensible à la casse)
     - Les deux comportements sont indépendants et cumulables, sans persistance de l'état de tri
     - _Exigences : 8.9, 8.10_
-  - [ ]* 6.8 Écrire les tests unitaires du tri et du filtre du marché
+  - [x] 6.8 Écrire les tests unitaires du tri et du filtre du marché
     - Tester le filtrage avec saisie vide, partielle et sans correspondance
     - Tester l'alternance croissant/décroissant et les différentes colonnes triables
     - _Exigences : 8.9, 8.10_
 
-- [ ] 7. Point de contrôle — vérification des améliorations UI
+- [x] 7. Point de contrôle — vérification des améliorations UI
   - Exécuter `npm test` et s'assurer que tous les tests passent.
 
 - [ ] 8. Export et import de la sauvegarde

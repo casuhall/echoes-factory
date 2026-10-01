@@ -90,8 +90,8 @@
       <table class="table" id="stock-table">
         <thead>
           <tr>
-            <th>Nom</th>
-            <th>Quantité</th>
+            <th id="th-nom" style="cursor:pointer;user-select:none;">Nom</th>
+            <th id="th-quantité" style="cursor:pointer;user-select:none;text-align:end;">Quantité</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -110,6 +110,7 @@
       decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT,
       initialiserElement, notifier
     } from "./app/presentation.js"
+    import { filtrerStock, trierStock } from "./app/stockSortFilter.js"
 
     // Binding des éléments d'IHM
     const nomUsine = document.getElementById('nav-nomUsine');
@@ -124,6 +125,13 @@
     const BOUTON_ENREGISTRER_MASSIF = document.getElementById("btn_enregistrer_massif");
     const STOCK_TABLE_BODY = document.getElementById("stock-body");
     const INPUT_LIQUIDITÉS = document.getElementById("liquidités_input");
+    const SEARCH_INPUT = document.getElementById("search_input");
+    const TH_NOM = document.getElementById("th-nom");
+    const TH_QUANTITÉ = document.getElementById("th-quantité");
+
+    // État local de tri : colonne ("nom" | "quantité" | null) et direction ("asc" | "desc")
+    let sortColonne = null;
+    let sortDirection = "asc";
 
     let usine;
     let storedUsine = localStorage.getItem("usine");
@@ -147,6 +155,32 @@
     préparerSaisieMassive();
     présenterLiquidités();
     présenterStock();
+
+    // Tri par colonne
+    TH_NOM.addEventListener("click", () => {
+      if (sortColonne === "nom") {
+        sortDirection = sortDirection === "asc" ? "desc" : "asc";
+      } else {
+        sortColonne = "nom";
+        sortDirection = "asc";
+      }
+      présenterStock();
+    });
+
+    TH_QUANTITÉ.addEventListener("click", () => {
+      if (sortColonne === "quantité") {
+        sortDirection = sortDirection === "asc" ? "desc" : "asc";
+      } else {
+        sortColonne = "quantité";
+        sortDirection = "asc";
+      }
+      présenterStock();
+    });
+
+    // Recherche en temps réel
+    SEARCH_INPUT.addEventListener("input", () => {
+      présenterStock();
+    });
 
     // Fonction de réparation de la fenêtre modale de saisie unitaire
     function préparerSaisieUnitaire() {
@@ -205,14 +239,30 @@
 
     // Fonction d'affichage du tableau à partir des données de l'usine
     function présenterStock() {
-      if (usine.stock.length === 0) {
-        STOCK_TABLE_BODY.innerHTML = "<tr><td class='empty' colspan='3'>Inventaire désepérément vide</td></tr>";
-      } else {
-        STOCK_TABLE_BODY.replaceChildren();
+      // Mettre à jour les indicateurs visuels des en-têtes de tri
+      const indicateurAsc = " ▲";
+      const indicateurDesc = " ▼";
+      TH_NOM.textContent = "Nom" + (sortColonne === "nom" ? (sortDirection === "asc" ? indicateurAsc : indicateurDesc) : "");
+      TH_QUANTITÉ.textContent = "Quantité" + (sortColonne === "quantité" ? (sortDirection === "asc" ? indicateurAsc : indicateurDesc) : "");
+
+      // Filtrer selon la recherche (correspondance partielle, insensible à la casse)
+      let articles = filtrerStock(usine.stock, SEARCH_INPUT.value);
+
+      // Trier selon la colonne et la direction choisies
+      if (sortColonne !== null) {
+        articles = trierStock(articles, sortColonne, sortDirection);
       }
 
+      if (articles.length === 0) {
+        STOCK_TABLE_BODY.innerHTML = usine.stock.length === 0
+          ? "<tr><td class='empty' colspan='3'>Inventaire désepérément vide</td></tr>"
+          : "<tr><td class='empty' colspan='3'>Aucun résultat pour cette recherche</td></tr>";
+        return;
+      }
+
+      STOCK_TABLE_BODY.replaceChildren();
       const fragment = document.createDocumentFragment();
-      for (const article of usine.stock) {
+      for (const article of articles) {
         const ligne = initialiserElement("tr");
         const nom = initialiserElement("td", [], article.nom);
         const quantité = initialiserElement("td", ["text-end"], NUMBER_FORMAT.format(article.quantité, "integer"));
