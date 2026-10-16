@@ -1,0 +1,372 @@
+69a7acfb-0ab3-4615-aad3-291304a79397 dev-storage
+https://getpantry.cloud/apiv1/pantry/69a7acfb-0ab3-4615-aad3-291304a79397/basket/dev-storage
+
+{
+    "nom": "ChangeIt",
+    "recettes": [
+        {
+            "nom": "Griffin",
+            "frais": 200000,
+            "quantité_produite": 1,
+            "chance_succès": 1,
+            "ingrédients": [
+                {
+                    "nom": "Lustering Alloy",
+                    "quantité": 701
+                },
+                {
+                    "nom": "Gleaming Alloy",
+                    "quantité": 706
+                },
+                {
+                    "nom": "Motley Compound",
+                    "quantité": 706
+                },
+                {
+                    "nom": "Base Metals",
+                    "quantité": 211
+                },
+                {
+                    "nom": "Noble Metals",
+                    "quantité": 800
+                },
+                {
+                    "nom": "Tritanium",
+                    "quantité": 38634
+                },
+                {
+                    "nom": "Pyerite",
+                    "quantité": 9642
+                },
+                {
+                    "nom": "Mexallon",
+                    "quantité": 3519
+                },
+                {
+                    "nom": "Griffin Blueprint",
+                    "quantité": 1
+                }
+            ]
+        }
+    ],
+    "stock": [
+        {
+            "nom": "Caldari Shuttle",
+            "quantité": 1
+        },
+        {
+            "nom": "Minmatar Shuttle",
+            "quantité": 4
+        },
+        {
+            "nom": "Gallente Shuttle",
+            "quantité": 4
+        },
+        {
+            "nom": "Griffin",
+            "quantité": 2
+        },
+        {
+            "nom": "Condor",
+            "quantité": 5
+        },
+        {
+            "nom": "Merlin",
+            "quantité": 1
+        },
+        {
+            "nom": "Condor Interceptor",
+            "quantité": 1
+        },
+        {
+            "nom": "Heron",
+            "quantité": 1
+        },
+        {
+            "nom": "Heron Covert Ops",
+            "quantité": 1
+        },
+        {
+            "nom": "Condor II Interceptor",
+            "quantité": 1
+        },
+        {
+            "nom": "Slasher",
+            "quantité": 1
+        },
+        {
+            "nom": "Rifter",
+            "quantité": 2
+        },
+        {
+            "nom": "Breacher",
+            "quantité": 4
+        },
+        {
+            "nom": "Slasher II",
+            "quantité": 4
+        },
+        {
+            "nom": "Slasher Interceptor",
+            "quantité": 4
+        },
+        {
+            "nom": "Hound",
+            "quantité": 3
+        },
+        {
+            "nom": "Probe",
+            "quantité": 2
+        },
+        {
+            "nom": "Probe Covert Ops",
+            "quantité": 1
+        },
+        {
+            "nom": "Crucifier",
+            "quantité": 4
+        },
+        {
+            "nom": "Inquisitor",
+            "quantité": 1
+        },
+        {
+            "nom": "Executioner",
+            "quantité": 1
+        },
+        {
+            "nom": "Tormentor",
+            "quantité": 1
+        },
+        {
+            "nom": "Punisher",
+            "quantité": 1
+        },
+        {
+            "nom": "Executioner Interceptor",
+            "quantité": 2
+        },
+        {
+            "nom": "Purifier",
+            "quantité": 5
+        },
+        {
+            "nom": "Magnate",
+            "quantité": 2
+        },
+        {
+            "nom": "Maulus",
+            "quantité": 2
+        },
+        {
+            "nom": "Atron",
+            "quantité": 1
+        },
+        {
+            "nom": "Tristan",
+            "quantité": 1
+        },
+        {
+            "nom": "Atron Interceptor",
+            "quantité": 1
+        }
+    ],
+    "tarifs": [
+        {
+            "nom": "Lustering Alloy",
+            "montant": "504.73000000000013",
+            "date_effet": "2026-10-12T13:16:37.799Z"
+        },
+        {
+            "nom": "Gleaming Alloy",
+            "montant": "197.03",
+            "date_effet": "2026-10-12T13:16:37.799Z"
+        },
+        {
+            "nom": "Motley Compound",
+            "montant": "876.6",
+            "date_effet": "2026-10-12T13:16:37.799Z"
+        },
+        {
+            "nom": "Base Metals",
+            "montant": "834.73",
+            "date_effet": "2026-10-12T13:16:37.799Z"
+        },
+        {
+            "nom": "Noble Metals",
+            "montant": "464.59",
+            "date_effet": "2026-10-12T13:16:37.799Z"
+        },
+        {
+            "nom": "Tritanium",
+            "montant": "1",
+            "date_effet": "2026-10-12T13:16:37.799Z"
+        },
+        {
+            "nom": "Pyerite",
+            "montant": "2",
+            "date_effet": "2026-10-12T13:16:37.799Z"
+        },
+        {
+            "nom": "Mexallon",
+            "montant": "5.69",
+            "date_effet": "2026-10-12T13:16:37.799Z"
+        },
+        {
+            "nom": "Griffin Blueprint",
+            "montant": "16239",
+            "date_effet": "2026-10-12T13:16:37.799Z"
+        },
+        {
+            "nom": "Caldari Shuttle",
+            "montant": "92190435.61",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Minmatar Shuttle",
+            "montant": "239722221.78",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Gallente Shuttle",
+            "montant": "119200000",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Griffin",
+            "montant": "2228990.75",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Condor",
+            "montant": "5170",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Merlin",
+            "montant": "63261",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Condor Interceptor",
+            "montant": "53815788.49",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Heron",
+            "montant": "122365.17",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Heron Covert Ops",
+            "montant": "7436683.03",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Condor II Interceptor",
+            "montant": "303386363.64",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Slasher",
+            "montant": "5047.18",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Rifter",
+            "montant": "63261",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Breacher",
+            "montant": "125727",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Slasher II",
+            "montant": "1433897.99",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Slasher Interceptor",
+            "montant": "51668620.34",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Hound",
+            "montant": "14851733",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Probe",
+            "montant": "121760",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Probe Covert Ops",
+            "montant": "7557966.84",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Crucifier",
+            "montant": "1518000",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Inquisitor",
+            "montant": "3885886.8620000007",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Executioner",
+            "montant": "5170",
+            "date_effet": "2026-10-12T13:17:07.659Z"
+        },
+        {
+            "nom": "Tormentor",
+            "montant": "59129",
+            "date_effet": "2026-10-12T13:17:07.660Z"
+        },
+        {
+            "nom": "Punisher",
+            "montant": "115825.45",
+            "date_effet": "2026-10-12T13:17:07.660Z"
+        },
+        {
+            "nom": "Executioner Interceptor",
+            "montant": "46289692.31",
+            "date_effet": "2026-10-12T13:17:07.660Z"
+        },
+        {
+            "nom": "Purifier",
+            "montant": "10016129.03",
+            "date_effet": "2026-10-12T13:17:07.660Z"
+        },
+        {
+            "nom": "Magnate",
+            "montant": "118640",
+            "date_effet": "2026-10-12T13:17:07.660Z"
+        },
+        {
+            "nom": "Maulus",
+            "montant": "2456882.5",
+            "date_effet": "2026-10-12T13:17:07.660Z"
+        },
+        {
+            "nom": "Atron",
+            "montant": "5170",
+            "date_effet": "2026-10-12T13:17:07.660Z"
+        },
+        {
+            "nom": "Tristan",
+            "montant": "59128.64",
+            "date_effet": "2026-10-12T13:17:07.660Z"
+        },
+        {
+            "nom": "Atron Interceptor",
+            "montant": "49788122.67",
+            "date_effet": "2026-10-12T13:17:07.660Z"
+        }
+    ],
+    "liquidités": 2000000
+}

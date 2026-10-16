@@ -133,6 +133,57 @@ describe('Fonctionnement des objets du domaine.', () => {
             let produit = new Produit(recette_imbriquée);
             expect(produit.coût_reviens).to.equal(310); // 50+(2*100)+(3*20) = 310
         });
+
+        describe('date_référence_estimations', () => {
+            it("retourne undefined pour un produit sans tarif (statut NA)", () => {
+                let produit = new Produit(recette_non_tarifée);
+                expect(produit.statut).to.equal('NA');
+                expect(produit.date_référence_estimations).to.be.undefined;
+            });
+
+            it("retourne undefined pour un produit avec prix estimé mais sans tarifs d'ingrédients (statut NA)", () => {
+                let produit = new Produit(recette_non_tarifée, new Tarif("NonTarifée", 1));
+                expect(produit.statut).to.equal('NA');
+                expect(produit.date_référence_estimations).to.be.undefined;
+            });
+
+            it("retourne la date du tarif produit quand tous les tarifs ont la même date", () => {
+                const dateRef = new Date('2024-01-15');
+                const recette = new Recette('Produit', 50, [
+                    new Ingrédient('Ingredient1', 2, new Tarif('Ingredient1', 10, dateRef)),
+                ]);
+                const produit = new Produit(recette, new Tarif('Produit', 200, dateRef));
+                expect(produit.statut).not.to.equal('NA');
+                const dateRéf = produit.date_référence_estimations;
+                expect(dateRéf).to.be.instanceOf(Date);
+                expect(dateRéf.toDateString()).to.equal(dateRef.toDateString());
+            });
+
+            it("retourne la date la plus ancienne parmi les tarifs des ingrédients", () => {
+                const dateAncienne = new Date('2023-06-01');
+                const dateRécente = new Date('2024-01-15');
+                const recette = new Recette('Produit', 50, [
+                    new Ingrédient('Ingredient1', 2, new Tarif('Ingredient1', 10, dateRécente)),
+                    new Ingrédient('Ingredient2', 3, new Tarif('Ingredient2', 20, dateAncienne)),
+                ]);
+                const produit = new Produit(recette, new Tarif('Produit', 500, dateRécente));
+                expect(produit.statut).not.to.equal('NA');
+                const dateRéf = produit.date_référence_estimations;
+                expect(dateRéf.toDateString()).to.equal(dateAncienne.toDateString());
+            });
+
+            it("prend en compte la date du tarif du produit lui-même si elle est la plus ancienne", () => {
+                const dateTarif = new Date('2022-03-10');
+                const dateIngrédient = new Date('2024-01-15');
+                const recette = new Recette('Produit', 50, [
+                    new Ingrédient('Ingredient1', 2, new Tarif('Ingredient1', 10, dateIngrédient)),
+                ]);
+                const produit = new Produit(recette, new Tarif('Produit', 500, dateTarif));
+                expect(produit.statut).not.to.equal('NA');
+                const dateRéf = produit.date_référence_estimations;
+                expect(dateRéf.toDateString()).to.equal(dateTarif.toDateString());
+            });
+        });
     });
 
     describe("Fonctionnement du catalogue des produits", () => {
@@ -220,6 +271,89 @@ describe('Fonctionnement des objets du domaine.', () => {
             expect(() => inventaire.retire('Objet1', -1)).to.throw(Error, /Nombre entier strictement positif attendu\. Fournis : quantité=-1/);
             expect(() => inventaire.ajoute('Objet1', 1.5)).to.throw(Error, /Nombre entier strictement positif attendu\. Fournis : quantité=1\.5/);
             expect(() => inventaire.retire('Objet1', 1.5)).to.throw(Error, /Nombre entier strictement positif attendu\. Fournis : quantité=1\.5/);
+        });
+
+        describe("Gestion du stock engagé (réservations)", () => {
+            beforeEach(() => {
+                inventaire.ajoute('Objet1', 10);
+            });
+
+            it("quantité_engagée retourne 0 pour un objet non réservé", () => {
+                expect(inventaire.quantité_engagée('Objet1')).to.equal(0);
+                expect(inventaire.quantité_engagée('InexistantPouet')).to.equal(0);
+            });
+
+            it("quantité_disponible retourne le stock total quand rien n'est engagé", () => {
+                expect(inventaire.quantité_disponible('Objet1')).to.equal(10);
+            });
+
+            it("réserver incrémente le stock engagé et réduit le stock disponible", () => {
+                inventaire.réserver('Objet1', 3);
+                expect(inventaire.quantité_engagée('Objet1')).to.equal(3);
+                expect(inventaire.quantité_disponible('Objet1')).to.equal(7);
+                expect(inventaire.quantité_en_stock('Objet1')).to.equal(10); // stock total inchangé
+            });
+
+            it("réserver plusieurs fois cumule les engagements", () => {
+                inventaire.réserver('Objet1', 3);
+                inventaire.réserver('Objet1', 4);
+                expect(inventaire.quantité_engagée('Objet1')).to.equal(7);
+                expect(inventaire.quantité_disponible('Objet1')).to.equal(3);
+            });
+
+            it("libérer décrémente le stock engagé", () => {
+                inventaire.réserver('Objet1', 6);
+                inventaire.libérer('Objet1', 4);
+                expect(inventaire.quantité_engagée('Objet1')).to.equal(2);
+                expect(inventaire.quantité_disponible('Objet1')).to.equal(8);
+            });
+
+            it("libérer tout le stock engagé remet l'engagement à 0", () => {
+                inventaire.réserver('Objet1', 5);
+                inventaire.libérer('Objet1', 5);
+                expect(inventaire.quantité_engagée('Objet1')).to.equal(0);
+                expect(inventaire.quantité_disponible('Objet1')).to.equal(10);
+            });
+
+            it("réserver plus que le stock disponible lance une erreur", () => {
+                inventaire.réserver('Objet1', 8);
+                expect(() => inventaire.réserver('Objet1', 3)).to.throw(Error);
+            });
+
+            it("libérer plus que le stock engagé lance une erreur", () => {
+                inventaire.réserver('Objet1', 3);
+                expect(() => inventaire.libérer('Objet1', 5)).to.throw(Error);
+            });
+
+            it("réserver avec un nom vide lance une erreur", () => {
+                expect(() => inventaire.réserver('', 3)).to.throw(Error, /Nom d'objet obligatoire\./);
+                expect(() => inventaire.réserver(null, 3)).to.throw(Error, /Nom d'objet obligatoire\./);
+            });
+
+            it("réserver ou libérer une quantité invalide lance une erreur", () => {
+                expect(() => inventaire.réserver('Objet1', 0)).to.throw(Error, /Nombre entier strictement positif attendu/);
+                expect(() => inventaire.réserver('Objet1', -1)).to.throw(Error, /Nombre entier strictement positif attendu/);
+                expect(() => inventaire.réserver('Objet1', 1.5)).to.throw(Error, /Nombre entier strictement positif attendu/);
+                inventaire.réserver('Objet1', 2);
+                expect(() => inventaire.libérer('Objet1', 0)).to.throw(Error, /Nombre entier strictement positif attendu/);
+                expect(() => inventaire.libérer('Objet1', -1)).to.throw(Error, /Nombre entier strictement positif attendu/);
+                expect(() => inventaire.libérer('Objet1', 1.5)).to.throw(Error, /Nombre entier strictement positif attendu/);
+            });
+
+            it("stock_disponible ne retourne que les objets avec quantité disponible > 0", () => {
+                inventaire.ajoute('Objet2', 3);
+                inventaire.réserver('Objet2', 3); // tout engagé, plus rien de dispo
+                const dispo = inventaire.stock_disponible;
+                expect(dispo).to.deep.include({ nom: 'Objet1', quantité: 10 });
+                expect(dispo.find(e => e.nom === 'Objet2')).to.be.undefined;
+            });
+
+            it("retire vérifie toujours le stock total (pas le disponible)", () => {
+                inventaire.réserver('Objet1', 8);
+                // stock total = 10, mais disponible = 2 ; retire 5 doit quand même passer
+                expect(inventaire.retire('Objet1', 5)).to.equal(5);
+                expect(inventaire.quantité_en_stock('Objet1')).to.equal(5);
+            });
         });
     });
 });

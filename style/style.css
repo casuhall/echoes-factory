@@ -195,6 +195,11 @@ th {
     font-size: 13px
 }
 
+.tarif-périmé {
+    color: #d97706;
+    font-weight: 600;
+}
+
 .actions button {
     margin-right: 6px
 }
@@ -207,4 +212,29 @@ th {
 
 .right {
     justify-self: end
+}
+
+/* ── Section fabrications en cours (index.html) ── */
+#section-fabrications {
+    margin-top: 20px;
+}
+
+#section-fabrications h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.fabrication-carte {
+    border: 1px solid #dfe6ee;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: #fbfdff;
+}
+
+.fabrication-entête {
+    margin-bottom: 8px;
+    font-size: 15px;
 }

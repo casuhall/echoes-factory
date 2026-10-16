@@ -16,6 +16,7 @@
       <a href="./marché.html" class="btn ghost" id="nav-marché">Marché</a>
       <a href="./produits.html" class="btn" id="nav-produits">Produits</a>
       <a href="./stock.html" class="btn ghost" id="nav-stock">Stock</a>
+      <a href="./planification.html" class="btn ghost" id="nav-planification">Planification</a>
     </div>
   </nav>
   <main id="ajoutProduitMain">
@@ -34,12 +35,13 @@
             <th id="th-rentabilité" style="cursor:pointer;user-select:none;">Rentabilité</th>
             <th id="th-gain" style="cursor:pointer;user-select:none;">Gain estimé</th>
             <th>Commentaire</th>
+            <th>Réf. tarif</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody id="produitsBody">
           <tr class="empty">
-            <td colspan="5">Aucun produit défini</td>
+            <td colspan="6">Aucun produit défini</td>
           </tr>
         </tbody>
       </table>
@@ -52,9 +54,13 @@
       initialiserElement, notifier
     } from "./app/presentation.js"
     import { filtrerProduits, trierProduits } from "./app/produitsSortFilter.js"
+    import { estPérimé } from "./app/péremption.js"
 
     const corpsTableauProduits = document.getElementById('produitsBody');
     const searchInput = document.getElementById('search_produits');
+
+    // Seuil configurable de péremption des estimations (en jours)
+    const SEUIL_PÉREMPTION_JOURS = 7;
 
     const usine = Usine.parse(localStorage.getItem("usine") || "{}");
     document.getElementById("nav-nomUsine").innerText = usine.nom;
@@ -107,7 +113,7 @@
       }
 
       if (produitsFiltrésTriés.length === 0) {
-        corpsTableauProduits.innerHTML = `<tr class="empty"><td colspan="5">${
+        corpsTableauProduits.innerHTML = `<tr class="empty"><td colspan="6">${
           filtre ? 'Aucun produit ne correspond à la recherche' : 'Aucun produit défini'
         }</td></tr>`;
         return;
@@ -121,6 +127,7 @@
           <td class="right">${NUMBER_FORMAT.format(produit.rentabilité * 100)} %</td>
           <td class="${(produit.statut === "BUY") ? "red" : "green"} right">${NUMBER_FORMAT.format(produit.prix_estimé - produit.coût_reviens)}</td>
           <td>${produit.commentaire || ''}</td>
+          <td class="right${estPérimé(produit.date_référence_estimations, SEUIL_PÉREMPTION_JOURS) ? ' tarif-périmé' : ''}">${produit.date_référence_estimations ? UNICODE_DATE_FORMAT.format(produit.date_référence_estimations) : '—'}</td>
         `;
         const actionsCell = document.createElement("td");
         const editButton = document.createElement("button");

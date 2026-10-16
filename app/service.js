@@ -1,4 +1,35 @@
 import { Catalogue, Tarification, Inventaire, Produit, Recette, Tarif, Ingrédient } from './domain.js';
+import { PlanProduction, ÉtapePlan } from './planificateur.js';
+
+/**
+ * Représente une fabrication en cours, issue d'un plan de production validé.
+ */
+export class FabricationEnCours {
+    /** @type {number|string} Identifiant unique de la fabrication */
+    id;
+    /** @type {string} Nom du produit cible */
+    nomProduit;
+    /** @type {number} Quantité cible */
+    quantité;
+    /** @type {ÉtapePlan[]} Étapes du plan de production */
+    étapes;
+    /** @type {"en_cours"|"terminée"} Statut d'avancement */
+    statut;
+
+    /**
+     * @param {number|string} id Identifiant unique
+     * @param {string} nomProduit Nom du produit cible
+     * @param {number} quantité Quantité cible
+     * @param {ÉtapePlan[]} étapes Étapes du plan
+     */
+    constructor(id, nomProduit, quantité, étapes) {
+        this.id = id;
+        this.nomProduit = nomProduit;
+        this.quantité = quantité;
+        this.étapes = étapes;
+        this.statut = "en_cours";
+    }
+}
 
 /**
  * Usine de production avec gestion des recettes, tarifs, stock et produits.
@@ -18,6 +49,8 @@ class Usine {
     #inventaire = new Inventaire();
     /** @type {{nom:string,quantité:number}[]} Stock courant de l'usine */
     get stock() { return this.#inventaire.stock; }
+    /** @type {{nom:string,quantité:number}[]} Stock disponible (non réservé) de l'usine */
+    get stock_disponible() { return this.#inventaire.stock_disponible; }
     /** @type {Number} Liquidités disponibles. */
     #liquidités = 0;
     /** @type {Number} Liquidités disponibles. */
@@ -37,6 +70,10 @@ class Usine {
     #marché = new Tarification();
     /** @type {Tarif[]} Ensemble des tarifs du marché */
     get tarifs() { return this.#marché.tarifs; }
+    /** @type {FabricationEnCours[]} Liste interne de toutes les fabrications */
+    #fabrications_en_cours = [];
+    /** @type {number} Compteur d'identifiants pour les fabrications */
+    #fabrication_counter = 0;
 
     /**
      * Initialisation de l'usine avec ses recettes, tarifs et stock initiaux.
@@ -212,6 +249,75 @@ class Usine {
      */
     stocker(nom, quantité) {
         return this.#inventaire.ajoute(nom, Number.parseFloat(quantité));
+    }
+
+    /**
+     * Valide un plan de production : enregistre la fabrication en cours
+     * et réserve les composants nécessaires (étapes BUY) dans l'inventaire.
+     * @param {PlanProduction} plan Plan calculé par le Planificateur
+     * @param {string} nomProduit Nom du produit cible
+     * @param {number} quantité Quantité cible
+     * @returns {FabricationEnCours} La fabrication créée
+     * @throws {Error} Si le plan est invalide
+     */
+    validerPlan(plan, nomProduit, quantité) {
+        if (!plan || !(plan instanceof PlanProduction))
+            throw new Error(`Plan de production invalide`);
+        if (!nomProduit || String(nomProduit).trim().length === 0)
+            throw new Error(`Nom de produit obligatoire`);
+        if (!quantité || quantité <= 0)
+            throw new Error(`Quantité cible invalide`);
+
+        const id = ++this.#fabrication_counter;
+        const fabrication = new FabricationEnCours(id, nomProduit, quantité, plan.étapes);
+
+        // Réserver les composants BUY dans l'inventaire (seulement ce qui est disponible)
+        for (const étape of plan.étapes) {
+            if (étape.décision === "BUY") {
+                const disponible = this.#inventaire.quantité_disponible(étape.nom);
+                if (disponible > 0) {
+                    const àRéserver = Math.min(disponible, étape.quantité);
+                    this.#inventaire.réserver(étape.nom, àRéserver);
+                }
+            }
+        }
+
+        this.#fabrications_en_cours.push(fabrication);
+        return fabrication;
+    }
+
+    /**
+     * Retourne la liste des fabrications en cours (non terminées).
+     * @type {FabricationEnCours[]}
+     */
+    get fabrications() {
+        return this.#fabrications_en_cours.filter(f => f.statut === "en_cours");
+    }
+
+    /**
+     * Marque une fabrication comme terminée et libère les composants engagés.
+     * @param {number|string} id Identifiant de la fabrication
+     * @throws {Error} Si la fabrication est introuvable ou déjà terminée
+     */
+    terminerFabrication(id) {
+        const fabrication = this.#fabrications_en_cours.find(f => f.id === id);
+        if (!fabrication)
+            throw new Error(`Fabrication introuvable : id=${id}`);
+        if (fabrication.statut === "terminée")
+            throw new Error(`Fabrication déjà terminée : id=${id}`);
+
+        // Libérer les composants réservés (étapes BUY)
+        for (const étape of fabrication.étapes) {
+            if (étape.décision === "BUY") {
+                const engagé = this.#inventaire.quantité_engagée(étape.nom);
+                if (engagé > 0) {
+                    const àLibérer = Math.min(engagé, étape.quantité);
+                    this.#inventaire.libérer(étape.nom, àLibérer);
+                }
+            }
+        }
+
+        fabrication.statut = "terminée";
     }
 
     toString() {

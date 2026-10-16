@@ -164,6 +164,8 @@ class Ingrédient {
       throw new Error(`Tarif non cohérent avec l'ingrédient '${this.#nom}'. Tarif fourni : ${tarif?.toString()}`);
     this.#estimé_unitaire = tarif;
   }
+  /** @type {Date | undefined} Date d'effet du tarif estimé de l'ingrédient (undefined si aucun tarif) */
+  get date_effet_tarif() { return this.#estimé_unitaire?.date_effet; }
   /** @type {number} Prix des ingrédients (calculé sur la quantité nécessaire et l'éventuel coût de production du produit correspondant) */
   get prix() {
     let prix_unitaire = this.#estimé_unitaire?.montant ?? undefined;
@@ -271,8 +273,21 @@ class Recette {
 class Inventaire {
   // nombre d'objets, classé par nom
   #objets = new Map();
+  // nombre d'objets réservés (engagés), classé par nom
+  #engagés = new Map();
   /** @type {{nom:string,quantité:number}[]} Stock courant avec les noms et quantités des objets */
   get stock() { return Array.from(this.#objets, ([key, value]) => ({ "nom": key, "quantité": value })); }
+
+  /**
+   * Retourne le stock disponible (non engagé) pour chaque objet ayant au moins 1 unité disponible.
+   * @type {{nom:string,quantité:number}[]}
+   */
+  get stock_disponible() {
+    return Array.from(this.#objets, ([key, value]) => {
+      const engagé = this.#engagés.get(key) ?? 0;
+      return { nom: key, quantité: value - engagé };
+    }).filter(entry => entry.quantité > 0);
+  }
 
   /**
    * Récupère la quantité en stock d'un objet donné.
@@ -323,6 +338,66 @@ class Inventaire {
     }
     return nouveau_stock;
   }
+
+  /**
+   * Retourne la quantité engagée (réservée) d'un objet donné.
+   * @param {string} objet Nom de l'objet
+   * @returns {number} Quantité engagée (0 si absent)
+   */
+  quantité_engagée(objet) {
+    return this.#engagés.get(objet) ?? 0;
+  }
+
+  /**
+   * Retourne la quantité disponible (non engagée) d'un objet donné.
+   * @param {string} objet Nom de l'objet
+   * @returns {number} Quantité disponible (jamais négative)
+   */
+  quantité_disponible(objet) {
+    return this.quantité_en_stock(objet) - this.quantité_engagée(objet);
+  }
+
+  /**
+   * Réserve une quantité d'objets (les rend engagés).
+   * @param {string} objet Nom de l'objet à réserver
+   * @param {number} quantité Quantité à réserver
+   * @returns {number} Quantité engagée totale après réservation
+   * @throws {Error} Si les préconditions ne sont pas respectées ou si le stock disponible est insuffisant
+   */
+  réserver(objet, quantité) {
+    if (!objet || !String(objet).trim()) throw new Error(`Nom d'objet obligatoire.`);
+    if (!quantité || quantité <= 0 || Number.isInteger(quantité) === false)
+      throw new Error(`Nombre entier strictement positif attendu. Fournis : quantité=${quantité}`);
+    const disponible = this.quantité_disponible(objet);
+    if (disponible < quantité)
+      throw new Error(`Impossible de réserver ${quantité} ${objet}. Seulement ${disponible} disponibles.`);
+    const nouvel_engagé = this.quantité_engagée(objet) + quantité;
+    this.#engagés.set(objet, nouvel_engagé);
+    return nouvel_engagé;
+  }
+
+  /**
+   * Libère une quantité d'objets préalablement réservés.
+   * @param {string} objet Nom de l'objet à libérer
+   * @param {number} quantité Quantité à libérer
+   * @returns {number} Quantité engagée restante après libération
+   * @throws {Error} Si les préconditions ne sont pas respectées ou si le stock engagé est insuffisant
+   */
+  libérer(objet, quantité) {
+    if (!objet || !String(objet).trim()) throw new Error(`Nom d'objet obligatoire.`);
+    if (!quantité || quantité <= 0 || Number.isInteger(quantité) === false)
+      throw new Error(`Nombre entier strictement positif attendu. Fournis : quantité=${quantité}`);
+    const engagé = this.quantité_engagée(objet);
+    if (engagé < quantité)
+      throw new Error(`Impossible de libérer ${quantité} ${objet}. Seulement ${engagé} engagés.`);
+    const nouvel_engagé = engagé - quantité;
+    if (nouvel_engagé === 0) {
+      this.#engagés.delete(objet);
+    } else {
+      this.#engagés.set(objet, nouvel_engagé);
+    }
+    return nouvel_engagé;
+  }
 }
 
 /**
@@ -362,6 +437,26 @@ class Produit {
     return result;
   };
   #updateDateEffet(date) { this.#date_effet = (date < this.#date_effet) ? new Date(date) : this.#date_effet; }
+
+  /**
+   * Date d'effet du tarif le plus ancien parmi tous les tarifs utilisés dans le calcul du coût de revient.
+   * Inclut le tarif du produit lui-même et les tarifs de tous ses ingrédients.
+   * @type {Date | undefined} La date la plus ancienne, ou undefined si aucun tarif n'est disponible (statut NA).
+   */
+  get date_référence_estimations() {
+    if (this.#statut === 'NA') return undefined;
+    const dates = [];
+    if (this.#date_effet) dates.push(this.#date_effet);
+    for (const ingrédient of this.#recette.ingrédients) {
+      const d = ingrédient.date_effet_tarif;
+      if (d) dates.push(d);
+    }
+    if (dates.length === 0) return undefined;
+    const oldest = dates.reduce((min, d) => d < min ? d : min);
+    const result = new Date(oldest);
+    result.setMilliseconds(0);
+    return result;
+  }
 
   #commentaire = '';
   /** @type {string} Commentaire sur la rentabilité du produit */

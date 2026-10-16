@@ -175,6 +175,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528116988
+      },
+      {
+        "executionId": "ffe6b3d6-cf84-4dfa-86ea-9da240e6634c",
+        "chatSessionId": "sess_86f9e961-f189-46e0-b114-43a3b7b55559",
+        "timestamp": 1790886290992
+      },
+      {
+        "executionId": "ffe6b3d6-cf84-4dfa-86ea-9da240e6634c",
+        "chatSessionId": "sess_86f9e961-f189-46e0-b114-43a3b7b55559",
+        "timestamp": 1790886449900
       }
     ],
     "9.2 Signaler visuellement les estimations périmées dans `produits.html`": [
@@ -182,6 +192,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528117576
+      },
+      {
+        "executionId": "ffe6b3d6-cf84-4dfa-86ea-9da240e6634c",
+        "chatSessionId": "sess_86f9e961-f189-46e0-b114-43a3b7b55559",
+        "timestamp": 1790886453419
+      },
+      {
+        "executionId": "ffe6b3d6-cf84-4dfa-86ea-9da240e6634c",
+        "chatSessionId": "sess_86f9e961-f189-46e0-b114-43a3b7b55559",
+        "timestamp": 1790886854118
       }
     ],
     "10. Point de contrôle — vérification des nouvelles fonctionnalités": [
@@ -196,6 +216,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528118666
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790887854903
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790887937812
       }
     ],
     "11.2 Écrire les tests unitaires du `Planificateur`": [
@@ -203,6 +233,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528119121
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790887940883
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790888331897
       }
     ],
     "11.3 Implémenter la réservation de composants dans l'`Inventaire`": [
@@ -210,6 +250,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528119653
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790887943893
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790888334880
       }
     ],
     "11.4 Écrire les tests unitaires de la réservation de stock": [
@@ -217,6 +267,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528120093
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790888337826
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790888424608
       }
     ],
     "11.5 Implémenter le suivi des fabrications en cours dans l'`Usine`": [
@@ -224,6 +284,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528120707
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790888340984
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790888427835
       }
     ],
     "11.6 Écrire les tests d'intégration du suivi de production": [
@@ -231,6 +301,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528121244
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790888430733
+      },
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790888534646
       }
     ],
     "12.1 Créer la page `planification.html` avec le formulaire de sélection produit + quantité cible": [
@@ -238,6 +318,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528121830
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791813249265
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791813406680
       }
     ],
     "12.2 Implémenter la surcharge utilisateur achat/fabrication dans `planification.html`": [
@@ -245,6 +335,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528122352
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791813409577
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791813835542
       }
     ],
     "12.3 Écrire les tests unitaires de la surcharge achat/fabrication": [
@@ -252,6 +352,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528122904
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791813838898
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814255849
       }
     ],
     "12.4 Afficher les ressources et liquidités restantes estimées dans `planification.html`": [
@@ -259,6 +369,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528123780
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791813413409
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791813836089
       }
     ],
     "12.5 Implémenter la détection des déficits dans le `Planificateur`": [
@@ -266,6 +386,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528124242
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791813839585
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814256404
       }
     ],
     "12.6 Écrire les tests unitaires de la détection des déficits": [
@@ -273,6 +403,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528124788
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814259660
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814672640
       }
     ],
     "12.7 Afficher les déficits visuellement dans `planification.html`": [
@@ -280,6 +420,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528125346
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814260286
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814673196
       }
     ],
     "12.8 Implémenter la priorisation des étapes réalisables dans le `Planificateur`": [
@@ -287,6 +437,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528125899
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814260810
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814673654
       }
     ],
     "12.10 Afficher le résumé des fabrications en cours sur `index.html`": [
@@ -294,6 +454,16 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790528126375
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814677243
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791815068516
       }
     ],
     "13. Point de contrôle final — validation complète": [
@@ -308,6 +478,39 @@
         "executionId": "cbf45e41-8250-45ca-8483-96c8594f5094",
         "chatSessionId": "sess_7cafb9f8-e25c-4681-a399-602ce090def7",
         "timestamp": 1790529057155
+      }
+    ],
+    "9. Affichage de la date de référence des estimations": [
+      {
+        "executionId": "ffe6b3d6-cf84-4dfa-86ea-9da240e6634c",
+        "chatSessionId": "sess_86f9e961-f189-46e0-b114-43a3b7b55559",
+        "timestamp": 1790886854641
+      }
+    ],
+    "11. Planification de production — moteur de calcul": [
+      {
+        "executionId": "dd0364d5-eeb7-4e62-93e8-a1e50856f95a",
+        "chatSessionId": "sess_3d0188c4-6c4b-41f4-8fc3-c7a6b98b63c6",
+        "timestamp": 1790888535313
+      }
+    ],
+    "12.9 Écrire les tests unitaires de la priorisation des étapes réalisables": [
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791814676754
+      },
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791815067967
+      }
+    ],
+    "12. Planification de production — interface utilisateur": [
+      {
+        "executionId": "8782805e-7c48-4f1c-99dd-f53f225bc444",
+        "chatSessionId": "sess_d3147317-818f-412a-a6f0-0c58b686f98b",
+        "timestamp": 1791815068812
       }
     ]
   }

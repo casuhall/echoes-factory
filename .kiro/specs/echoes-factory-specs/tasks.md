@@ -128,11 +128,11 @@ Ce plan de tâches couvre l'ensemble du projet Echoes Factory. Les fonctionnalit
     - Vérifier qu'un fichier invalide conserve l'usine existante
     - _Exigences : 10.1, 10.2, 10.3_
 
-- [ ] 9. Affichage de la date de référence des estimations
-  - [ ] 9.1 Afficher la date d'effet du tarif le plus ancien dans la ligne produit de `produits.html`
+- [x] 9. Affichage de la date de référence des estimations
+  - [x] 9.1 Afficher la date d'effet du tarif le plus ancien dans la ligne produit de `produits.html`
     - Ajouter une colonne ou une info secondaire avec la date de référence
     - _Exigences : 11.1_
-  - [ ] 9.2 Signaler visuellement les estimations périmées dans `produits.html`
+  - [x] 9.2 Signaler visuellement les estimations périmées dans `produits.html`
     - Appliquer une classe CSS d'alerte si la date du tarif dépasse un seuil configurable
     - _Exigences : 11.2_
   - [ ]* 9.3 Écrire les tests unitaires de la détection de péremption
@@ -142,67 +142,67 @@ Ce plan de tâches couvre l'ensemble du projet Echoes Factory. Les fonctionnalit
 - [ ] 10. Point de contrôle — vérification des nouvelles fonctionnalités
   - Exécuter `npm test` et s'assurer que tous les tests passent.
 
-- [ ] 11. Planification de production — moteur de calcul
-  - [ ] 11.1 Implémenter la classe `Planificateur` dans `app/service.js` (ou `app/planificateur.js`)
+- [x] 11. Planification de production — moteur de calcul
+  - [x] 11.1 Implémenter la classe `Planificateur` dans `app/service.js` (ou `app/planificateur.js`)
     - Pour un produit cible et une quantité donnée, comparer coût de fabrication vs coût d'achat pour chaque composant
     - Proposer une séquence d'achats/fabrications ordonnée minimisant le coût total
     - _Exigences : 9.1, 9.2_
-  - [ ] 11.2 Écrire les tests unitaires du `Planificateur`
+  - [x] 11.2 Écrire les tests unitaires du `Planificateur`
     - Tester les cas : composant BUY, composant BUILD, composant sans tarif, arborescence imbriquée
     - _Exigences : 9.1, 9.2_
-  - [ ] 11.3 Implémenter la réservation de composants dans l'`Inventaire`
+  - [x] 11.3 Implémenter la réservation de composants dans l'`Inventaire`
     - Ajouter les notions de stock disponible vs stock engagé lors de la planification
     - _Exigences : 9.3_
-  - [ ] 11.4 Écrire les tests unitaires de la réservation de stock
+  - [x] 11.4 Écrire les tests unitaires de la réservation de stock
     - Tester que le stock engagé est bien soustrait du stock disponible
     - _Exigences : 9.3_
-  - [ ] 11.5 Implémenter le suivi des fabrications en cours dans l'`Usine`
+  - [x] 11.5 Implémenter le suivi des fabrications en cours dans l'`Usine`
     - Stocker les plans de fabrication validés et permettre de suivre leur avancement
     - _Exigences : 9.4_
-  - [ ] 11.6 Écrire les tests d'intégration du suivi de production
+  - [x] 11.6 Écrire les tests d'intégration du suivi de production
     - Tester la validation d'un plan, la progression et la finalisation d'une fabrication
     - _Exigences : 9.4_
 
-- [ ] 12. Planification de production — interface utilisateur
-  - [ ] 12.1 Créer la page `planification.html` avec le formulaire de sélection produit + quantité cible
+- [x] 12. Planification de production — interface utilisateur
+  - [x] 12.1 Créer la page `planification.html` avec le formulaire de sélection produit + quantité cible
     - Afficher le plan proposé (liste d'achats et fabrications ordonnées)
     - Ajouter le lien de navigation vers cette page dans la barre de navigation de toutes les pages
     - Déclencher `Usine.évaluer()` pour chaque ligne valide de toute saisie TSV dans la page (Exigence 3.8)
     - _Exigences : 9.1, 9.2, 3.8, 8.11_
-  - [ ] 12.2 Implémenter la surcharge utilisateur achat/fabrication dans `planification.html`
+  - [x] 12.2 Implémenter la surcharge utilisateur achat/fabrication dans `planification.html`
     - Pour chaque ingrédient qui est aussi un `Produit` du catalogue, afficher la décision par défaut (basée sur le statut `BUILD`/`BUY`) et permettre à l'utilisateur de la remplacer par un choix explicite
     - Recalculer le coût total du plan en fonction des surcharges appliquées
     - _Exigences : 9.5_
-  - [ ] 12.3 Écrire les tests unitaires de la surcharge achat/fabrication
+  - [x] 12.3 Écrire les tests unitaires de la surcharge achat/fabrication
     - Tester que la surcharge modifie bien le calcul de coût (forcer fabrication sur un `BUY`, forcer achat sur un `BUILD`)
     - _Exigences : 9.5_
-  - [ ] 12.4 Afficher les ressources et liquidités restantes estimées dans `planification.html`
+  - [x] 12.4 Afficher les ressources et liquidités restantes estimées dans `planification.html`
     - À côté du stock actuel, afficher le stock résiduel estimé après exécution du plan
     - Afficher les liquidités restantes estimées après les achats prévus
     - Mettre en évidence visuellement ces indicateurs (colonne dédiée ou couleur différente)
     - _Exigences : 7.13, 7.14_
-  - [ ] 12.5 Implémenter la détection des déficits dans le `Planificateur`
+  - [x] 12.5 Implémenter la détection des déficits dans le `Planificateur`
     - Pour chaque composant du plan, comparer la quantité requise au stock disponible et calculer le déficit éventuel
     - Calculer le coût total des achats prévus et le comparer aux liquidités disponibles pour identifier un éventuel déficit de trésorerie
     - Le plan reste généré même en cas de ressources insuffisantes (aucun blocage)
     - _Exigences : 9.7, 9.8, 9.9_
-  - [ ] 12.6 Écrire les tests unitaires de la détection des déficits
+  - [x] 12.6 Écrire les tests unitaires de la détection des déficits
     - Tester qu'un plan est bien produit malgré un stock insuffisant
     - Tester le calcul du déficit par composant (quantité disponible < quantité requise)
     - Tester la détection du déficit de liquidités (coût total > liquidités disponibles)
     - _Exigences : 9.7, 9.8, 9.9_
-  - [ ] 12.7 Afficher les déficits visuellement dans `planification.html`
+  - [x] 12.7 Afficher les déficits visuellement dans `planification.html`
     - Mettre en évidence les composants dont le stock disponible est insuffisant (quantités manquantes en rouge ou avec icône d'alerte)
     - Afficher le déficit de liquidités lorsque les achats prévus dépassent les liquidités disponibles
     - _Exigences : 9.8, 9.9_
-  - [ ] 12.8 Implémenter la priorisation des étapes réalisables dans le `Planificateur`
+  - [x] 12.8 Implémenter la priorisation des étapes réalisables dans le `Planificateur`
     - Trier les étapes de fabrication de façon à placer en tête celles dont tous les composants sont déjà disponibles en stock, avant celles qui nécessitent des achats ou des ressources manquantes
     - _Exigences : 9.10_
-  - [ ]* 12.9 Écrire les tests unitaires de la priorisation des étapes réalisables
+  - [x] 12.9 Écrire les tests unitaires de la priorisation des étapes réalisables
     - Tester qu'une étape entièrement couverte par le stock apparaît avant une étape avec composants manquants
     - Tester le cas où aucune étape n'est immédiatement réalisable
     - _Exigences : 9.10_
-  - [ ] 12.10 Afficher le résumé des fabrications en cours sur `index.html`
+  - [x] 12.10 Afficher le résumé des fabrications en cours sur `index.html`
     - Ajouter une section résumé sur la page d'accueil avec les étapes suivantes
     - _Exigences : 9.5_
 
