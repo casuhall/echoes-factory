@@ -335,11 +335,12 @@ class Planificateur {
     const décision_par_défaut = produit ? this.#décision_par_défaut(produit) : 'BUY';
     const décision = surcharges.has(nom_produit) ? surcharges.get(nom_produit) : décision_par_défaut;
     const quantité_stock = stock.get(nom_produit) ?? 0;
+    const quantité_manquante = Math.max(0, quantité - quantité_stock);
     const étapes = [];
 
-    if (produit && décision === 'BUILD') {
+    if (produit && décision === 'BUILD' && quantité_manquante > 0) {
       const recette = produit.recette;
-      const facteur = quantité / recette.quantité_produite;
+      const facteur = quantité_manquante / recette.quantité_produite;
       for (const ingrédient of recette.ingrédients) {
         const sous_nom = ingrédient.nom;
         const sous_quantité = Math.ceil(ingrédient.quantité * facteur);

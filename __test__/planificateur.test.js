@@ -190,6 +190,44 @@ describe('Planificateur', () => {
       expect(noms).to.deep.equal(['Arbre', 'Bois', 'Épée']);
     });
 
+    it('ne calcule pas les sous-composants si le stock couvre la quantité', () => {
+      const recetteBois = new Recette('Bois', 10, [new Ingrédient('Arbre', 1)]);
+      const recetteÉpée = new Recette('Épée', 100, [new Ingrédient('Bois', 2)]);
+      usine.ajouteProduit(recetteBois);
+      usine.ajouteProduit(recetteÉpée);
+      usine.évaluer('Arbre', 5);
+      usine.évaluer('Bois', 20); // BUILD
+      usine.stocker('Bois', 2); // stock suffisant pour 1 Épée
+
+      const planificateur = new Planificateur(usine);
+      const plan = planificateur.planifier('Épée', 1);
+      const noms = plan.étapes.map(e => e.nom);
+      expect(noms).to.deep.equal(['Bois', 'Épée']); // pas d'Arbre
+    });
+
+    it('calcule les sous-composants seulement pour la quantité manquante', () => {
+      const recetteBois = new Recette('Bois', 10, [new Ingrédient('Arbre', 1)]);
+      const recetteÉpée = new Recette('Épée', 100, [new Ingrédient('Bois', 10)]);
+      usine.ajouteProduit(recetteBois);
+      usine.ajouteProduit(recetteÉpée);
+      usine.évaluer('Arbre', 5);
+      usine.évaluer('Bois', 20); // BUILD
+      usine.stocker('Bois', 2); // 2 en stock, 8 manquants
+
+      const planificateur = new Planificateur(usine);
+      const plan = planificateur.planifier('Épée', 1);
+
+      const noms = plan.étapes.map(e => e.nom);
+      expect(noms).to.deep.equal(['Arbre', 'Bois', 'Épée']);
+
+      const arbre = plan.étapes.find(e => e.nom === 'Arbre');
+      expect(arbre.quantité).to.equal(8); // 8 * 1
+
+      const bois = plan.étapes.find(e => e.nom === 'Bois');
+      expect(bois.quantité).to.equal(10);
+      expect(bois.quantité_stock).to.equal(2);
+    });
+
     it('ajoute les sous-composants lors d\'une surcharge BUY vers BUILD', () => {
       const recetteBois = new Recette('Bois', 10, [
         new Ingrédient('Arbre', 1)
