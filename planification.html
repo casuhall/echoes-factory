@@ -154,7 +154,7 @@
         boutonDécision.textContent = étape.décision === "BUILD" ? "Produire" : "Acheter";
         boutonDécision.addEventListener("click", () => {
           const nouvelleDécision = étape.décision === "BUILD" ? "BUY" : "BUILD";
-          const nouveauPlan = plan.avec_surcharge(étape.nom, nouvelleDécision);
+          const nouveauPlan = planificateur.surcharger(plan, étape.nom, nouvelleDécision);
           présenterPlan(nouveauPlan);
         });
         celluleDécision.appendChild(boutonDécision);
@@ -171,8 +171,10 @@
           boutonRéinitialiser.className = "btn ghost";
           boutonRéinitialiser.textContent = "Réinitialiser";
           boutonRéinitialiser.addEventListener("click", () => {
-            const planOriginal = plan.avec_surcharge(étape.nom, étape.décision === "BUY" ? "BUY" : "BUILD");
-            présenterPlan(planOriginal);
+            const produit = usine.produit(étape.nom);
+            const décision_par_défaut = produit && produit.statut === 'BUY' ? 'BUY' : 'BUILD';
+            const planRéinitialisé = planificateur.surcharger(plan, étape.nom, décision_par_défaut);
+            présenterPlan(planRéinitialisé);
           });
           celluleActions.appendChild(boutonRéinitialiser);
         }

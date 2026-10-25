@@ -323,17 +323,19 @@ class Planificateur {
    * @param {Map<string, number>} stock
    * @param {Set<string>} visités
    * @param {boolean} racine
+   * @param {Map<string, 'BUY'|'BUILD'>} surcharges
    * @returns {ÉtapePlan[]}
    */
-  #explorer(nom_produit, quantité, stock, visités = new Set(), racine = false) {
+  #explorer(nom_produit, quantité, stock, visités = new Set(), racine = false, surcharges = new Map()) {
     if (visités.has(nom_produit)) return [];
     visités.add(nom_produit);
 
     const catalogue = this.#catalogue();
     const produit = catalogue.get(nom_produit);
-    const décision = produit ? this.#décision_par_défaut(produit) : 'BUY';
+    const décision_par_défaut = produit ? this.#décision_par_défaut(produit) : 'BUY';
+    const décision = surcharges.has(nom_produit) ? surcharges.get(nom_produit) : décision_par_défaut;
     const quantité_stock = stock.get(nom_produit) ?? 0;
-    const étapes = [new ÉtapePlan(nom_produit, quantité, décision, quantité_stock)];
+    const étapes = [];
 
     if (produit && décision === 'BUILD') {
       const recette = produit.recette;
@@ -341,10 +343,13 @@ class Planificateur {
       for (const ingrédient of recette.ingrédients) {
         const sous_nom = ingrédient.nom;
         const sous_quantité = Math.ceil(ingrédient.quantité * facteur);
-        const sous_étapes = this.#explorer(sous_nom, sous_quantité, stock, visités, false);
+        const sous_étapes = this.#explorer(sous_nom, sous_quantité, stock, visités, false, surcharges);
         étapes.push(...sous_étapes);
       }
     }
+
+    const surcharge = surcharges.has(nom_produit);
+    étapes.push(new ÉtapePlan(nom_produit, quantité, décision, quantité_stock, surcharge));
 
     if (racine && !produit) return [];
 
@@ -352,15 +357,15 @@ class Planificateur {
   }
 
   /**
-   * Calcule le coût total estimé d'un plan.
-   * @param {PlanProduction} plan
+   * Calcule le coût total estimé d'un plan à partir d'une liste d'étapes.
+   * @param {ÉtapePlan[]} étapes
    * @returns {number}
    */
-  #calculer_coût(plan) {
+  #calculer_coût(étapes) {
     const tarifs = this.#tarifs();
     let coût = 0;
 
-    for (const étape of plan.étapes) {
+    for (const étape of étapes) {
       if (étape.décision === 'BUY') {
         const prix = tarifs.get(étape.nom) ?? 0;
         coût += prix * étape.quantité;
@@ -378,10 +383,41 @@ class Planificateur {
    */
   planifier(produit_cible, quantité_cible) {
     const stock = this.#stock();
-    const étapes = this.#explorer(produit_cible, quantité_cible, stock, undefined, true);
-    const plan = new PlanProduction(produit_cible, quantité_cible, étapes);
-    const coût_total = this.#calculer_coût(plan);
+    const étapes = this.#explorer(produit_cible, quantité_cible, stock, new Set(), true, new Map());
+    const coût_total = this.#calculer_coût(étapes);
     return new PlanProduction(produit_cible, quantité_cible, étapes, coût_total);
+  }
+
+  /**
+   * Applique une surcharge manuelle sur un plan existant et recalcule les étapes.
+   * @param {PlanProduction} plan
+   * @param {string} nom_étape
+   * @param {'BUY'|'BUILD'} décision
+   * @returns {PlanProduction}
+   */
+  surcharger(plan, nom_étape, décision) {
+    if (!plan || !(plan instanceof PlanProduction)) {
+      throw new Error(`Plan invalide. Fournis : ${plan}`);
+    }
+
+    const surcharges = new Map();
+    for (const étape of plan.étapes) {
+      if (étape.surcharge) surcharges.set(étape.nom, étape.décision);
+    }
+
+    const catalogue = this.#catalogue();
+    const produit = catalogue.get(nom_étape);
+    const décision_par_défaut = produit ? this.#décision_par_défaut(produit) : 'BUY';
+    if (décision === décision_par_défaut) {
+      surcharges.delete(nom_étape);
+    } else {
+      surcharges.set(nom_étape, décision);
+    }
+
+    const stock = this.#stock();
+    const nouvelles_étapes = this.#explorer(plan.produit_cible, plan.quantité_cible, stock, new Set(), true, surcharges);
+    const coût_total = this.#calculer_coût(nouvelles_étapes);
+    return new PlanProduction(plan.produit_cible, plan.quantité_cible, nouvelles_étapes, coût_total);
   }
 }
 

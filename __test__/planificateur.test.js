@@ -74,15 +74,6 @@ describe('Planificateur', () => {
       expect(() => new PlanProduction('Épée', 0)).to.throw(/Quantité cible invalide/);
     });
 
-    it('applique une surcharge manuelle', () => {
-      const étapes = [new ÉtapePlan('Bois', 10, 'BUY', 5)];
-      const plan = new PlanProduction('Épée', 1, étapes);
-      const planModifié = plan.avec_surcharge('Bois', 'BUILD');
-      expect(planModifié.étapes[0].décision).to.equal('BUILD');
-      expect(planModifié.étapes[0].surcharge).to.equal(true);
-      expect(plan.étapes[0].décision).to.equal('BUY'); // original inchangé
-    });
-
     it('sérialise en objet', () => {
       const étapes = [new ÉtapePlan('Bois', 10, 'BUY', 5)];
       const plan = new PlanProduction('Épée', 1, étapes, 1000);
@@ -109,7 +100,8 @@ describe('Planificateur', () => {
 
       expect(plan.produit_cible).to.equal('Épée');
       expect(plan.quantité_cible).to.equal(1);
-      expect(plan.étapes).to.have.length(3); // Épée + Bois + Fer
+      expect(plan.étapes).to.have.length(3); // Bois + Fer + Épée
+      expect(plan.étapes.map(e => e.nom)).to.deep.equal(['Bois', 'Fer', 'Épée']);
     });
 
     it('inclut les sous-produits récursivement', () => {
@@ -127,9 +119,7 @@ describe('Planificateur', () => {
       const plan = planificateur.planifier('Épée', 1);
 
       const noms = plan.étapes.map(étape => étape.nom);
-      expect(noms).to.include('Épée');
-      expect(noms).to.include('Bois');
-      expect(noms).to.include('Arbre');
+      expect(noms).to.deep.equal(['Arbre', 'Bois', 'Épée']);
     });
 
     it('calcule le coût total du plan', () => {
@@ -183,7 +173,56 @@ describe('Planificateur', () => {
       const plan = planificateur.planifier('A', 1);
 
       const noms = plan.étapes.map(étape => étape.nom);
-      expect(noms).to.have.length(2); // A + B, pas de boucle infinie
+      expect(noms).to.deep.equal(['B', 'A']); // pas de boucle infinie
+    });
+
+    it('ajoute les sous-composants lors d\'une surcharge BUY vers BUILD', () => {
+      const recetteBois = new Recette('Bois', 10, [
+        new Ingrédient('Arbre', 1)
+      ]);
+      const recetteÉpée = new Recette('Épée', 100, [
+        new Ingrédient('Bois', 2)
+      ]);
+      usine.ajouteProduit(recetteBois);
+      usine.ajouteProduit(recetteÉpée);
+      usine.évaluer('Arbre', 1);
+      usine.évaluer('Bois', 10); // prix < coût_reviens (11) => statut BUY
+
+      const planificateur = new Planificateur(usine);
+      let plan = planificateur.planifier('Épée', 1);
+      expect(plan.étapes.map(e => e.nom)).to.deep.equal(['Bois', 'Épée']);
+      expect(plan.étapes.find(e => e.nom === 'Bois').décision).to.equal('BUY');
+
+      plan = planificateur.surcharger(plan, 'Bois', 'BUILD');
+      expect(plan.étapes.map(e => e.nom)).to.deep.equal(['Arbre', 'Bois', 'Épée']);
+      expect(plan.étapes.find(e => e.nom === 'Bois').décision).to.equal('BUILD');
+      expect(plan.étapes.find(e => e.nom === 'Bois').surcharge).to.equal(true);
+    });
+
+    it('supprime les sous-composants lors d\'une réinitialisation BUILD vers BUY', () => {
+      const recetteBois = new Recette('Bois', 10, [
+        new Ingrédient('Arbre', 1)
+      ]);
+      const recetteÉpée = new Recette('Épée', 100, [
+        new Ingrédient('Bois', 2)
+      ]);
+      usine.ajouteProduit(recetteBois);
+      usine.ajouteProduit(recetteÉpée);
+      usine.évaluer('Arbre', 1);
+      usine.évaluer('Bois', 10); // prix < coût_reviens (11) => statut BUY
+
+      const planificateur = new Planificateur(usine);
+      let plan = planificateur.planifier('Épée', 1);
+      expect(plan.étapes.map(e => e.nom)).to.deep.equal(['Bois', 'Épée']);
+
+      plan = planificateur.surcharger(plan, 'Bois', 'BUILD');
+      expect(plan.étapes.map(e => e.nom)).to.deep.equal(['Arbre', 'Bois', 'Épée']);
+      expect(plan.étapes.find(e => e.nom === 'Bois').surcharge).to.equal(true);
+
+      plan = planificateur.surcharger(plan, 'Bois', 'BUY');
+      expect(plan.étapes.map(e => e.nom)).to.deep.equal(['Bois', 'Épée']);
+      expect(plan.étapes.find(e => e.nom === 'Bois').décision).to.equal('BUY');
+      expect(plan.étapes.find(e => e.nom === 'Bois').surcharge).to.equal(false);
     });
   });
 });

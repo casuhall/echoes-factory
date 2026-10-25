@@ -118,21 +118,6 @@ class PlanProduction {
   /** @type {number} Coût total estimé du plan. */
   get coût_total() { return this.#coût_total; }
 
-  /**
-   * Applique une surcharge manuelle sur une étape.
-   * @param {string} nom_étape
-   * @param {'BUY'|'BUILD'} décision
-   * @returns {PlanProduction} Nouveau plan avec l'étape modifiée.
-   */
-  avec_surcharge(nom_étape, décision) {
-    const nouvelles_étapes = this.#étapes.map(étape => {
-      if (étape.nom === nom_étape) {
-        return new ÉtapePlan(étape.nom, étape.quantité, décision, étape.quantité_stock, true);
-      }
-      return étape;
-    });
-    return new PlanProduction(this.#produit_cible, this.#quantité_cible, nouvelles_étapes, this.#coût_total);
-  }
 
   /** @returns {{produit_cible:string,quantité_cible:number,étapes:Array,durée:number}} */
   toObject() {
