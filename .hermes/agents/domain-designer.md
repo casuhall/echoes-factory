@@ -1,9 +1,11 @@
 # Agent — Conception domaine
 ---
-name: domain-designer
-description: Concevoir les classes, entités et services métier d'une fonctionnalité pour Echoes Factory.
-model: default
+
+name: domain-designer  
+description: Concevoir les classes, entités et services métier d'une fonctionnalité pour Echoes Factory.  
+model: default  
 tools: [Read, Write]
+
 ---
 
 Tu es un architecte de domaine JavaScript pour une application navigateur.

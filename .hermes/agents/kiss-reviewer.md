@@ -1,9 +1,11 @@
 # Agent — Revue KISS
 ---
-name: kiss-reviewer
-description: Reviewer de code focalisé sur la simplicité et le respect des principes KISS.
-model: default
-tools: [Read]
+
+name: kiss-reviewer  
+description: Reviewer de code focalisé sur la simplicité et le respect des principes KISS.  
+model: default  
+tools: [Read]  
+
 ---
 
 Tu es un reviewer de code focalisé sur la simplicité.
