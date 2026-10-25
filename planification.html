@@ -59,7 +59,7 @@
             <th>Composant</th>
             <th style="text-align: end;">Quantité requise</th>
             <th>Décision</th>
-            <th style="text-align: end;">Stock disponible</th>
+            <th style="text-align: end;">Quantité manquante</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -105,8 +105,11 @@
       produitCibleSelect.appendChild(option);
     }
 
+    let planificateur = new Planificateur(usine);
+    let planCourant = null;
+
     btnGénérer.addEventListener("click", () => {
-      const produitCible = produitCibleSelect.value;
+      const produitCible = String(produitCibleSelect.value || "").trim();
       const quantitéCible = parseInt(quantitéCibleInput.value || "1", 10);
 
       if (!produitCible) {
@@ -114,14 +117,14 @@
         return;
       }
 
-      if (!quantitéCible || quantitéCible <= 0) {
+      if (!Number.isInteger(quantitéCible) || quantitéCible <= 0) {
         notifier("La quantité cible doit être un entier positif.", "warn");
         return;
       }
 
-      const planificateur = new Planificateur(usine);
-      const plan = planificateur.planifier(produit_cible, quantitéCible);
-      présenterPlan(plan, planificateur);
+      planificateur = new Planificateur(usine);
+      planCourant = planificateur.planifier(produitCible, quantitéCible);
+      présenterPlan(planCourant, planificateur);
     });
 
     function présenterPlan(plan, planificateur) {
@@ -134,6 +137,7 @@
         ligneVide.className = "empty";
         ligneVide.innerHTML = `<td colspan="5">Aucune étape nécessaire</td>`;
         planBody.appendChild(ligneVide);
+        notifier(`Plan vide pour ${plan.produit_cible} (${plan.quantité_cible}). Vérifiez le produit et ses recettes.`, "warn");
         return;
       }
 
@@ -165,7 +169,8 @@
 
         const celluleStock = document.createElement("td");
         celluleStock.className = "right";
-        celluleStock.textContent = étape.quantité_stock.toLocaleString();
+        const quantitéManquante = Math.max(0, étape.quantité - étape.quantité_stock);
+        celluleStock.textContent = quantitéManquante.toLocaleString();
 
         const celluleActions = document.createElement("td");
         celluleActions.className = "actions";

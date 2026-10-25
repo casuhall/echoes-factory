@@ -176,6 +176,20 @@ describe('Planificateur', () => {
       expect(noms).to.deep.equal(['B', 'A']); // pas de boucle infinie
     });
 
+    it('affiche les sous-produits BUILD dans les étapes', () => {
+      const recetteBois = new Recette('Bois', 10, [new Ingrédient('Arbre', 1)]);
+      const recetteÉpée = new Recette('Épée', 100, [new Ingrédient('Bois', 2)]);
+      usine.ajouteProduit(recetteBois);
+      usine.ajouteProduit(recetteÉpée);
+      usine.évaluer('Arbre', 5);
+      usine.évaluer('Bois', 20); // prix > coût_reviens => BUILD
+
+      const planificateur = new Planificateur(usine);
+      const plan = planificateur.planifier('Épée', 1);
+      const noms = plan.étapes.map(e => e.nom);
+      expect(noms).to.deep.equal(['Arbre', 'Bois', 'Épée']);
+    });
+
     it('ajoute les sous-composants lors d\'une surcharge BUY vers BUILD', () => {
       const recetteBois = new Recette('Bois', 10, [
         new Ingrédient('Arbre', 1)
