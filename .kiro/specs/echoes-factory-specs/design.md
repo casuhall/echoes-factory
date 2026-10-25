@@ -281,39 +281,41 @@ Chaque page est un couple composé d'document HTML et de son script (sous forme 
 
 | Page                   | Responsabilité principale                                                                       |
 | ---------------------- | ----------------------------------------------------------------------------------------------- |
-| `index.html`           | Tableau de bord : nom, statistiques, reset                                                      |
-| `marché.html`          | Saisie et affichage des tarifs (unitaire + import TSV) ; tri par colonne et recherche par nom   |
-| `produits.html`        | Catalogue produits avec rentabilité, édition, suppression                                       |
-| `edition_produit.html` | Formulaire de création/modification de recette + ingrédients                                    |
-| `stock.html`           | Gestion du stock et des liquidités (unitaire + import TSV) ; tri par colonne et recherche par nom |
-| `planification.html`   | Sélection d'un produit cible, plan d'achats/fabrications, surcharge achat/fabrication par ingrédient, visualisation des ressources et liquidités restantes |
+| `index.html`           | Tableau de bord : nom, statistiques, reset et résumé des fabrications de l'instance courante (non persisté) |
+| `marché.html`          | Saisie et affichage des tarifs (unitaire + import TSV) ; tri par nom/prix/date et recherche par nom |
+| `produits.html`        | Catalogue avec rentabilité, édition, suppression, tri, recherche et date de référence des estimations |
+| `edition_produit.html` | Formulaire de création/modification de recette + ingrédients ; import TSV |
+| `stock.html`           | Gestion du stock et des liquidités (unitaire + import TSV) ; tri par nom/quantité et recherche par nom |
+| `planification.html`   | Calcul d'un plan sur les composants directs, choix `BUILD`/`BUY`, estimations de coûts et ressources, alertes de déficit ; aucun bouton de validation du plan |
 
 La barre de navigation est reproduite sur chaque page. Le lien de la page courante porte la classe `btn` (actif) vs `btn ghost` (inactif).
 
 #### Tri et recherche dans les tableaux (Exigences 8.5–8.10)
 
-Les pages `stock.html` et `marché.html` exposent chacune un tableau triable et filtrable :
+Les pages `stock.html`, `marché.html` et `produits.html` exposent des tableaux triables et filtrables :
 
-- **Tri par colonne** : un clic sur un en-tête de colonne trie les lignes selon cette colonne ; un deuxième clic inverse l'ordre. L'état de tri (colonne + direction) est géré localement dans la page, sans persistance.
-- **Recherche** : un champ texte filtre les lignes en temps réel sur le nom de l'objet (correspondance partielle, insensible à la casse).
-- Ces deux comportements sont indépendants et cumulables (filtrer puis trier, ou vice-versa).
+- **Stock** : tri par nom ou quantité ; recherche partielle par nom, insensible à la casse.
+- **Marché** : tri par nom, prix ou date d'effet ; recherche partielle par nom, insensible à la casse.
+- **Produits** : tri par nom, rentabilité ou gain estimé ; recherche par nom.
+- Le tri et le filtre s'appliquent côté navigateur ; l'état du tri n'est pas persisté.
 
-La page `produits.html` gagnera également un tri par colonne (Exigence 8.7) et une recherche par nom (Exigence 8.8) selon le même modèle.
+La page produits affiche aussi la date de référence des estimations et signale visuellement les tarifs dépassant sept jours. Ce seuil est actuellement une constante dans la page, et non une préférence utilisateur.
 
 #### Page planification (Exigences 9.1–9.10, 7.13–7.14)
 
-La page `planification.html` orchestrera les interactions suivantes :
+La page `planification.html` et le moteur `app/planificateur.js` implémentent actuellement un calcul estimatif limité :
 
-1. **Sélection du produit cible et de la quantité** — l'utilisateur choisit un produit du catalogue et saisit une quantité souhaitée.
-2. **Plan d'achats/fabrications** — le `Planificateur` calcule, pour chaque composant nécessaire, la comparaison coût de fabrication / coût d'achat et propose une séquence ordonnée minimisant le coût total.
-3. **Choix par défaut basé sur la rentabilité** — le planificateur applique par défaut la décision achat/fabrication déduite du statut de chaque ingrédient-produit (`BUILD` → fabriquer, `BUY` → acheter).
-4. **Surcharge utilisateur (Exigence 9.6)** — pour chaque ingrédient qui est également un `Produit` du catalogue, l'utilisateur peut remplacer la décision par défaut par un choix explicite (forcer l'achat ou forcer la fabrication). Ce choix est affiché clairement dans le plan et modifie le calcul de coût en conséquence.
-5. **Ressources et liquidités restantes (Exigences 7.13/7.14)** — la page affiche, à côté du stock actuel, le stock résiduel estimé après exécution du plan, ainsi que les liquidités restantes après les achats prévus. Ces deux indicateurs sont mis en évidence visuellement (ex. colonne dédiée, couleur différente).
-6. **Réservation de composants (Exigence 9.3)** — lors de la validation d'un plan, les composants nécessaires sont marqués « engagés » dans l'inventaire pour distinguer stock disponible et stock réservé.
-7. **Plan toujours produit malgré les ressources insuffisantes (Exigence 9.7)** — le `Planificateur` ne bloque jamais la génération d'un plan : si le stock ou les liquidités sont insuffisants, le plan est affiché en intégralité, et les manques sont signalés visuellement sans empêcher la consultation du plan.
-8. **Mise en évidence des composants en déficit (Exigence 9.8)** — pour chaque composant du plan dont la quantité disponible en stock est inférieure à la quantité requise, la ligne correspondante est mise en évidence visuellement (ex. quantité manquante en couleur d'alerte, icône d'avertissement). La quantité manquante exacte est affichée à côté de la quantité requise.
-9. **Mise en évidence du déficit de liquidités (Exigence 9.9)** — si le total des achats prévus dans le plan dépasse les liquidités disponibles, le montant du déficit est affiché de façon proéminente (ex. montant en rouge, indicateur dédié au-dessus ou en dessous du récapitulatif du plan).
-10. **Priorisation des étapes réalisables (Exigence 9.10)** — lorsque le plan comporte des ressources manquantes, le `Planificateur` ordonne la liste des prochaines étapes de fabrication en plaçant en tête celles dont tous les composants sont déjà disponibles en stock, suivies de celles qui nécessitent des achats ou présentent des ressources manquantes. L'ordre au sein de chaque groupe reste déterminé par la minimisation du coût total.
+1. L'utilisateur choisit un produit du catalogue et une quantité cible.
+2. Le moteur examine les ingrédients directs de la recette cible. Il multiplie la quantité par la quantité cible ; les frais de fabrication de la cible, eux, sont multipliés par `ceil(quantité / quantité_produite)`. Il ne développe pas récursivement les recettes des sous-produits en étapes supplémentaires.
+3. Pour un composant du catalogue au statut `BUILD`, la décision par défaut est `BUILD` et le coût unitaire provient de son coût de revient. Les autres composants sont proposés en `BUY`, avec leur tarif de marché si disponible.
+4. L'interface permet de remplacer `BUILD` par `BUY` ou inversement lorsque le composant figure au catalogue. Elle recalcule le coût de l'étape et le coût total, mais ne recalcule pas alors les déficits, le stock résiduel ou les liquidités.
+5. Le déficit de stock est estimé pour les étapes `BUY`. Le déficit de liquidités se fonde sur les coûts `BUY` connus ; il n'inclut pas nécessairement les frais de fabrication associés aux étapes `BUILD`.
+6. Le tableau affiche les composants directs présents en stock et une estimation du stock résiduel, ainsi que les liquidités après achats. Il s'agit d'indicateurs estimatifs, pas d'une simulation de mouvements d'inventaire.
+7. Les étapes `BUY` entièrement couvertes par le stock sont triées avant les autres composants. Cette règle ne garantit pas l'ordre exécutable d'une arborescence de fabrication complète.
+8. `Usine.validerPlan()` sait créer une fabrication et réserver des composants `BUY` disponibles ; `terminerFabrication()` sait libérer ces réservations. Ces méthodes sont testées au niveau service, mais la page ne propose pas de valider un plan.
+9. La sérialisation `Usine.toString()` n'enregistre ni fabrications en cours ni quantités engagées. Les fabrications affichées par l'accueil ne constituent donc pas un suivi persistant entre pages ou rechargements.
+
+Pour obtenir un flux opérationnel, il reste à développer la décomposition récursive, l'application des choix aux ressources, la validation depuis l'interface, la persistance des réservations/fabrications et la mise à jour réelle du stock et des liquidités lors de l'exécution.
 
 ---
 
@@ -344,6 +346,8 @@ La page `planification.html` orchestrera les interactions suivantes :
 ```
 
 > Les montants de tarifs sont sérialisés comme chaînes (`"montant":"1500"`) mais reconvertis en nombres à la désérialisation. L'`Usine` accepte des valeurs numériques sous forme de chaînes pour tous les champs concernés.
+>
+> **Limite du schéma actuel :** les fabrications en cours et les quantités engagées/réservées ne figurent pas dans ce JSON. Le stock sérialisé est le stock total ; l'état des réservations est perdu au rechargement. L'export/import de sauvegarde n'est pas implémenté.
 
 ---
 
@@ -353,7 +357,9 @@ La page `planification.html` orchestrera les interactions suivantes :
 
 **Mocha** (runner) + **Chai** (assertions) + **jsdom** (DOM simulé pour les tests de présentation).
 
-Commande : `npm test` → `mocha --exit "__test__/**/*.test.js"`
+Commande : `npm test` → `mocha --exit "__test__/**/*.test.js"`.
+
+Dernière exécution observée : **169 passing, 1 pending, 1 failing**. Le test en échec est `estPérimé` à exactement sept jours : l'implémentation compare le temps écoulé en millisecondes, tandis que le test attend une limite en jours calendaires. Le point de contrôle final n'est pas validé tant que ce désaccord n'est pas corrigé.
 
 ### Organisation des fichiers de test
 
@@ -392,7 +398,7 @@ __test__/
 
 ### Propriété 1 : Aller-retour de sérialisation de l'Usine
 
-*Pour toute* instance d'`Usine` valide (nom, recettes, tarifs, stock, liquidités quelconques), la sérialisation via `toString()` suivie de la désérialisation via `Usine.parse()` doit produire une usine dont toutes les propriétés observables (nom, nombre de produits, coûts de revient, prix estimés, dates d'effet, stock, tarifs, liquidités) sont égales à celles de l'usine originale.
+*Pour toute* instance d'`Usine` valide, `toString()` suivi de `Usine.parse()` doit préserver les champs actuellement sérialisés : nom, recettes, tarifs, stock total et liquidités, ainsi que les calculs dérivés. Cette propriété ne couvre pas les fabrications en cours ni les réservations, qui ne figurent pas dans le format JSON actuel.
 
 **Validates: Requirements 1.1**
 

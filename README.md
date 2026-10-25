@@ -4,74 +4,78 @@ Echoes Factory est une application web légère, en français, destinée à aide
 
 L’application fonctionne dans un navigateur sans serveur applicatif : les données de l’usine sont enregistrées localement dans le `localStorage` du navigateur. Il s’agit d’un outil de suivi et d’estimation ; les prix sont saisis ou importés par l’utilisateur, et ne sont pas synchronisés avec le jeu.
 
-## Fonctionnalités
+## Fonctionnalités implémentées
 
-### Accueil et données de l’usine
+### Accueil
 
-- Afficher et modifier le nom de l’usine.
-- Consulter le nombre de recettes, de tarifs et de types d’objets en stock, ainsi que les liquidités.
-- Réinitialiser les données locales de l’usine.
+- Modifier le nom de l’usine et consulter les nombres de produits, tarifs et types d’objets en stock, ainsi que les liquidités.
+- Réinitialiser les données de l’usine locale.
+- Afficher un résumé de fabrications présentes dans l’instance de l’usine. La page de planification ne permet pas encore de valider un plan pour créer une fabrication ; le suivi n’est pas persisté.
 
 ### Marché
 
-- Saisir le prix d’un objet individuellement ou importer une liste tabulée d’objets.
-- Afficher les prix enregistrés et leur date d’effet.
-- Utiliser les prix comme estimations pour calculer le coût des recettes et réévaluer les produits concernés.
-- Refuser une mise à jour antidatée lorsqu’un tarif plus récent existe déjà.
+- Enregistrer un tarif unitaire ou importer des lignes TSV EVE Echoes (`index`, `nom`, `quantité`, `valeur totale`), avec calcul du prix unitaire.
+- Afficher le montant et la date d’effet des tarifs ; trier le tableau par nom, prix ou date et rechercher par nom.
+- Refuser une mise à jour antidatée et recalculer les estimations des produits concernés.
 
 ### Produits et recettes
 
-- Créer, consulter, modifier et supprimer des recettes.
-- Décrire les ingrédients et leurs quantités, les frais de fabrication, le nombre d’objets produits par cycle et le taux de réussite.
-- Ajouter les ingrédients un par un ou importer les lignes copiées depuis une liste d’objets du jeu. L’import associe également un prix unitaire calculé à partir de la valeur et de la quantité importées.
-- Calculer le coût de revient en tenant compte des prix des ingrédients et, lorsqu’une recette connue est plus avantageuse, du coût de fabrication de l’ingrédient produit dans l’usine.
-- Comparer le coût de revient estimé au prix de vente enregistré. La liste indique la rentabilité, un gain estimé et un commentaire d’aide à la décision.
-- Mettre à jour automatiquement les calculs des recettes dépendantes lorsqu’un tarif ou un produit change.
+- Créer, modifier, consulter et supprimer des recettes. Décrire les ingrédients, les frais, la quantité produite par cycle et le taux de réussite.
+- Ajouter des ingrédients un par un ou les importer depuis un TSV ; leurs tarifs unitaires sont aussi actualisés.
+- Estimer le coût de revient à partir des tarifs disponibles. Pour un ingrédient qui est un produit `BUILD`, son coût de revient est utilisé ; sinon le calcul utilise son tarif de marché.
+- Classer les produits `BUILD`, `BUY` ou `NA`, et afficher rentabilité, gain estimé et commentaire. Le tableau se trie par nom, rentabilité ou gain et se filtre par nom.
+- Afficher la date de référence la plus ancienne utilisée dans l’estimation. Les estimations de plus de sept jours sont signalées ; le seuil est fixé dans la page et n’est pas configurable depuis l’application.
 
-Le statut métier distingue notamment `BUILD` (produire), `BUY` (acheter) et `NA` (données insuffisantes). Une rentabilité supérieure à 15 % est commentée « Commercialisable » ; une rentabilité positive inférieure ou égale à ce seuil est présentée comme adaptée à la consommation interne.
+Au-delà de 15 % de rentabilité, le commentaire est « Commercialisable » ; une rentabilité positive jusqu’à 15 % est commentée « Pour consommation interne ».
 
 ### Stock et liquidités
 
-- Ajouter des objets au stock, individuellement ou en lot.
-- Champ de recherche du stock présent dans l’interface, mais filtrage des objets pas encore implémenté.
-- Ajuster une quantité en l’augmentant ou en la diminuant, supprimer une ligne ou réinitialiser tout le stock.
-- Enregistrer et modifier le montant des liquidités de l’usine.
-- Empêcher le retrait d’une quantité supérieure au stock disponible.
+- Ajouter des objets individuellement ou en lot depuis un TSV ; ajuster ou supprimer les quantités.
+- Rechercher dans le stock et trier par nom ou quantité.
+- Modifier les liquidités et vider le stock / remettre les liquidités à zéro depuis la page Stock.
+- Refuser le retrait d’une quantité supérieure au stock disponible.
+
+### Planification de production — état actuel
+
+- Choisir un produit du catalogue et une quantité cible pour calculer un plan portant sur ses ingrédients directs.
+- Pour les composants qui sont aussi des produits du catalogue, conserver la décision suggérée `BUILD`/`BUY` ou la remplacer ; le coût affiché est recalculé.
+- Afficher les coûts estimés, les déficits de stock `BUY` et un déficit de liquidités calculé à partir des achats estimés.
+- Afficher une estimation du stock résiduel et des liquidités après achats, et importer un TSV de prix.
+
+Le planificateur ne déroule pas toute une arborescence de sous-recettes en séquence opérationnelle. Les estimations de ressources portent sur les composants directs et ne constituent pas une comptabilité d’exécution. Le service contient des méthodes de réservation de stock et de suivi de fabrication, mais l’interface ne permet pas encore de valider un plan et l’état des fabrications/réservations n’est pas inclus dans la sauvegarde locale.
 
 ## Utilisation
 
-Ouvrir `index.html` dans un navigateur moderne. La navigation permet d’accéder à l’accueil, au marché, aux produits et au stock. Aucune étape de compilation ni dépendance d’exécution n’est requise.
+Ouvrir `index.html` dans un navigateur moderne. La navigation permet d’accéder à l’accueil, au marché, aux produits, au stock et à la planification. Aucune étape de compilation ni dépendance d’exécution n’est requise.
 
 Les données sont propres au navigateur et à son origine. Effacer les données du site ou utiliser un autre navigateur/profil ne conserve pas l’usine. Le bouton de réinitialisation de l’accueil remplace l’usine locale par une nouvelle usine vide.
 
 ## Organisation du projet
 
-- `index.html`, `marché.html`, `produits.html`, `edition_produit.html`, `stock.html` : pages et interactions de l’interface.
-- `app/domain.js` : modèles métier (tarifs, recettes, ingrédients, produits, catalogue et inventaire) et calculs.
-- `app/service.js` : orchestration de l’usine, propagation des mises à jour et sérialisation des données.
-- `app/presentation.js` : décodage des listes importées, formatage et notifications.
+- `index.html`, `marché.html`, `produits.html`, `edition_produit.html`, `stock.html`, `planification.html` : pages et interactions de l’interface.
+- `app/domain.js` : modèles métier et calculs.
+- `app/service.js` : façade `Usine`, propagation des mises à jour, sérialisation, réservations et méthodes de suivi de fabrication.
+- `app/planificateur.js` et `app/planificationSurcharge.js` : calcul du plan et coût des choix `BUILD`/`BUY`.
+- `app/presentation.js` : décodage TSV, formatage et notifications.
+- `app/*SortFilter.js` : fonctions de tri/filtrage ; `app/péremption.js` : détection des estimations périmées.
 - `style/style.css` : styles de l’interface.
-- `__test__/` : tests unitaires du domaine, des services et de la présentation.
+- `__test__/` : tests Mocha du domaine, des services, de la présentation et des fonctions UI.
+- `.kiro/specs/echoes-factory-specs/` : exigences, conception et suivi des tâches.
 
-## Limites actuelles
+## Limites et travaux restants
 
-- Les données et prix sont saisis/importés manuellement ; il n’y a pas de connexion à une API de marché ni de synchronisation entre appareils.
-- Les calculs dépendent de la disponibilité et de la fraîcheur des prix saisis. Une recette dont les entrées nécessaires n’ont pas de prix exploitable ne peut pas avoir de rentabilité calculée.
-- Le tableau des produits n’offre pas encore de recherche ni de tri. Dans le stock, le champ de recherche est présent, mais son filtrage n’est pas encore implémenté.
-- Le suivi de stock ne déduit pas automatiquement les matériaux consommés ou les objets fabriqués lors d’une production.
-- L’accueil n’est pas encore un tableau de bord de planification de production.
-- Les liquidités sont suivies séparément : aucun budget, achat ou gain n’est automatiquement déduit ou crédité.
+- Les données de l’usine sont locales ; aucun stockage distant, export/import de sauvegarde ou synchronisation entre appareils n’est implémenté.
+- Les calculs dépendent de prix saisis/importés et peuvent être incomplets ou périmés.
+- Le plan de production est une estimation directe, pas une séquence complète de fabrication exécutable. Les choix `BUILD`/`BUY` modifient le coût affiché, mais les indicateurs de ressources ne sont pas tous recalculés après une surcharge.
+- La réservation de stock et le suivi de fabrication existent en partie dans le service, mais ne forment pas encore un flux persistant utilisable depuis l’interface.
+- Les mouvements de production ne déduisent pas automatiquement les matériaux ni ne créditent les objets produits ; les achats et gains ne modifient pas automatiquement stock ou liquidités.
+- L’internationalisation et la mise à jour automatique des prix ne sont pas implémentées.
 
-## Perspectives
+## Développement et état des tests
 
-Une évolution naturelle consiste à transformer les estimations en **outil de planification de production** : choisir un produit et une quantité, comparer achat et fabrication pour chaque composant, puis proposer une séquence d’achats et de fabrications selon les recettes et le stock disponible. La réservation des composants et le suivi des fabrications en cours permettraient ensuite de refléter l’avancement réel sans confondre stock disponible et stock engagé.
-
-D’autres pistes utiles seraient d’ajouter la recherche et le tri au catalogue des produits, d’afficher la date de référence et les données manquantes avec chaque estimation, de calculer le capital restant à investir, et de permettre l’export/import d’une sauvegarde. À plus long terme, une synchronisation de prix configurable et une interface multilingue pourraient réduire la saisie manuelle et élargir l’usage de l’application.
-
-## Développement
-
-Le projet utilise des modules JavaScript natifs et des tests Mocha. Pour lancer les tests :
+Le projet utilise des modules JavaScript natifs et Mocha. Installer les dépendances puis lancer `npm test`. Lors de la dernière exécution observée : **169 tests réussis, 1 en attente et 1 en échec**. L’échec concerne une date exactement au seuil de péremption de sept jours : le code compare une durée en millisecondes, tandis que le test attend une comparaison par jour calendaire. Le point de contrôle final n’est donc pas validé.
 
 ```sh
+npm install
 npm test
 ```

@@ -2,19 +2,19 @@
 
 ## Vue d'ensemble
 
-Ce plan de tâches couvre l'ensemble du projet Echoes Factory. Les fonctionnalités déjà en production (marquées ✅ dans les exigences) sont listées comme tâches optionnelles — elles sont implémentées et peuvent servir de référence. Les améliorations planifiées (☐ dans les exigences) constituent les tâches réelles à développer.
+Ce fichier est le plan de travail initial, remis en cohérence avec l’implémentation observée. `[x]` signifie que le comportement décrit existe ; les tâches explicitement signalées **partiel** ne couvrent pas encore l’exigence de bout en bout. Les exigences restent la source de vérité pour le périmètre attendu.
 
-> Les tâches marquées `*` sont optionnelles (code déjà en production ou tests associés à du code existant).
+> Les tâches marquées `*` sont des tâches de référence/optionnelles ; elles ne sont pas toutes des tests de propriétés effectivement présents. Les tâches fonctionnelles 1.1–4.5 sont déjà réalisées, mais les sous-tâches de tests de propriétés 1.3–1.7, 2.3–2.6 et 3.3 ne sont pas présentes comme telles. Le code actuel a dépassé ce plan pour certaines fonctionnalités UI, tandis que la planification de production reste partielle. Dernière validation observée : `npm test` donne 169 passing, 1 pending et 1 failing (test de péremption exactement au seuil de 7 jours). La tâche 13 reste donc ouverte.
 
 ---
 
 ## Tâches
 
 - [ ]* 1. Couche domaine — classes métier de base
-  - [ ]* 1.1 Implémenter `Tarif`, `Tarification`, `Ingrédient`, `Recette`, `Inventaire`, `Catalogue`, `Produit` dans `app/domain.js`
+  - [x]* 1.1 Implémenter `Tarif`, `Tarification`, `Ingrédient`, `Recette`, `Inventaire`, `Catalogue`, `Produit` dans `app/domain.js`
     - Champs privés (`#`), préconditions, formule de rentabilité, règles de statut
     - _Exigences : 1.1, 3.4, 3.7, 4.2, 4.3, 4.4, 4.5, 4.8, 4.9, 4.10, 4.11, 4.12, 7.3, 7.4, 7.5_
-  - [ ]* 1.2 Écrire les tests unitaires du domaine (`__test__/domain.test.js`)
+  - [x]* 1.2 Écrire les tests unitaires du domaine (`__test__/domain.test.js`)
     - Couvrir `Ingrédient`, `Produit`, `Catalogue`, `Inventaire`, `Tarification`
     - _Exigences : 3.7, 4.2, 4.3, 4.4, 4.5_
   - [ ]* 1.3 Écrire les tests de propriété — Propriété 2 : calcul du coût de revient
@@ -34,10 +34,10 @@ Ce plan de tâches couvre l'ensemble du projet Echoes Factory. Les fonctionnalit
     - **Valide : Exigence 4.4**
 
 - [ ]* 2. Couche service — façade `Usine` et bus d'événements
-  - [ ]* 2.1 Implémenter `GestionnaireEvenements` et `Usine` dans `app/service.js`
+  - [x]* 2.1 Implémenter `GestionnaireEvenements` et `Usine` dans `app/service.js`
     - Propagation `maj_tarif` / `maj_produit`, sérialisation `toString` / `parse`, gestion des liquidités
     - _Exigences : 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 2.5, 3.1, 3.5, 4.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 6.5, 7.1, 7.3, 7.10, 7.11, 7.12_
-  - [ ]* 2.2 Écrire les tests d'intégration de la façade Usine (`__test__/service.test.js`)
+  - [x]* 2.2 Écrire les tests d'intégration de la façade Usine (`__test__/service.test.js`)
     - Couvrir ajout/modification/suppression de produits, propagation des événements
     - _Exigences : 1.2, 1.3, 1.4, 1.5, 6.1, 6.2, 6.3, 6.4_
   - [ ]* 2.3 Écrire les tests de propriété — Propriété 1 : aller-retour de sérialisation
@@ -135,37 +135,37 @@ Ce plan de tâches couvre l'ensemble du projet Echoes Factory. Les fonctionnalit
   - [x] 9.2 Signaler visuellement les estimations périmées dans `produits.html`
     - Appliquer une classe CSS d'alerte si la date du tarif dépasse un seuil configurable
     - _Exigences : 11.2_
-  - [ ]* 9.3 Écrire les tests unitaires de la détection de péremption
+  - [x]* 9.3 Écrire les tests unitaires de la détection de péremption (1 test échoue au seuil exact de 7 jours)
     - Tester le calcul de péremption pour différentes dates et seuils
     - _Exigences : 11.2_
 
 - [ ] 10. Point de contrôle — vérification des nouvelles fonctionnalités
   - Exécuter `npm test` et s'assurer que tous les tests passent.
 
-- [x] 11. Planification de production — moteur de calcul
-  - [x] 11.1 Implémenter la classe `Planificateur` dans `app/service.js` (ou `app/planificateur.js`)
-    - Pour un produit cible et une quantité donnée, comparer coût de fabrication vs coût d'achat pour chaque composant
-    - Proposer une séquence d'achats/fabrications ordonnée minimisant le coût total
+- [ ] **Partiel** 11. Planification de production — moteur de calcul (partiel)
+  - [ ] **Partiel** 11.1 Implémenter la classe `Planificateur` dans `app/planificateur.js`
+    - Pour un produit cible et une quantité donnée, calculer les coûts des ingrédients directs selon les statuts `BUILD`/`BUY` et les tarifs disponibles
+    - Les recettes des composants ne sont pas déroulées en une séquence récursive minimisant le coût total
     - _Exigences : 9.1, 9.2_
   - [x] 11.2 Écrire les tests unitaires du `Planificateur`
     - Tester les cas : composant BUY, composant BUILD, composant sans tarif, arborescence imbriquée
     - _Exigences : 9.1, 9.2_
-  - [x] 11.3 Implémenter la réservation de composants dans l'`Inventaire`
-    - Ajouter les notions de stock disponible vs stock engagé lors de la planification
+  - [x] 11.3 Implémenter la réservation de composants dans l'`Inventaire` (API métier uniquement)
+    - Stock disponible vs stock engagé ; la page ne valide pas encore de plan et l'état engagé n'est pas sérialisé
     - _Exigences : 9.3_
   - [x] 11.4 Écrire les tests unitaires de la réservation de stock
     - Tester que le stock engagé est bien soustrait du stock disponible
     - _Exigences : 9.3_
-  - [x] 11.5 Implémenter le suivi des fabrications en cours dans l'`Usine`
-    - Stocker les plans de fabrication validés et permettre de suivre leur avancement
+  - [x] 11.5 Ajouter les méthodes de suivi des fabrications dans l'`Usine` (en mémoire uniquement)
+    - Création et finalisation par API ; aucun écran de validation et aucune sérialisation des fabrications
     - _Exigences : 9.4_
   - [x] 11.6 Écrire les tests d'intégration du suivi de production
     - Tester la validation d'un plan, la progression et la finalisation d'une fabrication
     - _Exigences : 9.4_
 
-- [x] 12. Planification de production — interface utilisateur
+- [ ] **Partiel** 12. Planification de production — interface utilisateur (partielle)
   - [x] 12.1 Créer la page `planification.html` avec le formulaire de sélection produit + quantité cible
-    - Afficher le plan proposé (liste d'achats et fabrications ordonnées)
+    - Afficher le plan estimatif des composants directs ; aucune validation ou création de fabrication depuis l'interface.
     - Ajouter le lien de navigation vers cette page dans la barre de navigation de toutes les pages
     - Déclencher `Usine.évaluer()` pour chaque ligne valide de toute saisie TSV dans la page (Exigence 3.8)
     - _Exigences : 9.1, 9.2, 3.8, 8.11_
@@ -176,10 +176,10 @@ Ce plan de tâches couvre l'ensemble du projet Echoes Factory. Les fonctionnalit
   - [x] 12.3 Écrire les tests unitaires de la surcharge achat/fabrication
     - Tester que la surcharge modifie bien le calcul de coût (forcer fabrication sur un `BUY`, forcer achat sur un `BUILD`)
     - _Exigences : 9.5_
-  - [x] 12.4 Afficher les ressources et liquidités restantes estimées dans `planification.html`
-    - À côté du stock actuel, afficher le stock résiduel estimé après exécution du plan
-    - Afficher les liquidités restantes estimées après les achats prévus
-    - Mettre en évidence visuellement ces indicateurs (colonne dédiée ou couleur différente)
+  - [x] 12.4 Afficher des estimations de ressources dans `planification.html` (partiel)
+    - Le stock résiduel couvre les composants directs présents en stock ; ce n'est pas une simulation des mouvements de fabrication.
+    - Les liquidités sont calculées à partir des coûts `BUY` ; elles n'incluent pas nécessairement tous les frais de fabrication.
+    - Les indicateurs ne sont pas recalculés après toutes les surcharges utilisateur.
     - _Exigences : 7.13, 7.14_
   - [x] 12.5 Implémenter la détection des déficits dans le `Planificateur`
     - Pour chaque composant du plan, comparer la quantité requise au stock disponible et calculer le déficit éventuel
@@ -195,15 +195,15 @@ Ce plan de tâches couvre l'ensemble du projet Echoes Factory. Les fonctionnalit
     - Mettre en évidence les composants dont le stock disponible est insuffisant (quantités manquantes en rouge ou avec icône d'alerte)
     - Afficher le déficit de liquidités lorsque les achats prévus dépassent les liquidités disponibles
     - _Exigences : 9.8, 9.9_
-  - [x] 12.8 Implémenter la priorisation des étapes réalisables dans le `Planificateur`
-    - Trier les étapes de fabrication de façon à placer en tête celles dont tous les composants sont déjà disponibles en stock, avant celles qui nécessitent des achats ou des ressources manquantes
+  - [x] 12.8 Implémenter une priorisation simple des étapes `BUY` couvertes en stock (partiel)
+    - Les étapes `BUY` sans déficit sont placées en tête ; la faisabilité d'une fabrication imbriquée n'est pas évaluée
     - _Exigences : 9.10_
   - [x] 12.9 Écrire les tests unitaires de la priorisation des étapes réalisables
     - Tester qu'une étape entièrement couverte par le stock apparaît avant une étape avec composants manquants
     - Tester le cas où aucune étape n'est immédiatement réalisable
     - _Exigences : 9.10_
-  - [x] 12.10 Afficher le résumé des fabrications en cours sur `index.html`
-    - Ajouter une section résumé sur la page d'accueil avec les étapes suivantes
+  - [x] 12.10 Afficher un résumé des fabrications présentes dans l'instance sur `index.html` (partiel)
+    - Le résumé est rendu, mais la page de planification ne crée pas de fabrication et l'état n'est pas persisté.
     - _Exigences : 9.5_
 
 - [ ] 13. Point de contrôle final — validation complète

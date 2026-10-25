@@ -6,7 +6,7 @@ Echoes Factory est une application web sans serveur, destinée aux industriels d
 
 Toutes les données sont persistées localement dans le `localStorage` du navigateur. Aucune étape de compilation ni de serveur applicatif n'est requise.
 
-Ce document couvre les fonctionnalités actuellement implémentées (✅) ainsi que les améliorations planifiées (☐).
+Ce document décrit les exigences du projet et leur état observé dans le code. Statuts : ✅ implémenté dans le périmètre indiqué ; ◐ partiellement implémenté ou non utilisable de bout en bout ; ☐ non implémenté. Cette notation reflète le code et l’interface présents, pas seulement l’intention des tâches. La planification, le suivi des fabrications et les tests ont des limites précisées dans les critères ci-dessous et dans le document de design.
 
 ---
 
@@ -148,8 +148,8 @@ Ce document couvre les fonctionnalités actuellement implémentées (✅) ainsi 
 10. ✅ WHEN l'utilisateur valide la saisie des liquidités, THE Usine SHALL accepter la nouvelle valeur si elle est un entier positif ou nul, persister l'`Usine` et masquer le champ de saisie.
 11. ✅ IF l'utilisateur saisit un montant de liquidités non entier, négatif ou non numérique, THEN THE Usine SHALL lever une erreur et conserver la valeur précédente.
 12. ✅ THE Usine SHALL accepter une chaîne numérique (ex. `"300"`) comme valeur de liquidités valide, en la convertissant en entier.
-13. ☐ WHEN l'utilisateur consulte le plan de production dans la page de planification, THE Application SHALL afficher les quantités en stock résiduelles estimées après exécution du plan, en plus des quantités actuellement disponibles.
-14. ☐ WHEN l'utilisateur consulte le plan de production dans la page de planification, THE Application SHALL afficher les liquidités restantes estimées après les achats prévus dans le plan.
+13. ◐ WHEN l'utilisateur consulte le plan dans la page de planification, THE Application SHALL afficher le stock résiduel estimé pour les composants directs présents en stock. L'estimation n'est pas une simulation complète des mouvements de production et n'est pas recalculée après toutes les surcharges `BUILD`/`BUY`.
+14. ◐ WHEN l'utilisateur consulte le plan, THE Application SHALL afficher les liquidités restantes estimées après les achats `BUY` prévus. Le calcul n'inclut pas systématiquement les frais de fabrication et ne se met pas à jour après toutes les surcharges.
 
 ---
 
@@ -163,13 +163,13 @@ Ce document couvre les fonctionnalités actuellement implémentées (✅) ainsi 
 2. ✅ THE Application SHALL mettre en évidence le lien de navigation correspondant à la page courante.
 3. ✅ THE Application SHALL afficher un message adapté lorsqu'une liste (produits, tarifs, stock) est vide.
 4. ✅ WHEN une opération échoue, THE Application SHALL afficher une notification contextuelle avec le message d'erreur, qui disparaît automatiquement après 5 secondes.
-5. ☐ WHEN l'utilisateur clique sur un en-tête de colonne du tableau du stock, THE Application SHALL trier les objets selon cette colonne, en alternant ordre croissant et décroissant.
-6. ☐ WHEN l'utilisateur saisit du texte dans le champ de recherche du stock, THE Application SHALL filtrer l'affichage des lignes de l'inventaire pour n'afficher que les objets dont le nom contient la saisie.
-7. ☐ WHEN l'utilisateur clique sur un en-tête de colonne du tableau des produits, THE Application SHALL trier les produits selon cette colonne, en alternant ordre croissant et décroissant.
-8. ☐ WHEN l'utilisateur saisit du texte dans un champ de recherche du catalogue produits, THE Application SHALL filtrer les produits affichés selon leur nom.
-9. ☐ WHEN l'utilisateur clique sur un en-tête de colonne du tableau des tarifs, THE Application SHALL trier les tarifs selon cette colonne, en alternant ordre croissant et décroissant.
-10. ☐ WHEN l'utilisateur saisit du texte dans un champ de recherche du marché, THE Application SHALL filtrer les tarifs affichés selon leur nom.
-11. ☐ WHEN la page de planification de production est disponible, THE Application SHALL ajouter un lien vers celle-ci dans la barre de navigation de toutes les pages.
+5. ✅ WHEN l'utilisateur clique sur un en-tête de colonne du tableau du stock, THE Application SHALL trier les objets selon cette colonne, en alternant ordre croissant et décroissant.
+6. ✅ WHEN l'utilisateur saisit du texte dans le champ de recherche du stock, THE Application SHALL filtrer l'affichage des lignes de l'inventaire pour n'afficher que les objets dont le nom contient la saisie.
+7. ✅ WHEN l'utilisateur clique sur un en-tête de colonne du tableau des produits, THE Application SHALL trier les produits selon cette colonne, en alternant ordre croissant et décroissant (nom, rentabilité, gain estimé).
+8. ✅ WHEN l'utilisateur saisit du texte dans le champ de recherche du catalogue produits, THE Application SHALL filtrer les produits affichés selon leur nom.
+9. ✅ WHEN l'utilisateur clique sur un en-tête de colonne du tableau des tarifs, THE Application SHALL trier les tarifs selon cette colonne, en alternant ordre croissant et décroissant (nom, prix, date).
+10. ✅ WHEN l'utilisateur saisit du texte dans le champ de recherche du marché, THE Application SHALL filtrer les tarifs affichés selon leur nom.
+11. ✅ THE Application SHALL proposer un lien vers la page de planification dans la barre de navigation de toutes les pages.
 
 ---
 
@@ -179,16 +179,16 @@ Ce document couvre les fonctionnalités actuellement implémentées (✅) ainsi 
 
 #### Critères d'acceptation
 
-1. ☐ WHEN l'utilisateur sélectionne un produit et saisit une quantité cible, THE Planificateur SHALL comparer le coût de fabrication et le coût d'achat pour chaque composant nécessaire.
-2. ☐ WHEN le Planificateur a analysé tous les composants, THE Planificateur SHALL proposer une séquence d'achats et de fabrications ordonnée minimisant le coût total.
-3. ☐ WHEN une fabrication est planifiée, THE Application SHALL réserver les composants nécessaires dans l'inventaire pour distinguer le stock disponible du stock engagé.
-4. ☐ WHEN l'utilisateur valide un plan de production, THE Application SHALL enregistrer les fabrications en cours et permettre de suivre leur avancement.
-5. ☐ WHEN l'utilisateur consulte la page d'accueil, THE Application SHALL afficher un résumé des fabrications en cours et des prochaines étapes nécessaires à leur avancement.
-6. ☐ WHEN le plan est affiché, THE Application SHALL présenter le choix par défaut achat/fabrication pour chaque ingrédient qui est également un `Produit` du catalogue, et permettre à l'utilisateur de remplacer ce choix par une décision explicite pour chacun de ces ingrédients.
-7. ☐ THE Planificateur SHALL permettre de produire un plan même si le stock ou les liquidités disponibles sont insuffisants pour couvrir l'intégralité des besoins.
-8. ☐ WHEN le stock disponible est insuffisant pour un composant requis par le plan, THE Application SHALL mettre en évidence visuellement les quantités manquantes pour chaque composant en déficit.
-9. ☐ WHEN les liquidités disponibles sont insuffisantes pour couvrir les achats et/ou les frais de fabrication prévus dans le plan, THE Application SHALL mettre en évidence visuellement le déficit de liquidités.
-10. ☐ WHEN un plan est établi avec des ressources insuffisantes, THE Planificateur SHALL ordonner les prochaines étapes de fabrication en priorisant celles dont tous les composants nécessaires sont déjà disponibles en stock, avant celles qui nécessitent des achats ou des ressources manquantes.
+1. ◐ WHEN l'utilisateur sélectionne un produit et saisit une quantité cible, THE Planificateur SHALL établir les coûts des composants directs selon le statut `BUILD`/`BUY` et les tarifs disponibles. Il ne développe pas l'ensemble des sous-recettes.
+2. ◐ Le Planificateur SHALL ordonner les composants directs avec les étapes `BUY` couvertes par le stock en tête ; il ne calcule pas une séquence complète minimisant le coût à travers toute l'arborescence de production.
+3. ◐ L'Inventaire et l'Usine exposent des méthodes de réservation, mais la page ne valide pas de plan et l'état engagé n'est pas persisté.
+4. ◐ L'Usine permet de créer et terminer des fabrications via ses méthodes, mais aucun parcours UI de validation n'est disponible et ces fabrications ne sont pas sérialisées.
+5. ◐ L'accueil sait afficher les fabrications fournies par l'instance de l'Usine ; faute de création depuis l'interface et de persistance, le résumé n'est pas un suivi durable.
+6. ✅ Le plan affiche la décision par défaut pour les composants présents au catalogue et permet de la remplacer ; le coût des composants et le total sont recalculés. Les indicateurs de ressources ne sont pas tous recalculés après cette surcharge.
+7. ✅ Le moteur retourne un plan même en cas de stock ou de liquidités insuffisants.
+8. ✅ Le déficit de stock des étapes `BUY` est affiché dans la page de planification.
+9. ◐ Un déficit est calculé et affiché à partir des coûts d'achats `BUY` estimés, mais les frais de fabrication et les surcharges ne sont pas intégralement inclus.
+10. ◐ Les composants `BUY` dont le besoin est entièrement couvert par le stock sont placés en tête. La priorité n'évalue pas la faisabilité complète d'une étape de fabrication imbriquée.
 
 ---
 
@@ -210,8 +210,8 @@ Ce document couvre les fonctionnalités actuellement implémentées (✅) ainsi 
 
 #### Critères d'acceptation
 
-1. ☐ WHEN un produit est affiché dans le catalogue, THE Application SHALL afficher la date d'effet du tarif le plus ancien utilisé dans le calcul de son coût de revient.
-2. ☐ WHEN un tarif utilisé dans un calcul est plus ancien qu'un seuil configurable, THE Application SHALL signaler visuellement que l'estimation peut être périmée.
+1. ✅ WHEN un produit est affiché dans le catalogue, THE Application SHALL afficher la date d'effet du tarif le plus ancien utilisé dans le calcul de son coût de revient.
+2. ◐ WHEN un tarif utilisé dans un calcul est plus ancien que sept jours, THE Application SHALL signaler visuellement que l'estimation peut être périmée. Le seuil est actuellement codé en dur et n'est pas configurable dans l'interface.
 
 ---
 
