@@ -198,12 +198,10 @@
     import { Planificateur } from "./app/planificateur.js"
     import { decodeEchoesListe, NUMBER_FORMAT, notifier } from "./app/presentation.js"
     import { coûtUnitaireEffectif as _coûtUnitaireEffectif } from "./app/planificationSurcharge.js"
+    import { Stockage } from "./app/storage.js"
 
-    // ============================================================
-    // INITIALISATION
-    // ============================================================
-
-    const usine = Usine.parse(localStorage.getItem("usine") || new Usine("He's alive !").toString());
+    const stockage = new Stockage();
+    const usine = Usine.parse(stockage.lireUsine() || new Usine("He's alive !").toString());
 
     document.getElementById("nav-nomUsine").textContent = usine.nom;
 
@@ -530,7 +528,7 @@
       }
 
       if (nbImportés > 0) {
-        localStorage.setItem("usine", usine.toString());
+        stockage.sauvegarderUsine(usine);
         TSV_RÉSULTAT.textContent = `${nbImportés} tarif(s) importé(s)${nbIgnorés > 0 ? `, ${nbIgnorés} ignoré(s)` : ""}.`;
         notifier(`${nbImportés} tarif(s) mis à jour depuis la liste TSV.`, "info");
         INPUT_TSV.value = "";

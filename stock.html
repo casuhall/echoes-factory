@@ -112,6 +112,17 @@
       initialiserElement, notifier
     } from "./app/presentation.js"
     import { filtrerStock, trierStock } from "./app/stockSortFilter.js"
+    import { Stockage } from "./app/storage.js"
+
+    const stockage = new Stockage();
+    let usine;
+    let storedUsine = stockage.lireUsine();
+    if (storedUsine) {
+      usine = Usine.parse(storedUsine);
+    }
+    else {
+      usine = new Usine("ChangeIt", undefined, [], [], []);
+    }
 
     // Binding des éléments d'IHM
     const nomUsine = document.getElementById('nav-nomUsine');
@@ -133,15 +144,6 @@
     // État local de tri : colonne ("nom" | "quantité" | null) et direction ("asc" | "desc")
     let sortColonne = null;
     let sortDirection = "asc";
-
-    let usine;
-    let storedUsine = localStorage.getItem("usine");
-    if (storedUsine) {
-      usine = Usine.parse(storedUsine);
-    }
-    else {
-      usine = new Usine("ChangeIt", undefined, [], [], []);
-    }
 
     nomUsine.textContent = usine.nom;
 
@@ -313,7 +315,7 @@
 
     // Fonction de stockage des données de l'usine
     function updateStorage() {
-      localStorage.setItem("usine", usine.toString());
+      stockage.sauvegarderUsine(usine);
     }
 
   </script>

@@ -55,15 +55,17 @@
     } from "./app/presentation.js"
     import { filtrerProduits, trierProduits } from "./app/produitsSortFilter.js"
     import { estPérimé } from "./app/péremption.js"
+    import { Stockage } from "./app/storage.js"
+
+    const stockage = new Stockage();
+    const usine = Usine.parse(stockage.lireUsine() || "{}");
+    document.getElementById("nav-nomUsine").innerText = usine.nom;
 
     const corpsTableauProduits = document.getElementById('produitsBody');
     const searchInput = document.getElementById('search_produits');
 
     // Seuil configurable de péremption des estimations (en jours)
     const SEUIL_PÉREMPTION_JOURS = 7;
-
-    const usine = Usine.parse(localStorage.getItem("usine") || "{}");
-    document.getElementById("nav-nomUsine").innerText = usine.nom;
 
     // État de tri : { colonne: 'nom'|'rentabilité'|'gain', direction: 'asc'|'desc' }
     let triCourant = { colonne: null, direction: 'asc' };
@@ -134,7 +136,7 @@
         editButton.textContent = "✎";
         editButton.classList.add("btn", "ghost");
         editButton.addEventListener("click", () => {
-          localStorage.setItem("produitÀÉditer", JSON.stringify(produit));
+          stockage.sauvegarder("produitÀÉditer", JSON.stringify(produit));
           window.location.href = `./edition_produit.html?produit=${produit.nom}`;
         });
         const deleteButton = document.createElement("button");
@@ -143,7 +145,7 @@
         deleteButton.addEventListener("click", () => {
           if (confirm(`Êtes-vous sûr de vouloir supprimer le produit "${produit.nom}" ?`)) {
             usine.supprimeProduit(produit.nom);
-            localStorage.setItem("usine", usine.toString());
+            stockage.sauvegarderUsine(usine);
             location.reload();
           }
         });

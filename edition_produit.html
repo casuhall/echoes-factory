@@ -117,6 +117,9 @@
   <script type="module">
     import { decodeEchoesListe, notifier } from "./app/presentation.js"
     import { Usine } from "./app/service.js"
+    import { Stockage } from "./app/storage.js"
+
+    const stockage = new Stockage();
 
     // ============================================================
     // ÉLÉMENTS DU DOM
@@ -157,7 +160,7 @@
      * @type {Array<{nom: string, quantité: number}>}
      */
     let ingredientsListe = [];
-    let storedUsine = localStorage.getItem("usine");
+    let storedUsine = stockage.lireUsine();
     let usine;
     if (storedUsine) {
       usine = Usine.parse(storedUsine);
@@ -349,7 +352,7 @@
         masquerFormulaireInitialisation();
 
         // Sauvegarde l'usine mise à jour dans le localStorage en cas d'ajout de nouveaux ingrédients au marché
-        localStorage.setItem("usine", usine.toString());
+        stockage.sauvegarderUsine(usine);
 
       } catch (erreur) {
         console.error("Erreur lors du décodage de la liste d'ingrédients:", erreur);
@@ -435,7 +438,7 @@
         usine.modifieProduit(recette);
       else
         usine.ajouteProduit(recette);
-      localStorage.setItem("usine", usine.toString());
+      stockage.sauvegarderUsine(usine);
 
       window.location.href = "./produits.html";
 

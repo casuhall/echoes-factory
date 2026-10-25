@@ -87,6 +87,17 @@
       initialiserElement, notifier
     } from "./app/presentation.js"
     import { filtrerTarifs, trierTarifs } from "./app/marchéSortFilter.js"
+    import { Stockage } from "./app/storage.js"
+
+    const stockage = new Stockage();
+    let usine;
+    let storedUsine = stockage.lireUsine();
+    if (storedUsine) {
+      usine = Usine.parse(storedUsine);
+    }
+    else {
+      usine = new Usine("ChangeIt", undefined, [], [], []);
+    }
 
     // Binding des éléments d'IHM
     const nomUsine = document.getElementById('nav-nomUsine');
@@ -106,17 +117,7 @@
     // État local de tri — { col: "nom"|"prix"|"date", dir: "asc"|"desc" } | null
     let triEtat = null;
 
-    let usine;
-    let storedUsine = localStorage.getItem("usine");
-    if (storedUsine) {
-      usine = Usine.parse(storedUsine);
-    }
-    else {
-      usine = new Usine("ChangeIt", undefined, [], [], []);
-    }
-
     nomUsine.textContent = usine.nom;
-    préparerSaisieUnitaire();
     préparerSaisieMassive();
     préparerTriEtRecherche();
     présenterTarifs();
@@ -219,7 +220,7 @@
 
     // Fonction de stockage des données de l'usine
     function updateStorage() {
-      localStorage.setItem("usine", usine.toString());
+      stockage.sauvegarderUsine(usine);
     }
 
   </script>

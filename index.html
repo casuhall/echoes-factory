@@ -57,7 +57,10 @@
   <script type="module">
     import { Usine } from "./app/service.js"
     import { notifier } from "./app/presentation.js"
-    const usine = Usine.parse(localStorage.getItem("usine") || new Usine("He's alive !").toString());
+    import { Stockage } from "./app/storage.js"
+
+    const stockage = new Stockage();
+    const usine = Usine.parse(stockage.lireUsine() || new Usine("He's alive !").toString());
 
     init();
 
@@ -67,8 +70,7 @@
     });
     // Auclic sur le bouton "reset", supression de l'usine persistée pour la remplacer par une usine vide
     document.querySelector("#button-reset").addEventListener("click", () => {
-      localStorage.removeItem("usine");
-      localStorage.setItem("usine", new Usine("Red is DED").toString());
+      stockage.sauvegarderUsine(new Usine("Red is DED"));
       window.location.reload();
     });
 
@@ -176,7 +178,7 @@
 
     function save() {
       usine.nom = document.querySelector("#input-nomUsine").value;
-      localStorage.setItem("usine", usine.toString());
+      stockage.sauvegarderUsine(usine);
       init();
     }
   </script>
