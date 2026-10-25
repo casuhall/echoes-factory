@@ -38,9 +38,14 @@ Au-delà de 15 % de rentabilité, le commentaire est « Commercialisable » ; un
 ### Planification de production — état actuel
 
 - Choisir un produit du catalogue et une quantité cible pour calculer un plan portant sur ses ingrédients directs.
+- Le plan proposé n’affiche que les **sous-produits** (composants présents dans le catalogue). Les composants absents du catalogue sont masqués du plan mais restent pris en compte dans les estimations de coût.
 - Pour les composants qui sont aussi des produits du catalogue, conserver la décision suggérée `BUILD`/`BUY` ou la remplacer ; le coût affiché est recalculé.
 - Afficher les coûts estimés, les déficits de stock `BUY` et un déficit de liquidités calculé à partir des achats estimés.
-- Afficher une estimation du stock résiduel et des liquidités après achats, et importer un TSV de prix.
+- Afficher les **ressources nécessaires** à la production planifiée :
+  - `Achat` pour les composants à acheter ;
+  - `Stock` pour les sous-produits `BUILD` déjà disponibles en stock ;
+  - `Fabrication` pour les sous-produits `BUILD` dont le stock est insuffisant, avec la liste des ingrédients nécessaires à leur fabrication.
+- Le plan calcule également le coût des composants absents du catalogue (`coût_hors_catalogue`).
 
 Le planificateur ne déroule pas toute une arborescence de sous-recettes en séquence opérationnelle. Les estimations de ressources portent sur les composants directs et ne constituent pas une comptabilité d’exécution. Le service contient des méthodes de réservation de stock et de suivi de fabrication, mais l’interface ne permet pas encore de valider un plan et l’état des fabrications/réservations n’est pas inclus dans la sauvegarde locale.
 
@@ -73,7 +78,7 @@ Les données sont propres au navigateur et à son origine. Effacer les données 
 
 ## Développement et état des tests
 
-Le projet utilise des modules JavaScript natifs et Mocha. Installer les dépendances puis lancer `npm test`. Lors de la dernière exécution observée : **169 tests réussis, 1 en attente et 1 en échec**. L’échec concerne une date exactement au seuil de péremption de sept jours : le code compare une durée en millisecondes, tandis que le test attend une comparaison par jour calendaire. Le point de contrôle final n’est donc pas validé.
+Le projet utilise des modules JavaScript natifs et Mocha. Installer les dépendances puis lancer `npm test`. Lors de la dernière exécution observée : **173 tests réussis, 1 en attente et 0 en échec**.
 
 ```sh
 npm install

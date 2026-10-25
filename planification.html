@@ -49,7 +49,8 @@
 
     #ressources-table td:nth-child(2),
     #ressources-table td:nth-child(3),
-    #ressources-table td:nth-child(4) {
+    #ressources-table td:nth-child(4),
+    #ressources-table td:nth-child(5) {
       text-align: end;
     }
 
@@ -165,7 +166,8 @@
       <table class="table" id="ressources-table">
         <thead>
           <tr>
-            <th>Composant</th>
+            <th>Ressource</th>
+            <th style="text-align:end;">Type</th>
             <th style="text-align:end;">Stock actuel</th>
             <th style="text-align:end;">Requis par le plan</th>
             <th style="text-align:end;">Stock résiduel estimé</th>
@@ -295,6 +297,8 @@
 
       PLAN_BODY.replaceChildren();
 
+      const étapesVisibles = plan.étapes.filter(étape => usine.produit(étape.nom) !== undefined);
+
       // Calcul des frais de fabrication du produit cible (nécessaire pour le recalcul du coût total)
       const produitCible = usine.produit(nomProduit);
       const recetteCible = produitCible?.recette;
@@ -304,12 +308,12 @@
       // Map des surcharges utilisateur : nom de l'étape → décision choisie
       const surcharges = new Map();
 
-      if (plan.étapes.length === 0) {
+      if (étapesVisibles.length === 0) {
         const tr = document.createElement("tr");
         tr.innerHTML = `<td class="empty" colspan="4">Aucun composant nécessaire</td>`;
         PLAN_BODY.appendChild(tr);
       } else {
-        for (const étape of plan.étapes) {
+        for (const étape of étapesVisibles) {
           const tr = document.createElement("tr");
 
           const tdNom = document.createElement("td");
@@ -427,41 +431,80 @@
     function afficherRessourcesRésiduelles(plan) {
       RESSOURCES_BODY.replaceChildren();
 
-      // Calculer le stock résiduel estimé pour chaque composant présent en stock
-      const composantsAvecStock = plan.étapes.filter(étape => {
-        const enStock = usine.stock.find(s => s.nom === étape.nom);
-        return enStock && enStock.quantité > 0;
-      });
+      const lignes = [];
 
-      if (composantsAvecStock.length > 0) {
-        for (const étape of composantsAvecStock) {
-          const stockActuel = usine.stock.find(s => s.nom === étape.nom)?.quantité ?? 0;
-          const résiduel = Math.max(0, stockActuel - étape.quantité);
+      for (const étape of plan.étapes) {
+        const produit = usine.produit(étape.nom);
+        const stockActuel = usine.stock.find(s => s.nom === étape.nom)?.quantité ?? 0;
 
+        if (produit && étape.décision === 'BUILD') {
+          if (stockActuel >= étape.quantité) {
+            // Stock suffisant : la ressource est le composant lui-même
+            lignes.push({
+              nom: étape.nom,
+              type: 'Stock',
+              quantitéRequise: étape.quantité,
+              stockActuel: stockActuel,
+              stockRésiduel: stockActuel - étape.quantité
+            });
+          } else {
+            // Stock insuffisant : les ressources sont les ingrédients nécessaires
+            const déficit = étape.quantité - stockActuel;
+            const cycles = Math.ceil(déficit / produit.recette.quantité_produite);
+            for (const ingrédient of produit.recette.ingrédients) {
+              const ingStock = usine.stock.find(s => s.nom === ingrédient.nom)?.quantité ?? 0;
+              const ingRequis = ingrédient.quantité * cycles;
+              lignes.push({
+                nom: ingrédient.nom,
+                type: 'Fabrication',
+                quantitéRequise: ingRequis,
+                stockActuel: ingStock,
+                stockRésiduel: Math.max(0, ingStock - ingRequis)
+              });
+            }
+          }
+        } else {
+          // Achat : la ressource est le composant lui-même
+          lignes.push({
+            nom: étape.nom,
+            type: 'Achat',
+            quantitéRequise: étape.quantité,
+            stockActuel: stockActuel,
+            stockRésiduel: Math.max(0, stockActuel - étape.quantité)
+          });
+        }
+      }
+
+      if (lignes.length > 0) {
+        for (const ligne of lignes) {
           const tr = document.createElement("tr");
 
           const tdNom = document.createElement("td");
-          tdNom.textContent = étape.nom;
+          tdNom.textContent = ligne.nom;
+
+          const tdType = document.createElement("td");
+          tdType.textContent = ligne.type;
+          tdType.style.textAlign = "end";
 
           const tdStockActuel = document.createElement("td");
-          tdStockActuel.textContent = NUMBER_FORMAT.format(stockActuel, "integer");
+          tdStockActuel.textContent = NUMBER_FORMAT.format(ligne.stockActuel, "integer");
           tdStockActuel.style.textAlign = "end";
 
           const tdRequis = document.createElement("td");
-          tdRequis.textContent = NUMBER_FORMAT.format(étape.quantité, "integer");
+          tdRequis.textContent = NUMBER_FORMAT.format(ligne.quantitéRequise, "integer");
           tdRequis.style.textAlign = "end";
 
           const tdRésiduel = document.createElement("td");
-          tdRésiduel.textContent = NUMBER_FORMAT.format(résiduel, "integer");
+          tdRésiduel.textContent = NUMBER_FORMAT.format(ligne.stockRésiduel, "integer");
           tdRésiduel.style.textAlign = "end";
-          tdRésiduel.classList.add(résiduel > 0 ? "résiduel-positif" : "résiduel-nul");
+          tdRésiduel.classList.add(ligne.stockRésiduel > 0 ? "résiduel-positif" : "résiduel-nul");
 
-          tr.append(tdNom, tdStockActuel, tdRequis, tdRésiduel);
+          tr.append(tdNom, tdType, tdStockActuel, tdRequis, tdRésiduel);
           RESSOURCES_BODY.appendChild(tr);
         }
       } else {
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td class="empty" colspan="4">Aucun composant du plan n'est disponible en stock</td>`;
+        tr.innerHTML = `<td class="empty" colspan="5">Aucune ressource nécessaire</td>`;
         RESSOURCES_BODY.appendChild(tr);
       }
 

@@ -8,6 +8,7 @@ Workflow attendu :
 1. Concevoir l'évolution du domaine et des services
 2. Implémenter l'interface utilisateur
 3. Adapter le stockage si nécessaire
+4. Mettre a jour la documentation du projet pour refléter les modifications appliquées
 
 Stack : JavaScript navigateur, ES modules, pas de TypeScript
 

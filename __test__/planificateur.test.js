@@ -244,6 +244,45 @@ describe('Planificateur', () => {
         });
     });
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // Tests unitaires — Coût hors catalogue
+    // ─────────────────────────────────────────────────────────────────────────
+    describe('Coût hors catalogue', () => {
+        it('coût_hors_catalogue est 0 quand tous les composants sont des sous-produits', () => {
+            // Arc : Corde×2 ; Corde est dans le catalogue
+            const recetteCorde = new Recette('Corde', 50, [new Ingrédient('Chanvre', 5)]);
+            const recetteArc = new Recette('Arc', 100, [new Ingrédient('Corde', 2)]);
+            const usine = new Usine('Usine coût hors catalogue', undefined,
+                [recetteCorde, recetteArc],
+                [new Tarif('Chanvre', 10), new Tarif('Corde', 200), new Tarif('Arc', 600)]
+            );
+            const plan = new Planificateur(usine).planifier('Arc', 1);
+            expect(plan.coût_hors_catalogue).to.equal(0);
+        });
+
+        it('coût_hors_catalogue retourne le coût du composant absent du catalogue', () => {
+            // Épée : Acier×3 ; Acier n est pas dans le catalogue, coût = 600
+            const recetteÉpée = new Recette('Épée', 50, [new Ingrédient('Acier', 3)]);
+            const usine = new Usine('Usine coût hors catalogue', undefined,
+                [recetteÉpée],
+                [new Tarif('Acier', 100), new Tarif('Épée', 500)]
+            );
+            const plan = new Planificateur(usine).planifier('Épée', 2);
+            expect(plan.coût_hors_catalogue).to.equal(600);
+        });
+
+        it('coût_hors_catalogue est undefined quand un composant hors catalogue a un coût inconnu', () => {
+            // Marteau : Pierre×4 ; Pierre n est pas dans le catalogue et sans tarif
+            const recetteMarteau = new Recette('Marteau', 30, [new Ingrédient('Pierre', 4)]);
+            const usine = new Usine('Usine coût hors catalogue', undefined,
+                [recetteMarteau],
+                [new Tarif('Marteau', 200)]
+            );
+            const plan = new Planificateur(usine).planifier('Marteau', 1);
+            expect(plan.coût_hors_catalogue).to.be.undefined;
+        });
+    });
+
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

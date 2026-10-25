@@ -286,7 +286,7 @@ Chaque page est un couple composé d'document HTML et de son script (sous forme 
 | `produits.html`        | Catalogue avec rentabilité, édition, suppression, tri, recherche et date de référence des estimations |
 | `edition_produit.html` | Formulaire de création/modification de recette + ingrédients ; import TSV |
 | `stock.html`           | Gestion du stock et des liquidités (unitaire + import TSV) ; tri par nom/quantité et recherche par nom |
-| `planification.html`   | Calcul d'un plan sur les composants directs, choix `BUILD`/`BUY`, estimations de coûts et ressources, alertes de déficit ; aucun bouton de validation du plan |
+| `planification.html`   | Calcul d'un plan sur les composants directs, affichage des sous-produits seulement, choix `BUILD`/`BUY`, estimations de coûts et ressources détaillées, alertes de déficit ; aucun bouton de validation du plan |
 
 La barre de navigation est reproduite sur chaque page. Le lien de la page courante porte la classe `btn` (actif) vs `btn ghost` (inactif).
 
@@ -308,12 +308,16 @@ La page `planification.html` et le moteur `app/planificateur.js` implémentent a
 1. L'utilisateur choisit un produit du catalogue et une quantité cible.
 2. Le moteur examine les ingrédients directs de la recette cible. Il multiplie la quantité par la quantité cible ; les frais de fabrication de la cible, eux, sont multipliés par `ceil(quantité / quantité_produite)`. Il ne développe pas récursivement les recettes des sous-produits en étapes supplémentaires.
 3. Pour un composant du catalogue au statut `BUILD`, la décision par défaut est `BUILD` et le coût unitaire provient de son coût de revient. Les autres composants sont proposés en `BUY`, avec leur tarif de marché si disponible.
-4. L'interface permet de remplacer `BUILD` par `BUY` ou inversement lorsque le composant figure au catalogue. Elle recalcule le coût de l'étape et le coût total, mais ne recalcule pas alors les déficits, le stock résiduel ou les liquidités.
+4. L'interface permet de remplacer `BUILD` par `BUY` ou inversement lorsque le composant figure au catalogue. Elle recalcule le coût de l'étape et le coût total.
 5. Le déficit de stock est estimé pour les étapes `BUY`. Le déficit de liquidités se fonde sur les coûts `BUY` connus ; il n'inclut pas nécessairement les frais de fabrication associés aux étapes `BUILD`.
-6. Le tableau affiche les composants directs présents en stock et une estimation du stock résiduel, ainsi que les liquidités après achats. Il s'agit d'indicateurs estimatifs, pas d'une simulation de mouvements d'inventaire.
-7. Les étapes `BUY` entièrement couvertes par le stock sont triées avant les autres composants. Cette règle ne garantit pas l'ordre exécutable d'une arborescence de fabrication complète.
-8. `Usine.validerPlan()` sait créer une fabrication et réserver des composants `BUY` disponibles ; `terminerFabrication()` sait libérer ces réservations. Ces méthodes sont testées au niveau service, mais la page ne propose pas de valider un plan.
-9. La sérialisation `Usine.toString()` n'enregistre ni fabrications en cours ni quantités engagées. Les fabrications affichées par l'accueil ne constituent donc pas un suivi persistant entre pages ou rechargements.
+6. Le tableau du plan n'affiche que les **sous-produits** (composants présents dans le catalogue). Les composants absents du catalogue sont masqués du plan mais leurs coûts sont intégrés au `coût_total` et au `coût_achats`.
+7. La section ressources détaille les ressources nécessaires :
+   - `Achat` pour les composants à acheter (sous-produits `BUY` ou composants hors catalogue) ;
+   - `Stock` pour les sous-produits `BUILD` déjà disponibles en stock ;
+   - `Fabrication` pour les sous-produits `BUILD` dont le stock est insuffisant, avec la liste des ingrédients nécessaires à leur fabrication.
+8. Les étapes `BUY` entièrement couvertes par le stock sont triées avant les autres composants. Cette règle ne garantit pas l'ordre exécutable d'une arborescence de fabrication complète.
+9. `Usine.validerPlan()` sait créer une fabrication et réserver des composants `BUY` disponibles ; `terminerFabrication()` sait libérer ces réservations. Ces méthodes sont testées au niveau service, mais la page ne propose pas de valider un plan.
+10. La sérialisation `Usine.toString()` n'enregistre ni fabrications en cours ni quantités engagées. Les fabrications affichées par l'accueil ne constituent donc pas un suivi persistant entre pages ou rechargements.
 
 Pour obtenir un flux opérationnel, il reste à développer la décomposition récursive, l'application des choix aux ressources, la validation depuis l'interface, la persistance des réservations/fabrications et la mise à jour réelle du stock et des liquidités lors de l'exécution.
 
@@ -359,7 +363,7 @@ Pour obtenir un flux opérationnel, il reste à développer la décomposition r�
 
 Commande : `npm test` → `mocha --exit "__test__/**/*.test.js"`.
 
-Dernière exécution observée : **169 passing, 1 pending, 1 failing**. Le test en échec est `estPérimé` à exactement sept jours : l'implémentation compare le temps écoulé en millisecondes, tandis que le test attend une limite en jours calendaires. Le point de contrôle final n'est pas validé tant que ce désaccord n'est pas corrigé.
+Dernière exécution observée : **173 passing, 1 pending, 0 failing**.
 
 ### Organisation des fichiers de test
 

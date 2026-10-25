@@ -50,18 +50,22 @@ export class PlanProduction {
     coût_achats;
     /** @type {number|undefined} Déficit de liquidités (Math.max(0, coût_achats - liquidités)), ou undefined si coût_achats inconnu */
     déficit_liquidités;
+    /** @type {number|undefined} Coût des composants absents du catalogue, ou undefined si un coût est manquant */
+    coût_hors_catalogue;
 
     /**
      * @param {ÉtapePlan[]} étapes
      * @param {number|undefined} coût_total
      * @param {number|undefined} coût_achats
      * @param {number|undefined} déficit_liquidités
+     * @param {number|undefined} coût_hors_catalogue Coût des composants hors catalogue
      */
-    constructor(étapes, coût_total, coût_achats, déficit_liquidités) {
+    constructor(étapes, coût_total, coût_achats, déficit_liquidités, coût_hors_catalogue) {
         this.étapes = étapes;
         this.coût_total = coût_total;
         this.coût_achats = coût_achats;
         this.déficit_liquidités = déficit_liquidités;
+        this.coût_hors_catalogue = coût_hors_catalogue;
     }
 }
 
@@ -170,6 +174,22 @@ export class Planificateur {
             ? Math.max(0, coût_achats - this.#usine.liquidités)
             : undefined;
 
-        return new PlanProduction(étapes, coût_total, coût_achats, déficit_liquidités);
+        // Coût des composants hors catalogue
+        let coût_hors_catalogue = 0;
+        let coût_hors_catalogue_défini = true;
+        for (const étape of étapes) {
+            if (!this.#usine.produit(étape.nom)) {
+                if (étape.coût === undefined) {
+                    coût_hors_catalogue_défini = false;
+                    break;
+                }
+                coût_hors_catalogue += étape.coût;
+            }
+        }
+        if (!coût_hors_catalogue_défini) {
+            coût_hors_catalogue = undefined;
+        }
+
+        return new PlanProduction(étapes, coût_total, coût_achats, déficit_liquidités, coût_hors_catalogue);
     }
 }
