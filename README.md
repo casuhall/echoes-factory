@@ -10,7 +10,6 @@ L’application fonctionne dans un navigateur sans serveur applicatif : les donn
 
 - Modifier le nom de l’usine et consulter les nombres de produits, tarifs et types d’objets en stock, ainsi que les liquidités.
 - Réinitialiser les données de l’usine locale.
-- Afficher un résumé de fabrications présentes dans l’instance de l’usine. La page de planification ne permet pas encore de valider un plan pour créer une fabrication ; le suivi n’est pas persisté.
 
 ### Marché
 
@@ -35,32 +34,17 @@ Au-delà de 15 % de rentabilité, le commentaire est « Commercialisable » ; un
 - Modifier les liquidités et vider le stock / remettre les liquidités à zéro depuis la page Stock.
 - Refuser le retrait d’une quantité supérieure au stock disponible.
 
-### Planification de production — état actuel
-
-- Choisir un produit du catalogue et une quantité cible pour calculer un plan portant sur ses ingrédients directs.
-- Le plan proposé n’affiche que les **sous-produits** (composants présents dans le catalogue). Les composants absents du catalogue sont masqués du plan mais restent pris en compte dans les estimations de coût.
-- Pour les composants qui sont aussi des produits du catalogue, conserver la décision suggérée `BUILD`/`BUY` ou la remplacer ; le coût affiché est recalculé.
-- Afficher les coûts estimés, les déficits de stock `BUY` et un déficit de liquidités calculé à partir des achats estimés.
-- Afficher les **ressources nécessaires** à la production planifiée :
-  - `Achat` pour les composants à acheter ;
-  - `Stock` pour les sous-produits `BUILD` déjà disponibles en stock ;
-  - `Fabrication` pour les sous-produits `BUILD` dont le stock est insuffisant, avec la liste des ingrédients nécessaires à leur fabrication.
-- Le plan calcule également le coût des composants absents du catalogue (`coût_hors_catalogue`).
-
-Le planificateur ne déroule pas toute une arborescence de sous-recettes en séquence opérationnelle. Les estimations de ressources portent sur les composants directs et ne constituent pas une comptabilité d’exécution. Le service contient des méthodes de réservation de stock et de suivi de fabrication, mais l’interface ne permet pas encore de valider un plan et l’état des fabrications/réservations n’est pas inclus dans la sauvegarde locale.
-
 ## Utilisation
 
-Ouvrir `index.html` dans un navigateur moderne. La navigation permet d’accéder à l’accueil, au marché, aux produits, au stock et à la planification. Aucune étape de compilation ni dépendance d’exécution n’est requise.
+Ouvrir `index.html` dans un navigateur moderne. La navigation permet d’accéder à l’accueil, au marché, aux produits et au stock. Aucune étape de compilation ni dépendance d’exécution n’est requise.
 
 Les données sont propres au navigateur et à son origine. Effacer les données du site ou utiliser un autre navigateur/profil ne conserve pas l’usine. Le bouton de réinitialisation de l’accueil remplace l’usine locale par une nouvelle usine vide.
 
 ## Organisation du projet
 
-- `index.html`, `marché.html`, `produits.html`, `edition_produit.html`, `stock.html`, `planification.html` : pages et interactions de l’interface.
+- `index.html`, `marché.html`, `produits.html`, `edition_produit.html`, `stock.html` : pages et interactions de l’interface.
 - `app/domain.js` : modèles métier et calculs.
-- `app/service.js` : façade `Usine`, propagation des mises à jour, sérialisation, réservations et méthodes de suivi de fabrication.
-- `app/planificateur.js` et `app/planificationSurcharge.js` : calcul du plan et coût des choix `BUILD`/`BUY`.
+- `app/service.js` : façade `Usine`, propagation des mises à jour et sérialisation.
 - `app/presentation.js` : décodage TSV, formatage et notifications.
 - `app/*SortFilter.js` : fonctions de tri/filtrage ; `app/péremption.js` : détection des estimations périmées.
 - `style/style.css` : styles de l’interface.
@@ -71,8 +55,6 @@ Les données sont propres au navigateur et à son origine. Effacer les données 
 
 - Les données de l’usine sont locales ; aucun stockage distant, export/import de sauvegarde ou synchronisation entre appareils n’est implémenté.
 - Les calculs dépendent de prix saisis/importés et peuvent être incomplets ou périmés.
-- Le plan de production est une estimation directe, pas une séquence complète de fabrication exécutable. Les choix `BUILD`/`BUY` modifient le coût affiché, mais les indicateurs de ressources ne sont pas tous recalculés après une surcharge.
-- La réservation de stock et le suivi de fabrication existent en partie dans le service, mais ne forment pas encore un flux persistant utilisable depuis l’interface.
 - Les mouvements de production ne déduisent pas automatiquement les matériaux ni ne créditent les objets produits ; les achats et gains ne modifient pas automatiquement stock ou liquidités.
 - L’internationalisation et la mise à jour automatique des prix ne sont pas implémentées.
 

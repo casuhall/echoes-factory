@@ -4,7 +4,7 @@
 
 Ce fichier est le plan de travail initial, remis en cohérence avec l’implémentation observée. `[x]` signifie que le comportement décrit existe ; les tâches explicitement signalées **partiel** ne couvrent pas encore l’exigence de bout en bout. Les exigences restent la source de vérité pour le périmètre attendu.
 
-> Les tâches marquées `*` sont des tâches de référence/optionnelles ; elles ne sont pas toutes des tests de propriétés effectivement présents. Les tâches fonctionnelles 1.1–4.5 sont déjà réalisées, mais les sous-tâches de tests de propriétés 1.3–1.7, 2.3–2.6 et 3.3 ne sont pas présentes comme telles. Le code actuel a dépassé ce plan pour certaines fonctionnalités UI, tandis que la planification de production reste partielle. Dernière validation observée : `npm test` donne 169 passing, 1 pending et 1 failing (test de péremption exactement au seuil de 7 jours). La tâche 13 reste donc ouverte.
+> Les tâches marquées `*` sont des tâches de référence/optionnelles ; elles ne sont pas toutes des tests de propriétés effectivement présents. Les tâches fonctionnelles 1.1–4.5 sont déjà réalisées, mais les sous-tâches de tests de propriétés 1.3–1.7, 2.3–2.6 et 3.3 ne sont pas présentes comme telles. Dernière validation observée : `npm test` donne 125 passing, 1 pending et 0 failing.
 
 ---
 
@@ -142,81 +142,26 @@ Ce fichier est le plan de travail initial, remis en cohérence avec l’impléme
 - [ ] 10. Point de contrôle — vérification des nouvelles fonctionnalités
   - Exécuter `npm test` et s'assurer que tous les tests passent.
 
-- [ ] **Partiel** 11. Planification de production — moteur de calcul (partiel)
-  - [ ] **Partiel** 11.1 Implémenter la classe `Planificateur` dans `app/planificateur.js`
-    - Pour un produit cible et une quantité donnée, calculer les coûts des ingrédients directs selon les statuts `BUILD`/`BUY` et les tarifs disponibles
-    - Les recettes des composants ne sont pas déroulées en une séquence récursive minimisant le coût total
-    - _Exigences : 9.1, 9.2_
-  - [x] 11.2 Écrire les tests unitaires du `Planificateur`
-    - Tester les cas : composant BUY, composant BUILD, composant sans tarif, arborescence imbriquée
-    - _Exigences : 9.1, 9.2_
-  - [x] 11.3 Implémenter la réservation de composants dans l'`Inventaire` (API métier uniquement)
-    - Stock disponible vs stock engagé ; la page ne valide pas encore de plan et l'état engagé n'est pas sérialisé
-    - _Exigences : 9.3_
-  - [x] 11.4 Écrire les tests unitaires de la réservation de stock
-    - Tester que le stock engagé est bien soustrait du stock disponible
-    - _Exigences : 9.3_
-  - [x] 11.5 Ajouter les méthodes de suivi des fabrications dans l'`Usine` (en mémoire uniquement)
-    - Création et finalisation par API ; aucun écran de validation et aucune sérialisation des fabrications
-    - _Exigences : 9.4_
-  - [x] 11.6 Écrire les tests d'intégration du suivi de production
-    - Tester la validation d'un plan, la progression et la finalisation d'une fabrication
-    - _Exigences : 9.4_
-
-- [ ] **Partiel** 12. Planification de production — interface utilisateur (partielle)
-  - [x] 12.1 Créer la page `planification.html` avec le formulaire de sélection produit + quantité cible
-    - Afficher le plan estimatif des composants directs ; aucune validation ou création de fabrication depuis l'interface.
-    - Ajouter le lien de navigation vers cette page dans la barre de navigation de toutes les pages
-    - Déclencher `Usine.évaluer()` pour chaque ligne valide de toute saisie TSV dans la page (Exigence 3.8)
-    - _Exigences : 9.1, 9.2, 3.8, 8.11_
-  - [x] 12.2 Implémenter la surcharge utilisateur achat/fabrication dans `planification.html`
-    - Pour chaque ingrédient qui est aussi un `Produit` du catalogue, afficher la décision par défaut (basée sur le statut `BUILD`/`BUY`) et permettre à l'utilisateur de la remplacer par un choix explicite
-    - Recalculer le coût total du plan en fonction des surcharges appliquées
-    - _Exigences : 9.5_
-  - [x] 12.3 Écrire les tests unitaires de la surcharge achat/fabrication
-    - Tester que la surcharge modifie bien le calcul de coût (forcer fabrication sur un `BUY`, forcer achat sur un `BUILD`)
-    - _Exigences : 9.5_
-  - [x] 12.4 Afficher des estimations de ressources dans `planification.html` (partiel)
-    - Le stock résiduel couvre les composants directs présents en stock ; ce n'est pas une simulation des mouvements de fabrication.
-    - Les liquidités sont calculées à partir des coûts `BUY` ; elles n'incluent pas nécessairement tous les frais de fabrication.
-    - Les indicateurs ne sont pas recalculés après toutes les surcharges utilisateur.
-    - _Exigences : 7.13, 7.14_
-  - [x] 12.5 Implémenter la détection des déficits dans le `Planificateur`
-    - Pour chaque composant du plan, comparer la quantité requise au stock disponible et calculer le déficit éventuel
-    - Calculer le coût total des achats prévus et le comparer aux liquidités disponibles pour identifier un éventuel déficit de trésorerie
-    - Le plan reste généré même en cas de ressources insuffisantes (aucun blocage)
-    - _Exigences : 9.7, 9.8, 9.9_
-  - [x] 12.6 Écrire les tests unitaires de la détection des déficits
-    - Tester qu'un plan est bien produit malgré un stock insuffisant
-    - Tester le calcul du déficit par composant (quantité disponible < quantité requise)
-    - Tester la détection du déficit de liquidités (coût total > liquidités disponibles)
-    - _Exigences : 9.7, 9.8, 9.9_
-  - [x] 12.7 Afficher les déficits visuellement dans `planification.html`
-    - Mettre en évidence les composants dont le stock disponible est insuffisant (quantités manquantes en rouge ou avec icône d'alerte)
-    - Afficher le déficit de liquidités lorsque les achats prévus dépassent les liquidités disponibles
-    - _Exigences : 9.8, 9.9_
-  - [x] 12.8 Implémenter une priorisation simple des étapes `BUY` couvertes en stock (partiel)
-    - Les étapes `BUY` sans déficit sont placées en tête ; la faisabilité d'une fabrication imbriquée n'est pas évaluée
-    - _Exigences : 9.10_
-  - [x] 12.9 Écrire les tests unitaires de la priorisation des étapes réalisables
-    - Tester qu'une étape entièrement couverte par le stock apparaît avant une étape avec composants manquants
-    - Tester le cas où aucune étape n'est immédiatement réalisable
-    - _Exigences : 9.10_
-  - [x] 12.10 Afficher un résumé des fabrications présentes dans l'instance sur `index.html` (partiel)
-    - Le résumé est rendu, mais la page de planification ne crée pas de fabrication et l'état n'est pas persisté.
-    - _Exigences : 9.5_
-
-- [ ] 13. Point de contrôle final — validation complète
-  - Exécuter `npm test` et s'assurer que l'intégralité des tests passe.
-
-- [ ]* 14. Refactoring optionnel — abstraction de la couche de stockage (Exigence 1.7)
-  - [ ]* 14.1 Créer l'interface `StockageAdapter` et l'implémentation `LocalStorageAdapter` dans `app/service.js`
-    - Déplacer la lecture/écriture `localStorage` dans l'adaptateur ; injecter celui-ci dans l'`Usine`
-    - Toutes les pages délèguent la persistance via cet adaptateur plutôt qu'en appelant `localStorage` directement
+- [ ] 11. Abstraction de la couche de stockage locale
+  - [x] 11.1 Créer l'abstraction `Stockage` / `StockageLocal` dans `app/storage.js`
+    - Déléguer la lecture/écriture de l'usine à cette abstraction depuis les pages HTML
+    - Mode Pantry réservé pour une itération ultérieure
     - _Exigences : 1.7_
-  - [ ]* 14.2 Écrire les tests unitaires du `LocalStorageAdapter`
-    - Vérifier que l'adaptateur lit, écrit et efface correctement la clé `usine` dans le `localStorage`
+  - [x] 11.2 Migrer les pages HTML vers `Stockage`
+    - Remplacer les accès directs à `localStorage` par la nouvelle abstraction
     - _Exigences : 1.7_
+  - [x] 11.3 Mettre à jour `sauvegarderUsine` pour accepter l'objet `Usine` directement
+    - La sérialisation JSON est gérée en interne par la méthode de stockage
+    - _Exigences : 1.7_
+
+- [ ] 12. Point de contrôle — vérification de l'abstraction de stockage
+  - Exécuter `npm test` et s'assurer que tous les tests passent.
+
+- [ ]* 13. Refactoring optionnel — préparation pour futures évolutions
+  - [ ]* 13.1 Harmoniser les noms de méthodes et constantes entre pages
+    - _Exigences : 2.5_
+  - [ ]* 13.2 Réduire les duplications de logique UI entre `marché.html` et `stock.html`
+    - _Exigences : 8.3, 8.4_
 
 ---
 
@@ -242,12 +187,7 @@ Ce fichier est le plan de travail initial, remis en cohérence avec l’impléme
     { "id": 5, "tasks": ["6.2", "6.4", "6.6", "6.8", "8.3", "9.3"] },
     { "id": 6, "tasks": ["11.1"] },
     { "id": 7, "tasks": ["11.2", "11.3"] },
-    { "id": 8, "tasks": ["11.4", "11.5", "12.1"] },
-    { "id": 9, "tasks": ["11.6", "12.2", "12.4"] },
-    { "id": 10, "tasks": ["12.3", "12.5", "12.8"] },
-    { "id": 11, "tasks": ["12.6", "12.7", "12.9", "12.10"] },
-    { "id": 12, "tasks": ["14.1"] },
-    { "id": 13, "tasks": ["14.2"] }
+    { "id": 8, "tasks": ["12.1", "12.2", "12.3"] }
   ]
 }
 ```

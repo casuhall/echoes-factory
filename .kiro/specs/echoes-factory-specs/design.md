@@ -279,14 +279,13 @@ Chaque page est un couple composé d'document HTML et de son script (sous forme 
 6. Sur import TSV (toute page) → appeler aussi Usine.évaluer() pour chaque ligne valide (Exigence 3.8)
 ```
 
-| Page                   | Responsabilité principale                                                                       |
-| ---------------------- | ----------------------------------------------------------------------------------------------- |
-| `index.html`           | Tableau de bord : nom, statistiques, reset et résumé des fabrications de l'instance courante (non persisté) |
-| `marché.html`          | Saisie et affichage des tarifs (unitaire + import TSV) ; tri par nom/prix/date et recherche par nom |
-| `produits.html`        | Catalogue avec rentabilité, édition, suppression, tri, recherche et date de référence des estimations |
-| `edition_produit.html` | Formulaire de création/modification de recette + ingrédients ; import TSV |
-| `stock.html`           | Gestion du stock et des liquidités (unitaire + import TSV) ; tri par nom/quantité et recherche par nom |
-| `planification.html`   | Calcul d'un plan sur les composants directs, affichage des sous-produits seulement, choix `BUILD`/`BUY`, estimations de coûts et ressources détaillées, alertes de déficit ; aucun bouton de validation du plan |
+|| Page                   | Responsabilité principale                                                                       |
+|| ---------------------- | ----------------------------------------------------------------------------------------------- |
+|| `index.html`           | Tableau de bord : nom, statistiques et reset                                                    |
+|| `marché.html`          | Saisie et affichage des tarifs (unitaire + import TSV) ; tri par nom/prix/date et recherche par nom |
+|| `produits.html`        | Catalogue avec rentabilité, édition, suppression, tri, recherche et date de référence des estimations |
+|| `edition_produit.html` | Formulaire de création/modification de recette + ingrédients ; import TSV |
+|| `stock.html`           | Gestion du stock et des liquidités (unitaire + import TSV) ; tri par nom/quantité et recherche par nom |
 
 La barre de navigation est reproduite sur chaque page. Le lien de la page courante porte la classe `btn` (actif) vs `btn ghost` (inactif).
 
@@ -298,60 +297,6 @@ Les pages `stock.html`, `marché.html` et `produits.html` exposent des tableaux 
 - **Marché** : tri par nom, prix ou date d'effet ; recherche partielle par nom, insensible à la casse.
 - **Produits** : tri par nom, rentabilité ou gain estimé ; recherche par nom.
 - Le tri et le filtre s'appliquent côté navigateur ; l'état du tri n'est pas persisté.
-
-La page produits affiche aussi la date de référence des estimations et signale visuellement les tarifs dépassant sept jours. Ce seuil est actuellement une constante dans la page, et non une préférence utilisateur.
-
-#### Page planification (Exigences 9.1–9.10, 7.13–7.14)
-
-La page `planification.html` et le moteur `app/planificateur.js` implémentent actuellement un calcul estimatif limité :
-
-1. L'utilisateur choisit un produit du catalogue et une quantité cible.
-2. Le moteur examine les ingrédients directs de la recette cible. Il multiplie la quantité par la quantité cible ; les frais de fabrication de la cible, eux, sont multipliés par `ceil(quantité / quantité_produite)`. Il ne développe pas récursivement les recettes des sous-produits en étapes supplémentaires.
-3. Pour un composant du catalogue au statut `BUILD`, la décision par défaut est `BUILD` et le coût unitaire provient de son coût de revient. Les autres composants sont proposés en `BUY`, avec leur tarif de marché si disponible.
-4. L'interface permet de remplacer `BUILD` par `BUY` ou inversement lorsque le composant figure au catalogue. Elle recalcule le coût de l'étape et le coût total.
-5. Le déficit de stock est estimé pour les étapes `BUY`. Le déficit de liquidités se fonde sur les coûts `BUY` connus ; il n'inclut pas nécessairement les frais de fabrication associés aux étapes `BUILD`.
-6. Le tableau du plan n'affiche que les **sous-produits** (composants présents dans le catalogue). Les composants absents du catalogue sont masqués du plan mais leurs coûts sont intégrés au `coût_total` et au `coût_achats`.
-7. La section ressources détaille les ressources nécessaires :
-   - `Achat` pour les composants à acheter (sous-produits `BUY` ou composants hors catalogue) ;
-   - `Stock` pour les sous-produits `BUILD` déjà disponibles en stock ;
-   - `Fabrication` pour les sous-produits `BUILD` dont le stock est insuffisant, avec la liste des ingrédients nécessaires à leur fabrication.
-8. Les étapes `BUY` entièrement couvertes par le stock sont triées avant les autres composants. Cette règle ne garantit pas l'ordre exécutable d'une arborescence de fabrication complète.
-9. `Usine.validerPlan()` sait créer une fabrication et réserver des composants `BUY` disponibles ; `terminerFabrication()` sait libérer ces réservations. Ces méthodes sont testées au niveau service, mais la page ne propose pas de valider un plan.
-10. La sérialisation `Usine.toString()` n'enregistre ni fabrications en cours ni quantités engagées. Les fabrications affichées par l'accueil ne constituent donc pas un suivi persistant entre pages ou rechargements.
-
-Pour obtenir un flux opérationnel, il reste à développer la décomposition récursive, l'application des choix aux ressources, la validation depuis l'interface, la persistance des réservations/fabrications et la mise à jour réelle du stock et des liquidités lors de l'exécution.
-
----
-
-## Modèle de données — Format JSON (localStorage)
-
-```json
-{
-  "nom": "string",
-  "liquidités": 0,
-  "recettes": [
-    {
-      "nom": "string",
-      "frais": 0,
-      "quantité_produite": 1,
-      "chance_succès": 1,
-      "ingrédients": [
-        { "nom": "string", "quantité": 1 }
-      ]
-    }
-  ],
-  "tarifs": [
-    { "nom": "string", "montant": "number", "date_effet": "ISO8601" }
-  ],
-  "stock": [
-    { "nom": "string", "quantité": 1 }
-  ]
-}
-```
-
-> Les montants de tarifs sont sérialisés comme chaînes (`"montant":"1500"`) mais reconvertis en nombres à la désérialisation. L'`Usine` accepte des valeurs numériques sous forme de chaînes pour tous les champs concernés.
->
-> **Limite du schéma actuel :** les fabrications en cours et les quantités engagées/réservées ne figurent pas dans ce JSON. Le stock sérialisé est le stock total ; l'état des réservations est perdu au rechargement. L'export/import de sauvegarde n'est pas implémenté.
 
 ---
 

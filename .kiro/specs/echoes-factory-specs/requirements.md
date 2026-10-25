@@ -6,7 +6,7 @@ Echoes Factory est une application web sans serveur, destinée aux industriels d
 
 Toutes les données sont persistées localement dans le `localStorage` du navigateur. Aucune étape de compilation ni de serveur applicatif n'est requise.
 
-Ce document décrit les exigences du projet et leur état observé dans le code. Statuts : ✅ implémenté dans le périmètre indiqué ; ◐ partiellement implémenté ou non utilisable de bout en bout ; ☐ non implémenté. Cette notation reflète le code et l’interface présents, pas seulement l’intention des tâches. La planification, le suivi des fabrications et les tests ont des limites précisées dans les critères ci-dessous et dans le document de design.
+Ce document décrit les exigences du projet et leur état observé dans le code. Statuts : ✅ implémenté dans le périmètre indiqué ; ◐ partiellement implémenté ou non utilisable de bout en bout ; ☐ non implémenté. Cette notation reflète le code et l’interface présents, pas seulement l’intention des tâches.
 
 ---
 
@@ -148,8 +148,6 @@ Ce document décrit les exigences du projet et leur état observé dans le code.
 10. ✅ WHEN l'utilisateur valide la saisie des liquidités, THE Usine SHALL accepter la nouvelle valeur si elle est un entier positif ou nul, persister l'`Usine` et masquer le champ de saisie.
 11. ✅ IF l'utilisateur saisit un montant de liquidités non entier, négatif ou non numérique, THEN THE Usine SHALL lever une erreur et conserver la valeur précédente.
 12. ✅ THE Usine SHALL accepter une chaîne numérique (ex. `"300"`) comme valeur de liquidités valide, en la convertissant en entier.
-13. ◐ WHEN l'utilisateur consulte le plan dans la page de planification, THE Application SHALL afficher le stock résiduel estimé pour les composants directs présents en stock. L'estimation n'est pas une simulation complète des mouvements de production et n'est pas recalculée après toutes les surcharges `BUILD`/`BUY`.
-14. ◐ WHEN l'utilisateur consulte le plan, THE Application SHALL afficher les liquidités restantes estimées après les achats `BUY` prévus. Le calcul n'inclut pas systématiquement les frais de fabrication et ne se met pas à jour après toutes les surcharges.
 
 ---
 
@@ -169,30 +167,10 @@ Ce document décrit les exigences du projet et leur état observé dans le code.
 8. ✅ WHEN l'utilisateur saisit du texte dans le champ de recherche du catalogue produits, THE Application SHALL filtrer les produits affichés selon leur nom.
 9. ✅ WHEN l'utilisateur clique sur un en-tête de colonne du tableau des tarifs, THE Application SHALL trier les tarifs selon cette colonne, en alternant ordre croissant et décroissant (nom, prix, date).
 10. ✅ WHEN l'utilisateur saisit du texte dans le champ de recherche du marché, THE Application SHALL filtrer les tarifs affichés selon leur nom.
-11. ✅ THE Application SHALL proposer un lien vers la page de planification dans la barre de navigation de toutes les pages.
 
 ---
 
-### Exigence 9 — Planification de production
-
-**User Story :** En tant qu'industriel, je veux choisir un produit et une quantité cible, afin que l'application me propose un plan d'achats et de fabrications optimisé selon mes recettes et mon stock.
-
-#### Critères d'acceptation
-
-1. ◐ WHEN l'utilisateur sélectionne un produit et saisit une quantité cible, THE Planificateur SHALL établir les coûts des composants directs selon le statut `BUILD`/`BUY` et les tarifs disponibles. Il ne développe pas l'ensemble des sous-recettes.
-2. ◐ Le Planificateur SHALL ordonner les composants directs avec les étapes `BUY` couvertes par le stock en tête ; il ne calcule pas une séquence complète minimisant le coût à travers toute l'arborescence de production.
-3. ◐ L'Inventaire et l'Usine exposent des méthodes de réservation, mais la page ne valide pas de plan et l'état engagé n'est pas persisté.
-4. ◐ L'Usine permet de créer et terminer des fabrications via ses méthodes, mais aucun parcours UI de validation n'est disponible et ces fabrications ne sont pas sérialisées.
-5. ◐ L'accueil sait afficher les fabrications fournies par l'instance de l'Usine ; faute de création depuis l'interface et de persistance, le résumé n'est pas un suivi durable.
-6. ✅ Le plan affiche la décision par défaut pour les composants présents au catalogue et permet de la remplacer ; le coût des composants et le total sont recalculés. Les indicateurs de ressources ne sont pas tous recalculés après cette surcharge.
-7. ✅ Le moteur retourne un plan même en cas de stock ou de liquidités insuffisants.
-8. ✅ Le déficit de stock des étapes `BUY` est affiché dans la page de planification.
-9. ◐ Un déficit est calculé et affiché à partir des coûts d'achats `BUY` estimés, mais les frais de fabrication et les surcharges ne sont pas intégralement inclus.
-10. ◐ Les composants `BUY` dont le besoin est entièrement couvert par le stock sont placés en tête. La priorité n'évalue pas la faisabilité complète d'une étape de fabrication imbriquée.
-
----
-
-### Exigence 10 — Export et import de la sauvegarde
+### Exigence 9 — Export et import de la sauvegarde
 
 **User Story :** En tant qu'industriel, je veux pouvoir exporter et importer les données de mon usine, afin de sauvegarder mes données hors navigateur ou de les transférer vers un autre appareil.
 
@@ -201,17 +179,6 @@ Ce document décrit les exigences du projet et leur état observé dans le code.
 1. ☐ WHEN l'utilisateur clique sur « Exporter », THE Application SHALL générer un fichier JSON contenant la sérialisation complète de l'`Usine` et proposer son téléchargement.
 2. ☐ WHEN l'utilisateur sélectionne un fichier JSON valide via le formulaire d'import, THE Application SHALL remplacer l'`Usine` courante par les données importées et les persister.
 3. ☐ IF le fichier JSON importé est malformé ou incompatible, THEN THE Application SHALL afficher un message d'erreur explicite et conserver l'`Usine` existante intacte.
-
----
-
-### Exigence 11 — Affichage des dates de référence des estimations
-
-**User Story :** En tant qu'industriel, je veux voir la date de référence des prix utilisés pour chaque estimation, afin d'évaluer la fraîcheur des calculs de rentabilité.
-
-#### Critères d'acceptation
-
-1. ✅ WHEN un produit est affiché dans le catalogue, THE Application SHALL afficher la date d'effet du tarif le plus ancien utilisé dans le calcul de son coût de revient.
-2. ◐ WHEN un tarif utilisé dans un calcul est plus ancien que sept jours, THE Application SHALL signaler visuellement que l'estimation peut être périmée. Le seuil est actuellement codé en dur et n'est pas configurable dans l'interface.
 
 ---
 

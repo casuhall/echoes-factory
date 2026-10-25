@@ -16,7 +16,6 @@
       <a href="./marché.html" class="btn ghost" id="nav-marché">Marché</a>
       <a href="./produits.html" class="btn ghost" id="nav-produits">Produits</a>
       <a href="./stock.html" class="btn ghost" id="nav-stock">Stock</a>
-      <a href="./planification.html" class="btn ghost" id="nav-planification">Planification</a>
     </div>
   </nav>
 
@@ -44,10 +43,6 @@
       </div>
     </div>
 
-    <section id="section-fabrications" aria-labelledby="titre-fabrications">
-      <h2 id="titre-fabrications">Fabrications en cours</h2>
-      <div id="liste-fabrications"></div>
-    </section>
   </main>
 
   <footer><span>Gestion des données</span>
@@ -83,97 +78,6 @@
       document.getElementById("input-nbMarché").value = usine.tarifs.length;
       document.getElementById("input-nbStock").value = usine.stock.length;
       document.getElementById("input-liquidités").value = usine.liquidités;
-
-      afficherFabrications();
-    }
-
-    /**
-     * Construit et affiche le résumé des fabrications en cours.
-     * Pour chaque fabrication, liste les prochaines étapes réalisables en priorité,
-     * puis les étapes restantes.
-     */
-    function afficherFabrications() {
-      const conteneur = document.getElementById("liste-fabrications");
-      const fabrications = usine.fabrications;
-
-      conteneur.innerHTML = "";
-
-      if (fabrications.length === 0) {
-        const vide = document.createElement("p");
-        vide.className = "empty";
-        vide.textContent = "Aucune fabrication en cours.";
-        conteneur.appendChild(vide);
-        return;
-      }
-
-      for (const fabrication of fabrications) {
-        const carte = document.createElement("div");
-        carte.className = "fabrication-carte";
-        carte.setAttribute("data-fabrication-id", fabrication.id);
-
-        // En-tête : nom du produit + quantité cible
-        const entête = document.createElement("div");
-        entête.className = "fabrication-entête";
-        const titre = document.createElement("strong");
-        titre.textContent = `${fabrication.nomProduit} × ${fabrication.quantité}`;
-        entête.appendChild(titre);
-        carte.appendChild(entête);
-
-        // Tableau des étapes
-        const étapes = fabrication.étapes;
-        if (étapes && étapes.length > 0) {
-          const table = document.createElement("table");
-          table.setAttribute("aria-label", `Étapes de fabrication pour ${fabrication.nomProduit}`);
-
-          const thead = document.createElement("thead");
-          thead.innerHTML = `<tr>
-            <th scope="col">Composant</th>
-            <th scope="col">Quantité</th>
-            <th scope="col">Action</th>
-            <th scope="col">Statut</th>
-          </tr>`;
-          table.appendChild(thead);
-
-          const tbody = document.createElement("tbody");
-
-          // Trier : étapes réalisables en premier (déjà triées par planificateur, on respecte cet ordre)
-          for (const étape of étapes) {
-            const tr = document.createElement("tr");
-
-            const tdNom = document.createElement("td");
-            tdNom.textContent = étape.nom;
-            tr.appendChild(tdNom);
-
-            const tdQté = document.createElement("td");
-            tdQté.textContent = étape.quantité;
-            tr.appendChild(tdQté);
-
-            const tdDécision = document.createElement("td");
-            tdDécision.textContent = étape.décision === "BUILD" ? "Fabriquer" : "Acheter";
-            tr.appendChild(tdDécision);
-
-            const tdStatut = document.createElement("td");
-            if (étape.réalisable) {
-              tdStatut.textContent = "✓ Disponible";
-              tdStatut.className = "green";
-            } else if (étape.décision === "BUY" && étape.déficit > 0) {
-              tdStatut.textContent = `Manque ${étape.déficit}`;
-              tdStatut.className = "red";
-            } else {
-              tdStatut.textContent = "À planifier";
-              tdStatut.className = "muted";
-            }
-            tr.appendChild(tdStatut);
-
-            tbody.appendChild(tr);
-          }
-
-          table.appendChild(tbody);
-          carte.appendChild(table);
-        }
-
-        conteneur.appendChild(carte);
-      }
     }
 
     function save() {
