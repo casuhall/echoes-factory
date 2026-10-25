@@ -177,26 +177,12 @@
       <p id="liquidités-résumé"></p>
     </section>
 
-    <section aria-labelledby="section-tsv-titre">
-      <h2 id="section-tsv-titre">Import de prix (TSV EVE Echoes)</h2>
-      <p>Collez une liste au format TSV exportée depuis EVE Echoes pour mettre à jour les prix du marché.</p>
-      <div class="grid">
-        <div>
-          <label for="input-tsv">Liste d'objets (TSV)</label>
-          <textarea id="input-tsv" placeholder="Index&#9;Nom&#9;Quantité&#9;Valeur totale&#10;1&#9;Tritanium&#9;1000&#9;500000"></textarea>
-        </div>
-      </div>
-      <div class="grid">
-        <button id="btn-importer-tsv" class="btn" type="button">Importer les prix</button>
-      </div>
-      <p id="tsv-résultat" aria-live="polite"></p>
-    </section>
   </main>
 
   <script type="module">
     import { Usine } from "./app/service.js"
     import { Planificateur } from "./app/planificateur.js"
-    import { decodeEchoesListe, NUMBER_FORMAT, notifier } from "./app/presentation.js"
+    import { NUMBER_FORMAT, notifier } from "./app/presentation.js"
     import { coûtUnitaireEffectif as _coûtUnitaireEffectif } from "./app/planificationSurcharge.js"
     import { Stockage } from "./app/storage.js"
 
@@ -216,9 +202,6 @@
     const RESSOURCES_BODY = document.getElementById("ressources-body");
     const LIQUIDITÉS_RÉSUMÉ = document.getElementById("liquidités-résumé");
     const ALERTE_DÉFICIT_LIQUIDITÉS = document.getElementById("alerte-déficit-liquidités");
-    const INPUT_TSV = document.getElementById("input-tsv");
-    const BTN_IMPORTER_TSV = document.getElementById("btn-importer-tsv");
-    const TSV_RÉSULTAT = document.getElementById("tsv-résultat");
 
     // ============================================================
     // REMPLISSAGE DE LA LISTE DES PRODUITS
@@ -501,45 +484,6 @@
 
       SECTION_RESSOURCES.classList.add("visible");
     }
-
-    // ============================================================
-    // IMPORT TSV — Exigence 3.8
-    // ============================================================
-
-    BTN_IMPORTER_TSV.addEventListener("click", () => {
-      const texte = INPUT_TSV.value.trim();
-      if (!texte) {
-        notifier("Veuillez coller une liste TSV avant d'importer.", "warn");
-        return;
-      }
-
-      const liste = decodeEchoesListe(texte);
-      let nbImportés = 0;
-      let nbIgnorés = 0;
-
-      for (const entrée of liste) {
-        try {
-          usine.évaluer(entrée.nom, entrée.valeur / entrée.quantité);
-          nbImportés++;
-        } catch (erreur) {
-          console.warn(`Tarif ignoré pour "${entrée.nom}" : ${erreur.message}`);
-          nbIgnorés++;
-        }
-      }
-
-      if (nbImportés > 0) {
-        stockage.sauvegarderUsine(usine);
-        TSV_RÉSULTAT.textContent = `${nbImportés} tarif(s) importé(s)${nbIgnorés > 0 ? `, ${nbIgnorés} ignoré(s)` : ""}.`;
-        notifier(`${nbImportés} tarif(s) mis à jour depuis la liste TSV.`, "info");
-        INPUT_TSV.value = "";
-      } else if (liste.length === 0) {
-        TSV_RÉSULTAT.textContent = "Aucune ligne valide trouvée dans le TSV.";
-        notifier("Aucune ligne valide trouvée dans la liste TSV.", "warn");
-      } else {
-        TSV_RÉSULTAT.textContent = `Aucun tarif importé (${nbIgnorés} ligne(s) ignorée(s)).`;
-        notifier("Aucun tarif n'a pu être importé.", "warn");
-      }
-    });
   </script>
 </body>
 
