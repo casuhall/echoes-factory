@@ -34,17 +34,25 @@ Au-delà de 15 % de rentabilité, le commentaire est « Commercialisable » ; un
 - Modifier les liquidités et vider le stock / remettre les liquidités à zéro depuis la page Stock.
 - Refuser le retrait d’une quantité supérieure au stock disponible.
 
+### Planification de production
+
+- Générer un plan de production pour un produit cible et une quantité souhaitée.
+- Afficher la liste récursive des composants nécessaires avec la décision système par défaut : `Acheter` ou `Produire`.
+- Permettre la surcharge manuelle de la décision sur chaque étape pour privilégier l'achat ou la fabrication d'un sous-produit.
+- Afficher le coût total estimé du plan et la quantité de stock disponible pour chaque composant.
+
 ## Utilisation
 
-Ouvrir `index.html` dans un navigateur moderne. La navigation permet d’accéder à l’accueil, au marché, aux produits et au stock. Aucune étape de compilation ni dépendance d’exécution n’est requise.
+Ouvrir `index.html` dans un navigateur moderne. La navigation permet d’accéder à l’accueil, au marché, aux produits, au stock et à la planification. Aucune étape de compilation ni dépendance d’exécution n’est requise.
 
 Les données sont propres au navigateur et à son origine. Effacer les données du site ou utiliser un autre navigateur/profil ne conserve pas l’usine. Le bouton de réinitialisation de l’accueil remplace l’usine locale par une nouvelle usine vide.
 
 ## Organisation du projet
 
-- `index.html`, `marché.html`, `produits.html`, `edition_produit.html`, `stock.html` : pages et interactions de l’interface.
+- `index.html`, `marché.html`, `produits.html`, `edition_produit.html`, `stock.html`, `planification.html` : pages et interactions de l’interface.
 - `app/domain.js` : modèles métier et calculs.
-- `app/service.js` : façade `Usine`, propagation des mises à jour et sérialisation.
+- `app/service.js` : façade `Usine`, propagation des mises à jour, sérialisation et `Planificateur`.
+- `app/planification.js` : modèles du plan de production (`ÉtapePlan`, `PlanProduction`).
 - `app/presentation.js` : décodage TSV, formatage et notifications.
 - `app/*SortFilter.js` : fonctions de tri/filtrage ; `app/péremption.js` : détection des estimations périmées.
 - `style/style.css` : styles de l’interface.
@@ -60,7 +68,7 @@ Les données sont propres au navigateur et à son origine. Effacer les données 
 
 ## Développement et état des tests
 
-Le projet utilise des modules JavaScript natifs et Mocha. Installer les dépendances puis lancer `npm test`. Lors de la dernière exécution observée : **173 tests réussis, 1 en attente et 0 en échec**.
+Le projet utilise des modules JavaScript natifs et Mocha. Installer les dépendances puis lancer `npm test`. Lors de la dernière exécution observée : **144 tests réussis, 1 en attente et 0 en échec**.
 
 ```sh
 npm install

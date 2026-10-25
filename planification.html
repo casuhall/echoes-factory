@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <title>Planification de production</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./style/style.css" />
+</head>
+
+<body>
+  <nav>
+    <div>
+      <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
+      <a href="./index.html" class="btn ghost" id="nav-accueil">Accueil</a>
+      <a href="./marché.html" class="btn ghost" id="nav-marché">Marché</a>
+      <a href="./produits.html" class="btn ghost" id="nav-produits">Produits</a>
+      <a href="./stock.html" class="btn ghost" id="nav-stock">Stock</a>
+      <a href="./planification.html" class="btn" id="nav-planification">Planification</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="grid">
+      <div>
+        <label for="produit_cible">Produit cible</label>
+        <select id="produit_cible">
+          <option value="">-- Sélectionner un produit --</option>
+        </select>
+      </div>
+      <div>
+        <label for="quantité_cible">Quantité cible</label>
+        <input id="quantité_cible" type="number" min="1" step="1" value="1" />
+      </div>
+      <div class="right">
+        <button id="btn_générer" class="btn" type="button">Générer le plan</button>
+      </div>
+    </div>
+
+    <section id="résumé" style="margin-top: 16px;">
+      <h3>Résumé du plan</h3>
+      <div class="grid">
+        <div>
+          <span>Coût total estimé : </span>
+          <span id="coût_total">—</span>
+        </div>
+        <div>
+          <span>Nombre d'étapes : </span>
+          <span id="nombre_étapes">—</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top: 16px;">
+      <h3>Étapes du plan</h3>
+      <table class="table" id="plan-table">
+        <thead>
+          <tr>
+            <th>Composant</th>
+            <th style="text-align: end;">Quantité requise</th>
+            <th>Décision</th>
+            <th style="text-align: end;">Stock disponible</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="plan-body">
+          <tr>
+            <td class="empty" colspan="5">Aucun plan généré</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script type="module">
+    import { Usine, Planificateur } from "./app/service.js"
+    import { Stockage } from "./app/storage.js"
+    import { notifier } from "./app/presentation.js"
+
+    const stockage = new Stockage();
+    let usine;
+    let storedUsine = stockage.lireUsine();
+    if (storedUsine) {
+      usine = Usine.parse(storedUsine);
+    } else {
+      usine = new Usine("ChangeIt", undefined, [], [], [], 0);
+    }
+
+    const nomUsine = document.getElementById("nav-nomUsine");
+    const produitCibleSelect = document.getElementById("produit_cible");
+    const quantitéCibleInput = document.getElementById("quantité_cible");
+    const btnGénérer = document.getElementById("btn_générer");
+    const coûtTotalSpan = document.getElementById("coût_total");
+    const nombreÉtapesSpan = document.getElementById("nombre_étapes");
+    const planBody = document.getElementById("plan-body");
+
+    nomUsine.textContent = usine.nom;
+
+    // Remplir le select des produits
+    const produits = usine.produits.sort((a, b) => a.nom.localeCompare(b.nom));
+    for (const produit of produits) {
+      const option = document.createElement("option");
+      option.value = produit.nom;
+      option.textContent = produit.nom;
+      produitCibleSelect.appendChild(option);
+    }
+
+    btnGénérer.addEventListener("click", () => {
+      const produitCible = produitCibleSelect.value;
+      const quantitéCible = parseInt(quantitéCibleInput.value || "1", 10);
+
+      if (!produitCible) {
+        notifier("Veuillez sélectionner un produit cible.", "warn");
+        return;
+      }
+
+      if (!quantitéCible || quantitéCible <= 0) {
+        notifier("La quantité cible doit être un entier positif.", "warn");
+        return;
+      }
+
+      const planificateur = new Planificateur(usine);
+      const plan = planificateur.planifier(produitCible, quantitéCible);
+      présenterPlan(plan);
+    });
+
+    function présenterPlan(plan) {
+      coûtTotalSpan.textContent = plan.coût_total.toLocaleString();
+      nombreÉtapesSpan.textContent = plan.étapes.length;
+
+      planBody.innerHTML = "";
+      if (plan.étapes.length === 0) {
+        const ligneVide = document.createElement("tr");
+        ligneVide.className = "empty";
+        ligneVide.innerHTML = `<td colspan="5">Aucune étape nécessaire</td>`;
+        planBody.appendChild(ligneVide);
+        return;
+      }
+
+      for (const étape of plan.étapes) {
+        const ligne = document.createElement("tr");
+
+        const celluleNom = document.createElement("td");
+        celluleNom.textContent = étape.nom;
+
+        const celluleQuantité = document.createElement("td");
+        celluleQuantité.className = "right";
+        celluleQuantité.textContent = étape.quantité.toLocaleString();
+
+        const celluleDécision = document.createElement("td");
+        const boutonDécision = document.createElement("button");
+        boutonDécision.type = "button";
+        boutonDécision.className = étape.décision === "BUILD" ? "btn" : "btn ghost";
+        boutonDécision.textContent = étape.décision === "BUILD" ? "Produire" : "Acheter";
+        boutonDécision.addEventListener("click", () => {
+          const nouvelleDécision = étape.décision === "BUILD" ? "BUY" : "BUILD";
+          const nouveauPlan = plan.avec_surcharge(étape.nom, nouvelleDécision);
+          présenterPlan(nouveauPlan);
+        });
+        celluleDécision.appendChild(boutonDécision);
+
+        const celluleStock = document.createElement("td");
+        celluleStock.className = "right";
+        celluleStock.textContent = étape.quantité_stock.toLocaleString();
+
+        const celluleActions = document.createElement("td");
+        celluleActions.className = "actions";
+        if (étape.surcharge) {
+          const boutonRéinitialiser = document.createElement("button");
+          boutonRéinitialiser.type = "button";
+          boutonRéinitialiser.className = "btn ghost";
+          boutonRéinitialiser.textContent = "Réinitialiser";
+          boutonRéinitialiser.addEventListener("click", () => {
+            const planOriginal = plan.avec_surcharge(étape.nom, étape.décision === "BUY" ? "BUY" : "BUILD");
+            présenterPlan(planOriginal);
+          });
+          celluleActions.appendChild(boutonRéinitialiser);
+        }
+
+        ligne.appendChild(celluleNom);
+        ligne.appendChild(celluleQuantité);
+        ligne.appendChild(celluleDécision);
+        ligne.appendChild(celluleStock);
+        ligne.appendChild(celluleActions);
+        planBody.appendChild(ligne);
+      }
+    }
+  </script>
+</body>
+
+</html>

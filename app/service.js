@@ -1,4 +1,5 @@
 import { Catalogue, Tarification, Inventaire, Produit, Recette, Tarif, Ingrédient } from './domain.js';
+import { ÉtapePlan, PlanProduction } from './planification.js';
 
 /**
  * Usine de production avec gestion des recettes, tarifs, stock et produits.
@@ -264,4 +265,125 @@ class GestionnaireEvenements {
     }
 }
 
-export { Usine, GestionnaireEvenements }
+class Planificateur {
+  /**
+   * @param {Usine} usine
+   */
+  constructor(usine) {
+    if (!(usine instanceof Usine)) {
+      throw new Error(`Usine invalide. Fournis : ${usine}`);
+    }
+    this.#usine = usine;
+  }
+
+  /** @type {Usine} */
+  #usine;
+
+  /** @type {Map<string, Produit>} */
+  #catalogue() {
+    const map = new Map();
+    for (const produit of this.#usine.produits) {
+      map.set(produit.nom, produit);
+    }
+    return map;
+  }
+
+  /** @type {Map<string, number>} */
+  #stock() {
+    const map = new Map();
+    for (const ligne of this.#usine.stock) {
+      map.set(ligne.nom, ligne.quantité);
+    }
+    return map;
+  }
+
+  /** @type {Map<string, number>} */
+  #tarifs() {
+    const map = new Map();
+    for (const tarif of this.#usine.tarifs) {
+      map.set(tarif.nom, tarif.montant);
+    }
+    return map;
+  }
+
+  /**
+   * Détermine la décision par défaut pour un produit donné.
+   * @param {Produit} produit
+   * @returns {'BUY'|'BUILD'}
+   */
+  #décision_par_défaut(produit) {
+    if (produit.statut === 'BUY') return 'BUY';
+    return 'BUILD';
+  }
+
+  /**
+   * Construit les étapes récursives pour un produit donné.
+   * @param {string} nom_produit
+   * @param {number} quantité
+   * @param {Map<string, number>} stock
+   * @param {Set<string>} visités
+   * @param {boolean} racine
+   * @returns {ÉtapePlan[]}
+   */
+  #explorer(nom_produit, quantité, stock, visités = new Set(), racine = false) {
+    if (visités.has(nom_produit)) return [];
+    visités.add(nom_produit);
+
+    const catalogue = this.#catalogue();
+    const produit = catalogue.get(nom_produit);
+    const décision = produit ? this.#décision_par_défaut(produit) : 'BUY';
+    const quantité_stock = stock.get(nom_produit) ?? 0;
+    const étapes = [new ÉtapePlan(nom_produit, quantité, décision, quantité_stock)];
+
+    if (produit && décision === 'BUILD') {
+      const recette = produit.recette;
+      const facteur = quantité / recette.quantité_produite;
+      for (const ingrédient of recette.ingrédients) {
+        const sous_nom = ingrédient.nom;
+        const sous_quantité = Math.ceil(ingrédient.quantité * facteur);
+        const sous_étapes = this.#explorer(sous_nom, sous_quantité, stock, visités, false);
+        étapes.push(...sous_étapes);
+      }
+    }
+
+    if (racine && !produit) return [];
+
+    return étapes;
+  }
+
+  /**
+   * Calcule le coût total estimé d'un plan.
+   * @param {PlanProduction} plan
+   * @returns {number}
+   */
+  #calculer_coût(plan) {
+    const tarifs = this.#tarifs();
+    let coût = 0;
+
+    for (const étape of plan.étapes) {
+      if (étape.décision === 'BUY') {
+        const prix = tarifs.get(étape.nom) ?? 0;
+        coût += prix * étape.quantité;
+      }
+    }
+
+    return Math.round(coût);
+  }
+
+  /**
+   * Génère un plan de production pour un produit cible.
+   * @param {string} produit_cible
+   * @param {number} quantité_cible
+   * @returns {PlanProduction}
+   */
+  planifier(produit_cible, quantité_cible) {
+    const stock = this.#stock();
+    const étapes = this.#explorer(produit_cible, quantité_cible, stock, undefined, true);
+    const plan = new PlanProduction(produit_cible, quantité_cible, étapes);
+    const coût_total = this.#calculer_coût(plan);
+    return new PlanProduction(produit_cible, quantité_cible, étapes, coût_total);
+  }
+}
+
+export { Usine, GestionnaireEvenements, Planificateur };
+
