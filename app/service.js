@@ -114,8 +114,12 @@ class Usine {
         if (!recette) throw new Error(`Recette nécessaire pour l'initialisation d'un produit`);
         if (!(recette instanceof Recette)) {
             // Fiabilisation de la recette
+            const quantité_produite = Number.parseInt(recette.quantité_produite);
+            const chances_de_succès = Number.parseFloat(recette.chances_de_succès);
             recette = new Recette(recette.nom, Number.parseFloat(recette.frais),
-                recette.ingrédients?.map(ingrédient => new Ingrédient(ingrédient.nom, Number.parseFloat(ingrédient.quantité))));
+                recette.ingrédients?.map(ingrédient => new Ingrédient(ingrédient.nom, Number.parseFloat(ingrédient.quantité))),
+                Number.isNaN(quantité_produite) ? undefined : quantité_produite,
+                Number.isNaN(chances_de_succès) ? undefined : chances_de_succès);
         }
         if (this.produit(recette.nom)) {
             throw new Error(`Produit ${recette.nom} déjà inscrit au catalogue, création impossible.`);
