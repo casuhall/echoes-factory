@@ -52,23 +52,89 @@
     </section>
 
     <section style="margin-top: 16px;">
-      <h3>Étapes du plan</h3>
-      <table class="table" id="plan-table">
+      <h3>Stratégie sous-produits</h3>
+      <table class="table" id="strategie-table">
         <thead>
           <tr>
-            <th>Composant</th>
-            <th style="text-align: end;">Quantité requise</th>
-            <th>Décision</th>
-            <th style="text-align: end;">Quantité manquante</th>
+            <th>Sous-produit</th>
+            <th>Recommandation</th>
+            <th>Décision actuelle</th>
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="plan-body">
+        <tbody id="strategie-body">
           <tr>
-            <td class="empty" colspan="5">Aucun plan généré</td>
+            <td class="empty" colspan="4">Aucun sous-produit impliqué</td>
           </tr>
         </tbody>
       </table>
+    </section>
+
+    <section style="margin-top: 16px;">
+      <h3>Étapes de construction</h3>
+      <table class="table" id="etapes-table">
+        <thead>
+          <tr>
+            <th>Étape</th>
+            <th style="text-align: end;">Quantité requise</th>
+            <th style="text-align: end;">Stock disponible</th>
+            <th style="text-align: end;">Quantité manquante</th>
+            <th style="text-align: end;">Frais fabrication</th>
+          </tr>
+        </thead>
+        <tbody id="etapes-body">
+          <tr>
+            <td class="empty" colspan="5">Aucune étape de construction</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section style="margin-top: 16px;">
+      <h3>Matériaux nécessaires / manquants</h3>
+      <table class="table" id="materiaux-table">
+        <thead>
+          <tr>
+            <th>Matériau</th>
+            <th style="text-align: end;">Quantité requise</th>
+            <th style="text-align: end;">Stock disponible</th>
+            <th style="text-align: end;">Quantité manquante</th>
+            <th style="text-align: end;">Coût unitaire</th>
+            <th style="text-align: end;">Coût total</th>
+          </tr>
+        </thead>
+        <tbody id="materiaux-body">
+          <tr>
+            <td class="empty" colspan="6">Aucun matériau nécessaire</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section style="margin-top: 16px;">
+      <h3>Liquidités requises</h3>
+      <div class="grid">
+        <div>
+          <span>Frais de fabrication : </span>
+          <span id="frais_fabrication">—</span>
+        </div>
+        <div>
+          <span>Coûts d'achat : </span>
+          <span id="couts_achat">—</span>
+        </div>
+        <div>
+          <span>Total requis : </span>
+          <span id="total_requis">—</span>
+        </div>
+        <div>
+          <span>Liquidités disponibles : </span>
+          <span id="liquidites_disponibles">—</span>
+        </div>
+        <div>
+          <span>Fonds manquants : </span>
+          <span id="fonds_manquants">—</span>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -92,7 +158,14 @@
     const btnGénérer = document.getElementById("btn_générer");
     const coûtTotalSpan = document.getElementById("coût_total");
     const nombreÉtapesSpan = document.getElementById("nombre_étapes");
-    const planBody = document.getElementById("plan-body");
+    const strategieBody = document.getElementById("strategie-body");
+    const etapesBody = document.getElementById("etapes-body");
+    const materiauxBody = document.getElementById("materiaux-body");
+    const fraisFabricationSpan = document.getElementById("frais_fabrication");
+    const coutsAchatSpan = document.getElementById("couts_achat");
+    const totalRequisSpan = document.getElementById("total_requis");
+    const liquiditesDisponiblesSpan = document.getElementById("liquidites_disponibles");
+    const fondsManquantsSpan = document.getElementById("fonds_manquants");
 
     nomUsine.textContent = usine.nom;
 
@@ -131,25 +204,51 @@
       coûtTotalSpan.textContent = plan.coût_total.toLocaleString();
       nombreÉtapesSpan.textContent = plan.étapes.length;
 
-      planBody.innerHTML = "";
-      if (plan.étapes.length === 0) {
+      const subProduits = [];
+      const etapesConstruction = [];
+      const materiaux = [];
+      const tarifs = new Map(usine.tarifs.map(t => [t.nom, t.montant]));
+
+      for (const étape of plan.étapes) {
+        const produit = usine.produit(étape.nom);
+        if (étape.nom === plan.produit_cible) {
+          etapesConstruction.push({ étape, produit });
+        } else if (produit) {
+          subProduits.push({ étape, produit });
+          if (étape.décision === 'BUILD') {
+            etapesConstruction.push({ étape, produit });
+          }
+        } else {
+          materiaux.push({ étape, produit: undefined });
+        }
+      }
+
+      présenterStratégie(subProduits, plan, planificateur);
+      présenterEtapesConstruction(etapesConstruction);
+      présenterMatériaux(materiaux, tarifs);
+      présenterLiquidités(etapesConstruction, materiaux, tarifs, plan.étapes);
+    }
+
+    function présenterStratégie(subProduits, plan, planificateur) {
+      strategieBody.innerHTML = "";
+
+      if (subProduits.length === 0) {
         const ligneVide = document.createElement("tr");
         ligneVide.className = "empty";
-        ligneVide.innerHTML = `<td colspan="5">Aucune étape nécessaire</td>`;
-        planBody.appendChild(ligneVide);
-        notifier(`Plan vide pour ${plan.produit_cible} (${plan.quantité_cible}). Vérifiez le produit et ses recettes.`, "warn");
+        ligneVide.innerHTML = `<td colspan="4">Aucun sous-produit impliqué</td>`;
+        strategieBody.appendChild(ligneVide);
         return;
       }
 
-      for (const étape of plan.étapes) {
+      for (const { étape, produit } of subProduits) {
         const ligne = document.createElement("tr");
 
         const celluleNom = document.createElement("td");
         celluleNom.textContent = étape.nom;
 
-        const celluleQuantité = document.createElement("td");
-        celluleQuantité.className = "right";
-        celluleQuantité.textContent = étape.quantité.toLocaleString();
+        const celluleRecommandation = document.createElement("td");
+        const recommandation = produit.statut === 'BUY' ? 'Acheter' : 'Produire';
+        celluleRecommandation.textContent = recommandation;
 
         const celluleDécision = document.createElement("td");
         const boutonDécision = document.createElement("button");
@@ -167,11 +266,6 @@
         });
         celluleDécision.appendChild(boutonDécision);
 
-        const celluleStock = document.createElement("td");
-        celluleStock.className = "right";
-        const quantitéManquante = Math.max(0, étape.quantité - étape.quantité_stock);
-        celluleStock.textContent = quantitéManquante.toLocaleString();
-
         const celluleActions = document.createElement("td");
         celluleActions.className = "actions";
         if (étape.surcharge) {
@@ -181,9 +275,8 @@
           boutonRéinitialiser.textContent = "Réinitialiser";
           boutonRéinitialiser.addEventListener("click", () => {
             try {
-              const produit = usine.produit(étape.nom);
-              const décision_par_défaut = produit && produit.statut === 'BUY' ? 'BUY' : 'BUILD';
-              const planRéinitialisé = planificateur.surcharger(plan, étape.nom, décision_par_défaut);
+              const décisionParDéfaut = produit.statut === 'BUY' ? 'BUY' : 'BUILD';
+              const planRéinitialisé = planificateur.surcharger(plan, étape.nom, décisionParDéfaut);
               présenterPlan(planRéinitialisé, planificateur);
             } catch (erreur) {
               notifier(`Erreur lors de la réinitialisation : ${erreur.message}`, "warn");
@@ -193,11 +286,131 @@
         }
 
         ligne.appendChild(celluleNom);
-        ligne.appendChild(celluleQuantité);
+        ligne.appendChild(celluleRecommandation);
         ligne.appendChild(celluleDécision);
-        ligne.appendChild(celluleStock);
         ligne.appendChild(celluleActions);
-        planBody.appendChild(ligne);
+        strategieBody.appendChild(ligne);
+      }
+    }
+
+    function présenterEtapesConstruction(etapesConstruction) {
+      etapesBody.innerHTML = "";
+
+      if (etapesConstruction.length === 0) {
+        const ligneVide = document.createElement("tr");
+        ligneVide.className = "empty";
+        ligneVide.innerHTML = `<td colspan="5">Aucune étape de construction</td>`;
+        etapesBody.appendChild(ligneVide);
+        return;
+      }
+
+      for (const { étape, produit } of etapesConstruction) {
+        const ligne = document.createElement("tr");
+
+        const celluleNom = document.createElement("td");
+        celluleNom.textContent = étape.nom;
+
+        const celluleQuantité = document.createElement("td");
+        celluleQuantité.className = "right";
+        celluleQuantité.textContent = étape.quantité.toLocaleString();
+
+        const celluleStock = document.createElement("td");
+        celluleStock.className = "right";
+        celluleStock.textContent = étape.quantité_stock.toLocaleString();
+
+        const celluleManquant = document.createElement("td");
+        celluleManquant.className = "right";
+        const quantitéManquante = Math.max(0, étape.quantité - étape.quantité_stock);
+        celluleManquant.textContent = quantitéManquante.toLocaleString();
+
+        const celluleFrais = document.createElement("td");
+        celluleFrais.className = "right";
+        const frais = produit?.recette?.frais ?? 0;
+        celluleFrais.textContent = frais.toLocaleString();
+
+        ligne.appendChild(celluleNom);
+        ligne.appendChild(celluleQuantité);
+        ligne.appendChild(celluleStock);
+        ligne.appendChild(celluleManquant);
+        ligne.appendChild(celluleFrais);
+        etapesBody.appendChild(ligne);
+      }
+    }
+
+    function présenterMatériaux(materiaux, tarifs) {
+      materiauxBody.innerHTML = "";
+
+      if (materiaux.length === 0) {
+        const ligneVide = document.createElement("tr");
+        ligneVide.className = "empty";
+        ligneVide.innerHTML = `<td colspan="6">Aucun matériau nécessaire</td>`;
+        materiauxBody.appendChild(ligneVide);
+        return;
+      }
+
+      for (const { étape } of materiaux) {
+        const ligne = document.createElement("tr");
+
+        const celluleNom = document.createElement("td");
+        celluleNom.textContent = étape.nom;
+
+        const celluleQuantité = document.createElement("td");
+        celluleQuantité.className = "right";
+        celluleQuantité.textContent = étape.quantité.toLocaleString();
+
+        const celluleStock = document.createElement("td");
+        celluleStock.className = "right";
+        celluleStock.textContent = étape.quantité_stock.toLocaleString();
+
+        const celluleManquant = document.createElement("td");
+        celluleManquant.className = "right";
+        const quantitéManquante = Math.max(0, étape.quantité - étape.quantité_stock);
+        celluleManquant.textContent = quantitéManquante.toLocaleString();
+
+        const celluleCoûtUnitaire = document.createElement("td");
+        celluleCoûtUnitaire.className = "right";
+        const coûtUnitaire = tarifs.get(étape.nom) ?? 0;
+        celluleCoûtUnitaire.textContent = coûtUnitaire.toLocaleString();
+
+        const celluleCoûtTotal = document.createElement("td");
+        celluleCoûtTotal.className = "right";
+        celluleCoûtTotal.textContent = (coûtUnitaire * étape.quantité).toLocaleString();
+
+        ligne.appendChild(celluleNom);
+        ligne.appendChild(celluleQuantité);
+        ligne.appendChild(celluleStock);
+        ligne.appendChild(celluleManquant);
+        ligne.appendChild(celluleCoûtUnitaire);
+        ligne.appendChild(celluleCoûtTotal);
+        materiauxBody.appendChild(ligne);
+      }
+    }
+
+    function présenterLiquidités(etapesConstruction, materiaux, tarifs, toutesLesÉtapes) {
+      const fraisFabrication = etapesConstruction.reduce((sum, { étape, produit }) => {
+        return sum + (produit?.recette?.frais ?? 0);
+      }, 0);
+
+      const coutsAchat = toutesLesÉtapes.reduce((sum, étape) => {
+        if (étape.décision !== 'BUY') return sum;
+        const prix = tarifs.get(étape.nom) ?? 0;
+        return sum + (prix * étape.quantité);
+      }, 0);
+
+      const totalRequis = fraisFabrication + coutsAchat;
+      const liquiditesDisponibles = usine.liquidités;
+      const fondsManquants = Math.max(0, totalRequis - liquiditesDisponibles);
+
+      fraisFabricationSpan.textContent = fraisFabrication.toLocaleString();
+      coutsAchatSpan.textContent = coutsAchat.toLocaleString();
+      totalRequisSpan.textContent = totalRequis.toLocaleString();
+      liquiditesDisponiblesSpan.textContent = liquiditesDisponibles.toLocaleString();
+      fondsManquantsSpan.textContent = fondsManquants.toLocaleString();
+
+      if (fondsManquants > 0) {
+        fondsManquantsSpan.className = "red";
+      } else {
+        fondsManquantsSpan.className = "";
       }
     }
   </script>
