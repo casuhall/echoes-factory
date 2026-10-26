@@ -127,7 +127,7 @@
         ligne.innerHTML = `
           <td>${produit.nom}</td>
           <td class="right">${NUMBER_FORMAT.format(produit.rentabilité * 100)} %</td>
-          <td class="${(produit.statut === "BUY") ? "red" : "green"} right">${NUMBER_FORMAT.format(produit.prix_estimé - produit.coût_reviens)}</td>
+          <td class="${(produit.statut === "BUY") ? "red" : "green"} right">${NUMBER_FORMAT.format(((produit.prix_estimé ?? 0) * (produit.recette?.quantité_produite ?? 1)) - ((produit.coût_reviens ?? 0) / (produit.recette?.chances_de_succès ?? 1)))}</td>
           <td>${produit.commentaire || ''}</td>
           <td class="right${estPérimé(produit.date_référence_estimations, SEUIL_PÉREMPTION_JOURS) ? ' tarif-périmé' : ''}">${produit.date_référence_estimations ? UNICODE_DATE_FORMAT.format(produit.date_référence_estimations) : '—'}</td>
         `;

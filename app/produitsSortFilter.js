@@ -31,7 +31,13 @@ export function trierProduits(produits, colonne, direction) {
     const extracteurs = {
         nom:          { valeur: p => p.nom,          naLast: false },
         rentabilité:  { valeur: p => p.rentabilité,  naLast: true  },
-        gain:         { valeur: p => (p.prix_estimé ?? 0) - (p.coût_reviens ?? 0), naLast: false },
+        gain:         { valeur: p => {
+            const prix = p.prix_estimé ?? 0;
+            const coût = p.coût_reviens ?? 0;
+            const quantité = p.recette?.quantité_produite ?? 1;
+            const chances = p.recette?.chances_de_succès ?? 1;
+            return (prix * quantité) - (coût / chances);
+        }, naLast: false },
     };
 
     const config = extracteurs[colonne];
