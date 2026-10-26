@@ -74,3 +74,8 @@ Le projet utilise des modules JavaScript natifs et Mocha. Installer les dépenda
 npm install
 npm test
 ```
+
+## TODO
+
+- Prise en compte d’un format alternatif pour les imports en TSV.
+- Export des données du tableau des étapes de planification (format à valider : TSV ou CSV).
