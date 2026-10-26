@@ -175,8 +175,8 @@
       champNomProduit.value = recette.nom;
       champFraisFabrication.value = recette.frais;
       champNombreProduits.value = recette.quantité_produite;
-      champChancesReussite.value = recette.chances_de_succès;
-      champCurseurChancesReussite.value = recette.chances_de_succès;
+      champChancesReussite.value = recette.chances_de_succès * 100;
+      champCurseurChancesReussite.value = recette.chances_de_succès * 100;
       ingredientsListe = recette.ingrédients;
     }
 
@@ -430,7 +430,7 @@
         nom: champNomProduit.value.trim(),
         frais: parseFloat(champFraisFabrication.value || 0),
         quantité_produite: parseInt(champNombreProduits.value || 0),
-        chances_de_succès: parseFloat(champChancesReussite.value || 0),
+        chances_de_succès: parseFloat(champChancesReussite.value || 0) / 100,
         ingrédients: ingredientsListe
       };
 
