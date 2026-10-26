@@ -170,7 +170,7 @@ class Ingrédient {
   get prix() {
     let prix_unitaire = this.#estimé_unitaire?.montant ?? undefined;
     if (this.#produit?.statut === 'BUILD') {
-      prix_unitaire = this.#produit.coût_reviens;
+      prix_unitaire = this.#produit.coût_reviens / (this.#produit.recette?.quantité_produite ?? 1);
     }
     return prix_unitaire * this.#quantité;
   };
