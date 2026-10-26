@@ -1,14 +1,36 @@
 
 /**
  * Décode une liste d'objets exportée par le jeu pour en extraire les données associées.
- * Analyse le format tabulé avec index, nom, quantité et valeur.
+ * Analyse le format tabulé avec index, nom, quantité et valeur, ou le format alternatif
+ * sans index où seules les lignes racines (non indentées) sont retenues.
  * @param {string} value Une liste d'objets au format exportée par le jeu
- * @returns {{ index:string, nom:string, quantité:number, valeur:number }[]} la liste d'entrée décodée sous forme d'objet.
+ * @returns {{ index:string|undefined, nom:string, quantité:number, valeur:number }[]} la liste d'entrée décodée sous forme d'objet.
  * @throws {Error} Si le format ne peut être analysé correctement
  */
 function decodeEchoesListe(value) {
   let liste = []
-  value.split("\n").forEach(element => {
+  const lignes = value.split("\n");
+  let formatAlternatif = false;
+
+  for (const element of lignes) {
+    if (!formatAlternatif && /^Material\tQuantity\tISK$/i.test(element.trim())) {
+      formatAlternatif = true;
+      continue;
+    }
+
+    if (formatAlternatif) {
+      const nom = element.trim();
+      if (!nom || /^\s/.test(element)) continue;
+      const ligne = /^(.+)\t(\d+)\t(\d+)$/.exec(element);
+      if (ligne) {
+        const [, nom, quantité_brut, valeur_brut] = ligne;
+        const quantité = Number.parseFloat(quantité_brut);
+        const valeur = Number.parseFloat(valeur_brut);
+        liste.push({ index: undefined, nom, quantité, valeur });
+      }
+      continue;
+    }
+
     let ligne = /^(\d+)\t(.+)\t(\d+)\t(.+)$/.exec(element);
     if (ligne) {
       let [, index, nom, quantité_brut, valeur_brut] = ligne;
@@ -16,7 +38,12 @@ function decodeEchoesListe(value) {
       let valeur = Number.parseFloat(valeur_brut);
       liste.push({ index, nom, quantité, valeur })
     }
-  });
+  };
+
+  if (liste.length === 0 && !formatAlternatif) {
+    throw new Error("Format non reconnu : attendu TSV à 4 colonnes (index, nom, quantité, valeur) ou à 3 colonnes (Material, Quantity, ISK).");
+  }
+
   return liste;
 }
 

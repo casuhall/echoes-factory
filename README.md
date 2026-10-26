@@ -14,13 +14,14 @@ L’application fonctionne dans un navigateur sans serveur applicatif : les donn
 ### Marché
 
 - Enregistrer un tarif unitaire ou importer des lignes TSV EVE Echoes (`index`, `nom`, `quantité`, `valeur totale`), avec calcul du prix unitaire.
+- Importer un TSV alternatif sans index (`Material`, `Quantity`, `ISK`) : seules les lignes racines (non indentées) sont retenues ; les sous-sections et les totaux sont ignorés.
 - Afficher le montant et la date d’effet des tarifs ; trier le tableau par nom, prix ou date et rechercher par nom.
 - Refuser une mise à jour antidatée et recalculer les estimations des produits concernés.
 
 ### Produits et recettes
 
 - Créer, modifier, consulter et supprimer des recettes. Décrire les ingrédients, les frais, la quantité produite par cycle et le taux de réussite.
-- Ajouter des ingrédients un par un ou les importer depuis un TSV ; leurs tarifs unitaires sont aussi actualisés.
+- Ajouter des ingrédients un par un ou les importer depuis un TSV (`index`, `nom`, `quantité`, `valeur totale`) ou depuis le format alternatif (`Material`, `Quantity`, `ISK`) ; leurs tarifs unitaires sont aussi actualisés.
 - Estimer le coût de revient à partir des tarifs disponibles. Pour un ingrédient qui est un produit `BUILD`, son coût de revient est utilisé ; sinon le calcul utilise son tarif de marché.
 - Classer les produits `BUILD`, `BUY` ou `NA`, et afficher rentabilité, gain estimé et commentaire. Le tableau se trie par nom, rentabilité ou gain et se filtre par nom.
 - Afficher la date de référence la plus ancienne utilisée dans l’estimation. Les estimations de plus de sept jours sont signalées ; le seuil est fixé dans la page et n’est pas configurable depuis l’application.
@@ -29,7 +30,7 @@ Au-delà de 15 % de rentabilité, le commentaire est « Commercialisable » ; un
 
 ### Stock et liquidités
 
-- Ajouter des objets individuellement ou en lot depuis un TSV ; ajuster ou supprimer les quantités.
+- Ajouter des objets individuellement ou en lot depuis un TSV (`index`, `nom`, `quantité`, `valeur totale`) ou depuis le format alternatif (`Material`, `Quantity`, `ISK`) ; ajuster ou supprimer les quantités.
 - Rechercher dans le stock et trier par nom ou quantité.
 - Modifier les liquidités et vider le stock / remettre les liquidités à zéro depuis la page Stock.
 - Refuser le retrait d’une quantité supérieure au stock disponible.
@@ -68,7 +69,7 @@ Les données sont propres au navigateur et à son origine. Effacer les données 
 
 ## Développement et état des tests
 
-Le projet utilise des modules JavaScript natifs et Mocha. Installer les dépendances puis lancer `npm test`. Lors de la dernière exécution observée : **144 tests réussis, 1 en attente et 0 en échec**.
+Le projet utilise des modules JavaScript natifs et Mocha. Installer les dépendances puis lancer `npm test`. Lors de la dernière exécution observée : **149 tests réussis, 1 en attente et 1 en échec** (échec non lié à la planification).
 
 ```sh
 npm install
@@ -77,5 +78,4 @@ npm test
 
 ## TODO
 
-- Prise en compte d’un format alternatif pour les imports en TSV.
 - Export des données du tableau des étapes de planification (format à valider : TSV ou CSV).

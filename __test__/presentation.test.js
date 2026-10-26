@@ -46,6 +46,34 @@ describe('Presentation', () => {
             const result = decodeEchoesListe(input);
             expect(result).to.deep.equal(expected);
         });
+
+        it('Devrait décoder le format alternatif TSV sans index', () => {
+            const input = `Material\tQuantity\tISK
+Tritanium\t568800000\t568800000
+Pyerite\t189600000\t379200000
+  Reactive Gas\t75171\t15922721
+Structure Construction Parts\t3\t299250000`;
+            const expected = [
+                { index: undefined, nom: "Tritanium", quantité: 568800000, valeur: 568800000 },
+                { index: undefined, nom: "Pyerite", quantité: 189600000, valeur: 379200000 },
+                { index: undefined, nom: "Structure Construction Parts", quantité: 3, valeur: 299250000 }
+            ];
+            const result = decodeEchoesListe(input);
+            expect(result).to.deep.equal(expected);
+        });
+
+        it('Devrait ignorer les sous-sections et les totaux dans le format alternatif', () => {
+            const input = `Material\tQuantity\tISK
+Blueprints\t\t
+Bounty Management Module III Blueprint\t1\t5400000000
+Job fees\t\t5400000000
+Build cost\t\t44707645253`;
+            const expected = [
+                { index: undefined, nom: "Bounty Management Module III Blueprint", quantité: 1, valeur: 5400000000 }
+            ];
+            const result = decodeEchoesListe(input);
+            expect(result).to.deep.equal(expected);
+        });
     });
 
     describe(`Outils de générationd d'objets HTML`, () => {
