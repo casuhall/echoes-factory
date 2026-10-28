@@ -92,6 +92,7 @@
 
     <section style="margin-top: 16px;">
       <h3>Matériaux nécessaires / manquants</h3>
+      <button type="button" id="export-materiaux" class="btn ghost" style="margin-bottom: 8px;">Exporter en TSV</button>
       <table class="table" id="materiaux-table">
         <thead>
           <tr>
@@ -161,6 +162,7 @@
     const strategieBody = document.getElementById("strategie-body");
     const etapesBody = document.getElementById("etapes-body");
     const materiauxBody = document.getElementById("materiaux-body");
+    const exportMateriauxBtn = document.getElementById("export-materiaux");
     const fraisFabricationSpan = document.getElementById("frais_fabrication");
     const coutsAchatSpan = document.getElementById("couts_achat");
     const totalRequisSpan = document.getElementById("total_requis");
@@ -198,6 +200,32 @@
       planificateur = new Planificateur(usine);
       planCourant = planificateur.planifier(produitCible, quantitéCible);
       présenterPlan(planCourant, planificateur);
+    });
+
+    exportMateriauxBtn.addEventListener("click", () => {
+      if (materiauxActuels.length === 0) {
+        notifier("Aucun matériau à exporter.", "warn");
+        return;
+      }
+      const lignes = ["Material\tQuantity\tStock\tMissing\tUnitCost\tTotalCost"];
+      for (const { étape } of materiauxActuels) {
+        const coûtUnitaire = tarifs.get(étape.nom) ?? 0;
+        lignes.push([
+          étape.nom,
+          étape.quantité,
+          étape.quantité_stock,
+          étape.quantité_manquante,
+          coûtUnitaire,
+          étape.coût_achat
+        ].join("\t"));
+      }
+      const blob = new Blob([lignes.join("\n")], { type: "text/tab-separated-values;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "materiaux.tsv";
+      a.click();
+      URL.revokeObjectURL(url);
     });
 
     function présenterPlan(plan, planificateur) {
@@ -335,8 +363,11 @@
       }
     }
 
+    let materiauxActuels = [];
+
     function présenterMatériaux(materiaux, tarifs) {
       materiauxBody.innerHTML = "";
+      materiauxActuels = materiaux;
 
       if (materiaux.length === 0) {
         const ligneVide = document.createElement("tr");
