@@ -92,7 +92,7 @@
 
     <section style="margin-top: 16px;">
       <h3>Matériaux nécessaires / manquants</h3>
-      <button type="button" id="export-materiaux" class="btn ghost" style="margin-bottom: 8px;">Exporter en TSV</button>
+      <button type="button" id="export-materiaux" class="btn ghost" style="margin-bottom: 8px;">Exporter</button>
       <table class="table" id="materiaux-table">
         <thead>
           <tr>
@@ -207,9 +207,9 @@
         notifier("Aucun matériau à exporter.", "warn");
         return;
       }
-      const lignes = ["Material\tQuantity\tStock\tMissing\tUnitCost\tTotalCost"];
+      const lignes = ["Material;Quantity;Stock;Missing;UnitCost;TotalCost"];
       for (const { étape } of materiauxActuels) {
-        const coûtUnitaire = tarifs.get(étape.nom) ?? 0;
+        const coûtUnitaire = tarifsActuels.get(étape.nom) ?? 0;
         lignes.push([
           étape.nom,
           étape.quantité,
@@ -217,13 +217,13 @@
           étape.quantité_manquante,
           coûtUnitaire,
           étape.coût_achat
-        ].join("\t"));
+        ].join(";"));
       }
-      const blob = new Blob([lignes.join("\n")], { type: "text/tab-separated-values;charset=utf-8;" });
+      const blob = new Blob([lignes.join("\n")], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "materiaux.tsv";
+      a.download = "materiaux.csv";
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -364,10 +364,12 @@
     }
 
     let materiauxActuels = [];
+    let tarifsActuels = new Map();
 
     function présenterMatériaux(materiaux, tarifs) {
       materiauxBody.innerHTML = "";
       materiauxActuels = materiaux;
+      tarifsActuels = tarifs;
 
       if (materiaux.length === 0) {
         const ligneVide = document.createElement("tr");

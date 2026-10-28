@@ -41,6 +41,7 @@ Au-delà de 15 % de rentabilité, le commentaire est « Commercialisable » ; un
 - Afficher la liste récursive des composants nécessaires avec la décision système par défaut : `Acheter` ou `Produire`.
 - Permettre la surcharge manuelle de la décision sur chaque étape pour privilégier l'achat ou la fabrication d'un sous-produit.
 - Afficher le coût total estimé du plan et la quantité de stock disponible pour chaque composant.
+- Exporter les données du tableau des matériaux nécessaires/manquants au format CSV.
 
 ## Utilisation
 
@@ -81,4 +82,3 @@ npm test
 - Répliquer les boutons enregistrer et annuler en haut du tableau des ingrédients dans la page d'ajout/modification de produits.
 - Correction de bug sur l'affichage des messages d'erreur dans la page d'ajout de produits : l'enregistrement échoue en cas d'absence de composants (comportement correct), mais aucun message visible n'est remonté à l'utilisateur (comportement incorrect).
 - Correction de bug sur la modification de produit : les chances de succès sont affichées par défaut avec une probabilité de 1% pour des produits pourtant enregistrés avec un taux de réussite de 100%.
-- Export des données du tableau des étapes de planification (format à valider : TSV ou CSV).
