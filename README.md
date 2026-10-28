@@ -81,5 +81,4 @@ npm test
 - Répliquer les boutons enregistrer et annuler en haut du tableau des ingrédients dans la page d'ajout/modification de produits.
 - Correction de bug sur l'affichage des messages d'erreur dans la page d'ajout de produits : l'enregistrement échoue en cas d'absence de composants (comportement correct), mais aucun message visible n'est remonté à l'utilisateur (comportement incorrect).
 - Correction de bug sur la modification de produit : les chances de succès sont affichées par défaut avec une probabilité de 1% pour des produits pourtant enregistrés avec un taux de réussite de 100%.
-- Indiquer les liquidités nécessaires pour satisfaire le plan en cours : dissocier les coûts associés aux frais de fabrication des coûts associés aux achats, mettre en évidence les liquidités disponibles et indiquer si elles sont réputées suffisantes.
 - Export des données du tableau des étapes de planification (format à valider : TSV ou CSV).
