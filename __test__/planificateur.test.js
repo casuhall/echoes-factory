@@ -279,5 +279,10 @@ describe('Planificateur', () => {
       expect(plan.étapes.find(e => e.nom === 'Bois').décision).to.equal('BUY');
       expect(plan.étapes.find(e => e.nom === 'Bois').surcharge).to.equal(false);
     });
+
+    it('refuse un plan invalide lors d une surcharge', () => {
+      const planificateur = new Planificateur(usine);
+      expect(() => planificateur.surcharger(null, 'Bois', 'BUILD')).to.throw(/Plan invalide/);
+    });
   });
 });

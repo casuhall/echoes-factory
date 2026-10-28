@@ -200,7 +200,14 @@ describe('Usine - Gestion complète', () => {
             expect(usine.stock).to.deep.equal([]);
         });
 
+        it("Retirer plus que le stock disponible lance une erreur", () => {
+            const usine = new Usine("Usine Test", undefined, [], [], [], 0);
+            usine.stocker("Bois", 5);
+            expect(() => usine.déstocker("Bois", 10)).to.throw(/Impossible de retirer/);
+        });
+
         it("il est possible de supprimer simplement un objet du stock de l'usine", () => {
+            const usine = new Usine("Usine Test", undefined, [], [], [], 0);
             expect(usine.stocker("ObjetTest", 5)).to.equal(5);
             expect(usine.stocker("ObjetTest2", 3)).to.equal(3);
             expect(usine.stock).to.deep.include({ nom: "ObjetTest", quantité: 5 });
