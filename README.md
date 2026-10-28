@@ -67,6 +67,9 @@ Les données sont propres au navigateur et à son origine. Effacer les données 
 - Les calculs dépendent de prix saisis/importés et peuvent être incomplets ou périmés.
 - Les mouvements de production ne déduisent pas automatiquement les matériaux ni ne créditent les objets produits ; les achats et gains ne modifient pas automatiquement stock ou liquidités.
 - L’internationalisation et la mise à jour automatique des prix ne sont pas implémentées.
+- Répliquer les boutons enregistrer et annuler en haut du tableau des ingrédients dans la page d'ajout/modification de produits.
+- Correction de bug sur l'affichage des messages d'erreur dans la page d'ajout de produits : l'enregistrement échoue en cas d'absence de composants (comportement correct), mais aucun message visible n'est remonté à l'utilisateur (comportement incorrect).
+- Correction de bug sur la modification de produit : les chances de succès sont affichées par défaut avec une probabilité de 1% pour des produits pourtant enregistrés avec un taux de réussite de 100%.
 
 ## Développement et état des tests
 
@@ -76,9 +79,3 @@ Le projet utilise des modules JavaScript natifs et Mocha. Installer les dépenda
 npm install
 npm test
 ```
-
-## TODO
-
-- Répliquer les boutons enregistrer et annuler en haut du tableau des ingrédients dans la page d'ajout/modification de produits.
-- Correction de bug sur l'affichage des messages d'erreur dans la page d'ajout de produits : l'enregistrement échoue en cas d'absence de composants (comportement correct), mais aucun message visible n'est remonté à l'utilisateur (comportement incorrect).
-- Correction de bug sur la modification de produit : les chances de succès sont affichées par défaut avec une probabilité de 1% pour des produits pourtant enregistrés avec un taux de réussite de 100%.
