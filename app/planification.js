@@ -22,6 +22,8 @@ class ÉtapePlan {
   #décision;
   #quantité_stock;
   #surcharge = false;
+  #frais_fabrication = 0;
+  #coût_achat = 0;
 
   /**
    * @param {string} nom
@@ -30,7 +32,7 @@ class ÉtapePlan {
    * @param {number} quantité_stock
    * @param {boolean} [surcharge=false]
    */
-  constructor(nom, quantité, décision, quantité_stock, surcharge = false) {
+  constructor(nom, quantité, décision, quantité_stock, surcharge = false, frais_fabrication = 0, coût_achat = 0) {
     if (!nom || String(nom).trim().length === 0) {
       throw new Error(`Nom d'étape obligatoire. Fournis : ${nom}`);
     }
@@ -48,6 +50,8 @@ class ÉtapePlan {
     this.#décision = décision;
     this.#quantité_stock = quantité_stock;
     this.#surcharge = surcharge;
+    this.#frais_fabrication = frais_fabrication;
+    this.#coût_achat = coût_achat;
   }
 
   /** @type {string} Nom de l'étape. */
@@ -60,6 +64,12 @@ class ÉtapePlan {
   get quantité_stock() { return this.#quantité_stock; }
   /** @type {boolean} true si l'utilisateur a surchargé la recommandation. */
   get surcharge() { return this.#surcharge; }
+  /** @type {number} Quantité manquante après prise en compte du stock. */
+  get quantité_manquante() { return Math.max(0, this.#quantité - this.#quantité_stock); }
+  /** @type {number} Frais de fabrication pour cette étape (BUILD uniquement). */
+  get frais_fabrication() { return this.#frais_fabrication; }
+  /** @type {number} Coût d'achat pour cette étape (BUY uniquement). */
+  get coût_achat() { return this.#coût_achat; }
 
   /** @returns {{nom:string,quantité:number,décision:string,quantité_stock:number,surcharge:boolean}} */
   toObject() {
@@ -68,7 +78,10 @@ class ÉtapePlan {
       quantité: this.#quantité,
       décision: this.#décision,
       quantité_stock: this.#quantité_stock,
-      surcharge: this.#surcharge
+      surcharge: this.#surcharge,
+      quantité_manquante: this.quantité_manquante,
+      frais_fabrication: this.#frais_fabrication,
+      coût_achat: this.#coût_achat
     };
   }
 }
@@ -117,6 +130,18 @@ class PlanProduction {
   get étapes() { return [...this.#étapes]; }
   /** @type {number} Coût total estimé du plan. */
   get coût_total() { return this.#coût_total; }
+  /** @type {number} Total des frais de fabrication (BUILD). */
+  get frais_fabrication_total() {
+    return this.#étapes.reduce((sum, étape) => sum + étape.frais_fabrication, 0);
+  }
+  /** @type {number} Total des coûts d'achat (BUY). */
+  get coûts_achat_total() {
+    return this.#étapes.reduce((sum, étape) => sum + étape.coût_achat, 0);
+  }
+  /** @type {number} Total requis (frais + achats). */
+  get total_requis() {
+    return this.frais_fabrication_total + this.coûts_achat_total;
+  }
 
 
   /** @returns {{produit_cible:string,quantité_cible:number,étapes:Array,durée:number}} */
@@ -125,7 +150,10 @@ class PlanProduction {
       produit_cible: this.#produit_cible,
       quantité_cible: this.#quantité_cible,
       étapes: this.#étapes.map(étape => étape.toObject()),
-      coût_total: this.#coût_total
+      coût_total: this.#coût_total,
+      frais_fabrication_total: this.frais_fabrication_total,
+      coûts_achat_total: this.coûts_achat_total,
+      total_requis: this.total_requis
     };
   }
 }

@@ -354,7 +354,22 @@ class Planificateur {
     }
 
     const surcharge = surcharges.has(nom_produit);
-    étapes.push(new ÉtapePlan(nom_produit, quantité, décision, quantité_stock, surcharge));
+    let frais_fabrication = 0;
+    let coût_achat = 0;
+    if (produit && décision === 'BUILD') {
+      const recette = produit.recette;
+      const quantité_manquante = Math.max(0, quantité - quantité_stock);
+      if (quantité_manquante > 0) {
+        const lots = Math.ceil(quantité_manquante / recette.quantité_produite);
+        frais_fabrication = recette.frais * lots;
+      }
+    } else if (décision === 'BUY') {
+      const tarifs = this.#tarifs();
+      const prix = tarifs.get(nom_produit) ?? 0;
+      const quantité_manquante = Math.max(0, quantité - quantité_stock);
+      coût_achat = prix * quantité_manquante;
+    }
+    étapes.push(new ÉtapePlan(nom_produit, quantité, décision, quantité_stock, surcharge, frais_fabrication, coût_achat));
 
     if (racine && !produit) return [];
 

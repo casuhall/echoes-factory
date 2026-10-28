@@ -51,7 +51,10 @@ describe('Planificateur', () => {
         quantité: 10,
         décision: 'BUY',
         quantité_stock: 5,
-        surcharge: true
+        surcharge: true,
+        quantité_manquante: 5,
+        frais_fabrication: 0,
+        coût_achat: 0
       });
     });
   });

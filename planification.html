@@ -225,8 +225,8 @@
 
       présenterStratégie(subProduits, plan, planificateur);
       présenterEtapesConstruction(etapesConstruction);
+      présenterLiquidités(etapesConstruction, materiaux, tarifs, plan.étapes, plan);
       présenterMatériaux(materiaux, tarifs);
-      présenterLiquidités(etapesConstruction, materiaux, tarifs, plan.étapes);
     }
 
     function présenterStratégie(subProduits, plan, planificateur) {
@@ -320,13 +320,11 @@
 
         const celluleManquant = document.createElement("td");
         celluleManquant.className = "right";
-        const quantitéManquante = Math.max(0, étape.quantité - étape.quantité_stock);
-        celluleManquant.textContent = quantitéManquante.toLocaleString();
+        celluleManquant.textContent = étape.quantité_manquante.toLocaleString();
 
         const celluleFrais = document.createElement("td");
         celluleFrais.className = "right";
-        const frais = produit?.recette?.frais ?? 0;
-        celluleFrais.textContent = frais.toLocaleString();
+        celluleFrais.textContent = étape.frais_fabrication.toLocaleString();
 
         ligne.appendChild(celluleNom);
         ligne.appendChild(celluleQuantité);
@@ -364,8 +362,7 @@
 
         const celluleManquant = document.createElement("td");
         celluleManquant.className = "right";
-        const quantitéManquante = Math.max(0, étape.quantité - étape.quantité_stock);
-        celluleManquant.textContent = quantitéManquante.toLocaleString();
+        celluleManquant.textContent = étape.quantité_manquante.toLocaleString();
 
         const celluleCoûtUnitaire = document.createElement("td");
         celluleCoûtUnitaire.className = "right";
@@ -374,7 +371,7 @@
 
         const celluleCoûtTotal = document.createElement("td");
         celluleCoûtTotal.className = "right";
-        celluleCoûtTotal.textContent = (coûtUnitaire * étape.quantité).toLocaleString();
+        celluleCoûtTotal.textContent = étape.coût_achat.toLocaleString();
 
         ligne.appendChild(celluleNom);
         ligne.appendChild(celluleQuantité);
@@ -386,25 +383,12 @@
       }
     }
 
-    function présenterLiquidités(etapesConstruction, materiaux, tarifs, toutesLesÉtapes) {
-      const fraisFabrication = etapesConstruction.reduce((sum, { étape, produit }) => {
-        return sum + (produit?.recette?.frais ?? 0);
-      }, 0);
-
-      const coutsAchat = toutesLesÉtapes.reduce((sum, étape) => {
-        if (étape.décision !== 'BUY') return sum;
-        const prix = tarifs.get(étape.nom) ?? 0;
-        return sum + (prix * étape.quantité);
-      }, 0);
-
-      const totalRequis = fraisFabrication + coutsAchat;
-      const liquiditesDisponibles = usine.liquidités;
-      const fondsManquants = Math.max(0, totalRequis - liquiditesDisponibles);
-
-      fraisFabricationSpan.textContent = fraisFabrication.toLocaleString();
-      coutsAchatSpan.textContent = coutsAchat.toLocaleString();
-      totalRequisSpan.textContent = totalRequis.toLocaleString();
-      liquiditesDisponiblesSpan.textContent = liquiditesDisponibles.toLocaleString();
+    function présenterLiquidités(etapesConstruction, materiaux, tarifs, toutesLesÉtapes, plan) {
+      fraisFabricationSpan.textContent = plan.frais_fabrication_total.toLocaleString();
+      coutsAchatSpan.textContent = plan.coûts_achat_total.toLocaleString();
+      totalRequisSpan.textContent = plan.total_requis.toLocaleString();
+      liquiditesDisponiblesSpan.textContent = usine.liquidités.toLocaleString();
+      const fondsManquants = Math.max(0, plan.total_requis - usine.liquidités);
       fondsManquantsSpan.textContent = fondsManquants.toLocaleString();
 
       if (fondsManquants > 0) {
