@@ -66,9 +66,11 @@
 
   <script type="module">
     import { Usine } from "./app/service.js"
-    import { notifier } from "./app/presentation.js"
+    import { notifier, prépareNotification } from "./app/presentation.js"
     import { Stockage } from "./app/storage.js"
     import { associerPantry } from "./app/storage.js"
+
+    prépareNotification();
 
     const stockage = new Stockage(Stockage.lirePantryId());
     const usine = Usine.parse(await stockage.lireUsine() || new Usine("He's alive !").toString());
