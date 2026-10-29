@@ -324,7 +324,7 @@
      * Initialise les ingrédients en décodant une liste au format texte
      * Format attendu : ID	Names	Quantity	Valuation (séparés par des tabulations)
      */
-    boutonInitialiserPlusieursIngredients.addEventListener('click', () => {
+    boutonInitialiserPlusieursIngredients.addEventListener('click', async () => {
       const texteBrut = zoneTextePlusieursIngredients.value.trim();
 
       try {
@@ -425,7 +425,7 @@
      * Enregistre les données de la ligne de production
      * Collecte les frais, nombre de produits, taux de réussite et ingrédients
      */
-    boutonEnregistrer.addEventListener('click', () => {
+    boutonEnregistrer.addEventListener('click', async () => {
       const recette = {
         nom: champNomProduit.value.trim(),
         frais: parseFloat(champFraisFabrication.value || 0),

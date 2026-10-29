@@ -57,5 +57,17 @@
   "stock.aucunObjet": "Aucun objet en stock",
   "stock.inventaireVide": "Inventaire désepérément vide",
   "stock.aucunResultat": "Aucun résultat pour cette recherche",
+  "produits.titre": "Catalogue des Produits de l'Usine",
+  "produits.ajouterProduit": "Ajouter un produit",
+  "produits.rechercher": "Rechercher un produit...",
+  "produits.produit": "Produit",
+  "produits.rentabilité": "Rentabilité",
+  "produits.gain": "Gain estimé",
+  "produits.commentaire": "Commentaire",
+  "produits.refTarif": "Réf. tarif",
+  "produits.actions": "Actions",
+  "produits.aucunProduit": "Aucun produit défini",
+  "produits.aucunResultat": "Aucun produit ne correspond à la recherche",
+  "produits.confirmationSuppression": "Êtes-vous sûr de vouloir supprimer le produit \"{nom}\" ?",
   "stock.confirmationSuppression": "Êtes-vous sûr de vouloir supprimer l'objet \"{nom}\" ?"
 }

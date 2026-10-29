@@ -57,5 +57,17 @@
   "stock.aucunObjet": "No items in stock",
   "stock.inventaireVide": "Inventory desperately empty",
   "stock.aucunResultat": "No results for this search",
+  "produits.titre": "Product Catalog",
+  "produits.ajouterProduit": "Add a product",
+  "produits.rechercher": "Search for a product...",
+  "produits.produit": "Product",
+  "produits.rentabilité": "Profitability",
+  "produits.gain": "Estimated gain",
+  "produits.commentaire": "Comment",
+  "produits.refTarif": "Price ref.",
+  "produits.actions": "Actions",
+  "produits.aucunProduit": "No products defined",
+  "produits.aucunResultat": "No products match the search",
+  "produits.confirmationSuppression": "Are you sure you want to delete the product \"{nom}\" ?",
   "stock.confirmationSuppression": "Are you sure you want to delete the item \"{nom}\" ?"
 }

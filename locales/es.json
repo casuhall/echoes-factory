@@ -57,5 +57,17 @@
   "stock.aucunObjet": "Ningún objeto en stock",
   "stock.inventaireVide": "Inventario desesperadamente vacío",
   "stock.aucunResultat": "Sin resultados para esta búsqueda",
-  "stock.confirmationSuppression": "¿Está seguro de que desea eliminar el objeto \"{nom}\"?"
+  "produits.titre": "Catálogo de Productos",
+  "produits.ajouterProduit": "Añadir un producto",
+  "produits.rechercher": "Buscar un producto...",
+  "produits.produit": "Producto",
+  "produits.rentabilité": "Rentabilidad",
+  "produits.gain": "Ganancia estimada",
+  "produits.commentaire": "Comentario",
+  "produits.refTarif": "Ref. precio",
+  "produits.actions": "Acciones",
+  "produits.aucunProduit": "Ningún producto definido",
+  "produits.aucunResultat": "Ningún producto coincide con la búsqueda",
+  "produits.confirmationSuppression": "¿Está seguro de que desea eliminar el producto \"{nom}\" ?",
+  "stock.confirmationSuppression": "¿Está seguro de que desea eliminar el objeto \"{nom}\" ?"
 }

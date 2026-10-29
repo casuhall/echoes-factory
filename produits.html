@@ -12,36 +12,38 @@
   <nav>
     <div>
       <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
-      <a href="./index.html" class="btn ghost" id="nav-accueil">Accueil</a>
-      <a href="./marché.html" class="btn ghost" id="nav-marché">Marché</a>
-      <a href="./produits.html" class="btn" id="nav-produits">Produits</a>
-      <a href="./stock.html" class="btn ghost" id="nav-stock">Stock</a>
-      <a href="./planification.html" class="btn ghost" id="nav-planification">Planification</a>
+      <a href="./index.html" class="btn ghost" id="nav-accueil" data-i18n="nav.accueil">Accueil</a>
+      <a href="./marché.html" class="btn ghost" id="nav-marché" data-i18n="nav.marché">Marché</a>
+      <a href="./produits.html" class="btn" id="nav-produits" data-i18n="nav.produits">Produits</a>
+      <a href="./stock.html" class="btn ghost" id="nav-stock" data-i18n="nav.stock">Stock</a>
+      <a href="./planification.html" class="btn ghost" id="nav-planification" data-i18n="nav.planification">Planification</a>
+      <select id="select-langue" style="margin-left: 8px; padding: 2px 8px; font-size: 0.85em; width: auto;">
+      </select>
     </div>
   </nav>
   <main id="ajoutProduitMain">
-    <h1>Catalogue des Produits de l'Usine</h1>
+    <h1 data-i18n="produits.titre">Catalogue des Produits de l'Usine</h1>
     <div class="actions">
-      <a href="./edition_produit.html" class="btn">Ajouter un produit</a>
+      <a href="./edition_produit.html" class="btn" data-i18n="produits.ajouterProduit">Ajouter un produit</a>
     </div>
     <div class="grid" style="margin-bottom:12px;">
-      <input type="text" id="search_produits" placeholder="Rechercher un produit..." />
+      <input type="text" id="search_produits" placeholder="Rechercher un produit..." data-i18n-placeholder="produits.rechercher" />
     </div>
     <div>
       <table>
         <thead>
           <tr>
-            <th id="th-nom" style="cursor:pointer;user-select:none;">Produit</th>
-            <th id="th-rentabilité" style="cursor:pointer;user-select:none;">Rentabilité</th>
-            <th id="th-gain" style="cursor:pointer;user-select:none;">Gain estimé</th>
-            <th>Commentaire</th>
-            <th>Réf. tarif</th>
-            <th>Actions</th>
+            <th id="th-nom" style="cursor:pointer;user-select:none;" data-i18n="produits.produit">Produit</th>
+            <th id="th-rentabilité" style="cursor:pointer;user-select:none;" data-i18n="produits.rentabilité">Rentabilité</th>
+            <th id="th-gain" style="cursor:pointer;user-select:none;" data-i18n="produits.gain">Gain estimé</th>
+            <th data-i18n="produits.commentaire">Commentaire</th>
+            <th data-i18n="produits.refTarif">Réf. tarif</th>
+            <th data-i18n="produits.actions">Actions</th>
           </tr>
         </thead>
         <tbody id="produitsBody">
           <tr class="empty">
-            <td colspan="6">Aucun produit défini</td>
+            <td colspan="6" data-i18n="produits.aucunProduit">Aucun produit défini</td>
           </tr>
         </tbody>
       </table>
@@ -51,11 +53,15 @@
     import { Usine } from "./app/service.js"
     import {
       decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT,
-      initialiserElement, notifier
+      initialiserElement, notifier, prépareNotification
     } from "./app/presentation.js"
     import { filtrerProduits, trierProduits } from "./app/produitsSortFilter.js"
     import { estPérimé } from "./app/péremption.js"
     import { Stockage } from "./app/storage.js"
+    import { i18n } from "./app/i18n.js"
+
+    prépareNotification();
+    await i18n.charger();
 
     const stockage = new Stockage(Stockage.lirePantryId());
     const usine = Usine.parse(await stockage.lireUsine() || "{}");
@@ -116,7 +122,7 @@
 
       if (produitsFiltrésTriés.length === 0) {
         corpsTableauProduits.innerHTML = `<tr class="empty"><td colspan="6">${
-          filtre ? 'Aucun produit ne correspond à la recherche' : 'Aucun produit défini'
+          filtre ? i18n.t('produits.aucunResultat') : i18n.t('produits.aucunProduit')
         }</td></tr>`;
         return;
       }
@@ -143,7 +149,7 @@
         deleteButton.textContent = "🗑";
         deleteButton.classList.add("btn", "warning");
         deleteButton.addEventListener("click", async () => {
-          if (confirm(`Êtes-vous sûr de vouloir supprimer le produit "${produit.nom}" ?`)) {
+          if (confirm(i18n.t('produits.confirmationSuppression').replace('{nom}', produit.nom))) {
             usine.supprimeProduit(produit.nom);
             await stockage.sauvegarderUsine(usine);
             location.reload();
@@ -158,6 +164,42 @@
 
     // Recherche en temps réel
     searchInput.addEventListener('input', afficherProduits);
+
+    // Appliquer les traductions
+    function appliquerTraductions() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const clé = el.getAttribute('data-i18n');
+        el.textContent = i18n.t(clé);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const clé = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = i18n.t(clé);
+      });
+    }
+
+    function alimenterSelecteurLangue() {
+      const select = document.getElementById('select-langue');
+      select.innerHTML = '';
+      const labels = { fr: 'Français', en: 'English', de: 'Deutsch', es: 'Español' };
+      i18n.localesDisponibles.forEach(code => {
+        const option = document.createElement('option');
+        option.value = code;
+        option.textContent = labels[code] || code.toUpperCase();
+        if (code === i18n.locale) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+    }
+
+    appliquerTraductions();
+    alimenterSelecteurLangue();
+
+    document.getElementById('select-langue').addEventListener('change', async (event) => {
+      await i18n.changerLocale(event.target.value);
+      appliquerTraductions();
+      alimenterSelecteurLangue();
+    });
 
     // Affichage initial
     afficherProduits();
