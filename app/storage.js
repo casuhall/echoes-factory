@@ -36,7 +36,7 @@ class StockageLocal {
 /**
  * Stratégie de stockage distante basée sur Pantry.
  */
-class StockagePantry {
+export class StockagePantry {
   #pantryId;
 
   /** @param {string} pantryId */

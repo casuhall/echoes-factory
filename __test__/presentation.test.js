@@ -24,6 +24,7 @@ describe('Presentation', () => {
     beforeEach(() => {
         localStorage.clear();
         global.document = (new JSDOM()).window.document;
+        global.localStorage = localStorage;
     });
 
     describe('decodeEchoesListe', () => {
@@ -91,18 +92,6 @@ Build cost\t\t44707645253`;
             expect(element.classList.contains("class1")).to.be.true;
             expect(element.classList.contains("class2")).to.be.true;
             expect(element.textContent).to.equal(contenu);
-        });
-    });
-
-    describe.skip('Stockage et récupération de l usine', () => {
-        it('Devrait stocker et récupérer une usine correctement', () => {
-            const usine = new Usine("Usine Test");
-            usine.évaluer("ProduitTest", 100);
-            putUsine(usine);
-            const retrievedUsine = getUsine();
-            expect(retrievedUsine).to.exist;
-            expect(retrievedUsine.nom).to.equal("Usine Test");
-            expect(retrievedUsine.tarifs).to.deep.equal(usine.tarifs);
         });
     });
 
