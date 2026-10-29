@@ -12,53 +12,59 @@
   <nav>
     <div>
       <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
-      <a href="./index.html" class="btn" id="nav-accueil">Accueil</a>
-      <a href="./marché.html" class="btn ghost" id="nav-marché">Marché</a>
-      <a href="./produits.html" class="btn ghost" id="nav-produits">Produits</a>
-      <a href="./stock.html" class="btn ghost" id="nav-stock">Stock</a>
-      <a href="./planification.html" class="btn ghost" id="nav-planification">Planification</a>
+      <a href="./index.html" class="btn" id="nav-accueil" data-i18n="nav.accueil">Accueil</a>
+      <a href="./marché.html" class="btn ghost" id="nav-marché" data-i18n="nav.marché">Marché</a>
+      <a href="./produits.html" class="btn ghost" id="nav-produits" data-i18n="nav.produits">Produits</a>
+      <a href="./stock.html" class="btn ghost" id="nav-stock" data-i18n="nav.stock">Stock</a>
+      <a href="./planification.html" class="btn ghost" id="nav-planification" data-i18n="nav.planification">Planification</a>
+      <select id="select-langue" style="margin-left: 8px;">
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="es">Español</option>
+      </select>
     </div>
   </nav>
 
   <main>
     <div class="grid">
       <div>
-        <label for="input-nomUsine">Nom de l'usine</label>
+        <label for="input-nomUsine" data-i18n="accueil.nomUsine">Nom de l'usine</label>
         <input type="text" id="input-nomUsine" />
       </div>
       <div>
-        <label for="input-nbProduits">Nombre de produits</label>
+        <label for="input-nbProduits" data-i18n="accueil.nbProduits">Nombre de produits</label>
         <input id="input-nbProduits" type="number" readonly></input>
       </div>
       <div>
-        <label for="input-nbMarché">Nombre de valeurs de marché</label>
+        <label for="input-nbMarché" data-i18n="accueil.nbMarché">Nombre de valeurs de marché</label>
         <input id="input-nbMarché" type="number" readonly></input>
       </div>
       <div>
-        <label for="input-nbStock">Nombre de type d'objets en stock</label>
+        <label for="input-nbStock" data-i18n="accueil.nbStock">Nombre de type d'objets en stock</label>
         <input id="input-nbStock" type="number" readonly></input>
       </div>
       <div>
-        <label for="input-liquidités">Liquidités disponibles</label>
+        <label for="input-liquidités" data-i18n="accueil.liquidités">Liquidités disponibles</label>
         <input id="input-liquidités" type="number" readonly></input>
       </div>
     </div>
 
     <div class="grid" style="margin-top: 16px;">
       <div>
-        <label for="input-pantry-id">Identifiant Pantry (optionnel)</label>
-        <input type="text" id="input-pantry-id" placeholder="Entrez votre identifiant Pantry" />
+        <label for="input-pantry-id" data-i18n="accueil.pantry.identifiant">Identifiant Pantry (optionnel)</label>
+        <input type="text" id="input-pantry-id" placeholder="Entrez votre identifiant Pantry" data-i18n-placeholder="accueil.pantry.placeholder" />
       </div>
       <div style="display: flex; align-items: flex-end;">
-        <button type="button" class="btn" id="button-associer-pantry">Associer Pantry</button>
+        <button type="button" class="btn" id="button-associer-pantry" data-i18n="accueil.pantry.associer">Associer Pantry</button>
       </div>
     </div>
     <p id="status-pantry" style="margin-top: 8px;"></p>
 
   </main>
 
-  <footer><span>Gestion des données</span>
-    <button type="button" class="btn warning" id="button-reset">Reset</button>
+  <footer><span data-i18n="accueil.gestionDonnées">Gestion des données</span>
+    <button type="button" class="btn warning" id="button-reset" data-i18n="accueil.reset">Reset</button>
   </footer>
 
   <script type="module">
@@ -66,13 +72,37 @@
     import { notifier, prépareNotification } from "./app/presentation.js"
     import { Stockage } from "./app/storage.js"
     import { associerPantry } from "./app/storage.js"
+    import { i18n } from "./app/i18n.js"
 
     prépareNotification();
+    await i18n.charger();
 
     const stockage = new Stockage(Stockage.lirePantryId());
     const usine = Usine.parse(await stockage.lireUsine() || new Usine("He's alive !").toString());
 
     init();
+
+    // Appliquer les traductions
+    function appliquerTraductions() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const clé = el.getAttribute('data-i18n');
+        el.textContent = i18n.t(clé);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const clé = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = i18n.t(clé);
+      });
+      document.getElementById('select-langue').value = i18n.locale;
+    }
+
+    appliquerTraductions();
+
+    // Changement de langue
+    document.getElementById('select-langue').addEventListener('change', async (event) => {
+      await i18n.changerLocale(event.target.value);
+      appliquerTraductions();
+      mettreAJourStatutPantry();
+    });
 
     // Auclic sur le bouton "reset", supression de l'usine persistée pour la remplacer par une usine vide
     document.querySelector("#input-nomUsine").addEventListener("change", (event) => {
@@ -83,9 +113,9 @@
       const status = document.getElementById("status-pantry");
       const pantryId = Stockage.lirePantryId();
       if (pantryId) {
-        status.textContent = `Mode Pantry actif (identifiant : ${pantryId})`;
+        status.textContent = i18n.t("accueil.pantry.modePantry", { id: pantryId });
       } else {
-        status.textContent = "Mode local actif (pas de Pantry associé)";
+        status.textContent = i18n.t("accueil.pantry.modeLocal");
       }
     }
 
@@ -95,18 +125,18 @@
     document.querySelector("#button-associer-pantry").addEventListener("click", async () => {
       const identifiant = document.querySelector("#input-pantry-id").value.trim();
       if (!identifiant) {
-        notifier("Veuillez saisir un identifiant Pantry.", "warn");
+        notifier(i18n.t("accueil.pantry.saisirIdentifiant"), "warn");
         return;
       }
       try {
         const résultat = await associerPantry(identifiant);
         if (résultat.conflit) {
           // Règle 5 : demander à l'utilisateur
-          const choix = confirm("Les données locales et Pantry contiennent toutes deux des données valides.\n\nOK = garder Pantry\nAnnuler = garder local");
+          const choix = confirm(i18n.t("accueil.pantry.conflit"));
           if (choix) {
             // Garder Pantry
             Stockage.mémoriserPantryId(identifiant);
-            notifier("Pantry associé (données Pantry conservées).", "info");
+            notifier(i18n.t("accueil.pantry.conservéPantry"), "info");
           } else {
             // Garder local : transférer les données locales vers le Pantry
             Stockage.mémoriserPantryId(identifiant);
@@ -115,14 +145,14 @@
             if (donnéesLocales) {
               await stockagePantry.sauvegarderUsine(Usine.parse(donnéesLocales));
             }
-            notifier("Pantry associé (données locales conservées).", "info");
+            notifier(i18n.t("accueil.pantry.conservéLocal"), "info");
           }
         } else {
-          notifier("Pantry associé avec succès.", "info");
+          notifier(i18n.t("accueil.pantry.succès"), "info");
         }
         mettreAJourStatutPantry();
       } catch (erreur) {
-        notifier(`Erreur lors de l'association Pantry : ${erreur.message}`, "error");
+        notifier(i18n.t("accueil.pantry.erreur", { message: erreur.message }), "error");
       }
     });
       // Clic sur le bouton "reset", suppression de l'usine persistée pour la remplacer par une usine vide

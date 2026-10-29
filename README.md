@@ -35,6 +35,13 @@ Au-delà de 15 % de rentabilité, le commentaire est « Commercialisable » ; un
 - Modifier les liquidités et vider le stock / remettre les liquidités à zéro depuis la page Stock.
 - Refuser le retrait d’une quantité supérieure au stock disponible.
 
+### Internationalisation
+
+- Support de 4 langues : français, anglais, allemand, espagnol.
+- Sélecteur de langue dans la barre de navigation.
+- Fichiers de traduction au format JSON dans le dossier `locales/`.
+- Ajout de nouvelles langues possible sans modification du code HTML (ajouter un fichier JSON et une entrée dans `I18n.localesDisponibles`).
+
 ### Stockage
 
 - Stockage local par défaut dans le `localStorage` du navigateur.
@@ -53,6 +60,12 @@ Au-delà de 15 % de rentabilité, le commentaire est « Commercialisable » ; un
 ## Utilisation
 
 Ouvrir `index.html` dans un navigateur moderne. La navigation permet d’accéder à l’accueil, au marché, aux produits, au stock et à la planification. Aucune étape de compilation ni dépendance d’exécution n’est requise.
+
+Pour le développement avec les fichiers de traduction JSON, un serveur HTTP local est nécessaire :
+```sh
+python -m http.server 8080
+```
+Puis accéder à `http://localhost:8080/index.html`.
 
 Les données sont propres au navigateur et à son origine. Effacer les données du site ou utiliser un autre navigateur/profil ne conserve pas l’usine. Le bouton de réinitialisation de l’accueil remplace l’usine locale par une nouvelle usine vide.
 
