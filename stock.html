@@ -17,17 +17,19 @@
   <nav>
     <div>
       <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
-      <a href="./index.html" class="btn ghost" id="nav-accueil">Accueil</a>
-      <a href="./marché.html" class="btn ghost" id="nav-marché">Marché</a>
-      <a href="./produits.html" class="btn ghost" id="nav-produits">Produits</a>
-      <a href="./stock.html" class="btn" id="nav-stock">Stock</a>
-      <a href="./planification.html" class="btn ghost" id="nav-planification">Planification</a>
+      <a href="./index.html" class="btn ghost" id="nav-accueil" data-i18n="nav.accueil">Accueil</a>
+      <a href="./marché.html" class="btn ghost" id="nav-marché" data-i18n="nav.marché">Marché</a>
+      <a href="./produits.html" class="btn ghost" id="nav-produits" data-i18n="nav.produits">Produits</a>
+      <a href="./stock.html" class="btn" id="nav-stock" data-i18n="nav.stock">Stock</a>
+      <a href="./planification.html" class="btn ghost" id="nav-planification" data-i18n="nav.planification">Planification</a>
+      <select id="select-langue" style="margin-left: 8px; padding: 2px 8px; font-size: 0.85em; width: auto;">
+      </select>
     </div>
   </nav>
 
   <dialog id="ajout_unitaire_modal">
     <form method="dialog">
-      <h2>Enregistrer un objet</h2>
+      <h2 data-i18n="stock.enregistrerObjet">Enregistrer un objet</h2>
       <div>
         <div class="grid">
           <div class="grid">
@@ -79,14 +81,14 @@
       <button id="btn_reset_stock" type="button" class="btn warning">Réinitialiser</button>
     </div>
     <section class="grid">
-      <h3>Liquidités disponibles</h3>
+      <h3 data-i18n="stock.liquiditésDisponibles">Liquidités disponibles</h3>
       <P id="p-liquidités" class="right"></P>
       <input type="number" step="1" min="0" id="liquidités_input" class="right" hidden />
     </section>
     <section>
       <div class="grid">
-        <h3>Objets en stock</h3>
-        <input type="text" name="Search" id="search_input" placeholder="Rechercher un objet..." />
+        <h3 data-i18n="stock.objetsEnStock">Objets en stock</h3>
+        <input type="text" name="Search" id="search_input" placeholder="Rechercher un objet..." data-i18n-placeholder="stock.rechercherObjet" />
       </div>
       <table class="table" id="stock-table">
         <thead>
@@ -109,10 +111,14 @@
     import { Usine, GestionnaireEvenements } from "./app/service.js"
     import {
       decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT,
-      initialiserElement, notifier
+      initialiserElement, notifier, prépareNotification
     } from "./app/presentation.js"
     import { filtrerStock, trierStock } from "./app/stockSortFilter.js"
     import { Stockage } from "./app/storage.js"
+    import { i18n } from "./app/i18n.js"
+
+    prépareNotification();
+    await i18n.charger();
 
     const stockage = new Stockage(Stockage.lirePantryId());
     let usine;
@@ -146,6 +152,42 @@
     let sortDirection = "asc";
 
     nomUsine.textContent = usine.nom;
+
+    // Appliquer les traductions
+    function appliquerTraductions() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const clé = el.getAttribute('data-i18n');
+        el.textContent = i18n.t(clé);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const clé = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = i18n.t(clé);
+      });
+    }
+
+    function alimenterSelecteurLangue() {
+      const select = document.getElementById('select-langue');
+      select.innerHTML = '';
+      const labels = { fr: 'Français', en: 'English', de: 'Deutsch', es: 'Español' };
+      i18n.localesDisponibles.forEach(code => {
+        const option = document.createElement('option');
+        option.value = code;
+        option.textContent = labels[code] || code.toUpperCase();
+        if (code === i18n.locale) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+    }
+
+    appliquerTraductions();
+    alimenterSelecteurLangue();
+
+    document.getElementById('select-langue').addEventListener('change', async (event) => {
+      await i18n.changerLocale(event.target.value);
+      appliquerTraductions();
+      alimenterSelecteurLangue();
+    });
 
     BOUTON_RESET.addEventListener("click", () => {
       usine.liquidités = 0;
@@ -245,8 +287,8 @@
       // Mettre à jour les indicateurs visuels des en-têtes de tri
       const indicateurAsc = " ▲";
       const indicateurDesc = " ▼";
-      TH_NOM.textContent = "Nom" + (sortColonne === "nom" ? (sortDirection === "asc" ? indicateurAsc : indicateurDesc) : "");
-      TH_QUANTITÉ.textContent = "Quantité" + (sortColonne === "quantité" ? (sortDirection === "asc" ? indicateurAsc : indicateurDesc) : "");
+      TH_NOM.textContent = i18n.t("stock.nom") + (sortColonne === "nom" ? (sortDirection === "asc" ? indicateurAsc : indicateurDesc) : "");
+      TH_QUANTITÉ.textContent = i18n.t("stock.quantité") + (sortColonne === "quantité" ? (sortDirection === "asc" ? indicateurAsc : indicateurDesc) : "");
 
       // Filtrer selon la recherche (correspondance partielle, insensible à la casse)
       let articles = filtrerStock(usine.stock, SEARCH_INPUT.value);
@@ -258,8 +300,8 @@
 
       if (articles.length === 0) {
         STOCK_TABLE_BODY.innerHTML = usine.stock.length === 0
-          ? "<tr><td class='empty' colspan='3'>Inventaire désepérément vide</td></tr>"
-          : "<tr><td class='empty' colspan='3'>Aucun résultat pour cette recherche</td></tr>";
+          ? "<tr><td class='empty' colspan='3'>" + i18n.t("stock.inventaireVide") + "</td></tr>"
+          : "<tr><td class='empty' colspan='3'>" + i18n.t("stock.aucunResultat") + "</td></tr>";
         return;
       }
 
@@ -295,7 +337,7 @@
         const supprimer = initialiserElement("button", ["btn", "warning"], "🗑", [{
           trigger: "click", listener: () => {
             try {
-              if (confirm(`Êtes-vous sûr de vouloir supprimer l'objet "${article.nom}" ?`)) {
+              if (confirm(i18n.t("stock.confirmationSuppression", { nom: article.nom }))) {
                 usine.déstocker(article.nom);
                 updateStorage();
                 présenterStock();
