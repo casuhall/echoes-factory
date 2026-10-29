@@ -17,42 +17,44 @@
   <nav>
     <div>
       <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
-      <a href="./index.html" class="btn ghost" id="nav-accueil">Accueil</a>
-      <a href="./marché.html" class="btn" id="nav-marché">Marché</a>
-      <a href="./produits.html" class="btn ghost" id="nav-produits">Produits</a>
-      <a href="./stock.html" class="btn ghost" id="nav-stock">Stock</a>
-      <a href="./planification.html" class="btn ghost" id="nav-planification">Planification</a>
+      <a href="./index.html" class="btn ghost" id="nav-accueil" data-i18n="nav.accueil">Accueil</a>
+      <a href="./marché.html" class="btn" id="nav-marché" data-i18n="nav.marché">Marché</a>
+      <a href="./produits.html" class="btn ghost" id="nav-produits" data-i18n="nav.produits">Produits</a>
+      <a href="./stock.html" class="btn ghost" id="nav-stock" data-i18n="nav.stock">Stock</a>
+      <a href="./planification.html" class="btn ghost" id="nav-planification" data-i18n="nav.planification">Planification</a>
+      <select id="select-langue" style="margin-left: 8px; padding: 2px 8px; font-size: 0.85em; width: auto;">
+      </select>
     </div>
   </nav>
 
 
   <dialog id="ajout_unitaire_modal">
     <form method="dialog">
-      <h2>Enregistrer un prix</h2>
+      <h2 data-i18n="marché.enregistrerPrix">Enregistrer un prix</h2>
       <div class="grid">
         <div>
-          <label for="nom_article_unitaire_input" class="form-label">Nom de l'article</label>
+          <label for="nom_article_unitaire_input" class="form-label" data-i18n="marché.nomArticle">Nom de l'article</label>
           <input type="text" id="nom_article_unitaire_input" class="form-control" />
         </div>
         <div>
-          <label for="prix_article_unitaire_input">Prix de l'article</label>
+          <label for="prix_article_unitaire_input" data-i18n="marché.prixArticle">Prix de l'article</label>
           <input type="number" step="0.01" id="prix_article_unitaire_input" />
         </div>
-        <input id="btn_annuler_unitaire" type="submit" formnovalidate class="btn ghost" value="Annuler" />
-        <input id="btn_enregistrer_unitaire" type="submit" class="btn" value="Enregistrer" />
+        <input id="btn_annuler_unitaire" type="submit" formnovalidate class="btn ghost" value="Annuler" data-i18n-value="marché.annuler" />
+        <input id="btn_enregistrer_unitaire" type="submit" class="btn" value="Enregistrer" data-i18n-value="marché.enregistrer" />
       </div>
     </form>
   </dialog>
   <dialog id="ajout_massif_modal">
-    <h5>Mise à jour de tarifs en masse !</h5>
+    <h5 data-i18n="marché.miseAJourMasse">Mise à jour de tarifs en masse !</h5>
     <form method="dialog">
       <div class="grid">
-        <label for="saisie_massif_input" class="form-label">Lot d'objets à évaluer</label>
+        <label for="saisie_massif_input" class="form-label" data-i18n="marché.lotObjets">Lot d'objets à évaluer</label>
         <textarea id="saisie_massif_input" class="form-control"></textarea>
       </div>
       <div class="grid">
-        <input id="btn_annuler_massif" type="submit" formnovalidate class="btn ghost" value="Annuler" />
-        <input id="btn_enregistrer_massif" type="submit" class="btn" value="Enregistrer" />
+        <input id="btn_annuler_massif" type="submit" formnovalidate class="btn ghost" value="Annuler" data-i18n-value="marché.annuler" />
+        <input id="btn_enregistrer_massif" type="submit" class="btn" value="Enregistrer" data-i18n-value="marché.enregistrer" />
       </div>
     </form>
     </div>
@@ -60,12 +62,12 @@
 
   <main>
     <div class="grid">
-      <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn">Enregistrer un prix</button>
-      <button command="show-modal" commandfor="ajout_massif_modal" class="btn">Enregistrer en masse</button>
+      <button command="show-modal" commandfor="ajout_unitaire_modal" class="btn" data-i18n="marché.enregistrerPrixBtn">Enregistrer un prix</button>
+      <button command="show-modal" commandfor="ajout_massif_modal" class="btn" data-i18n="marché.enregistrerMasse">Enregistrer en masse</button>
     </div>
 
     <div class="grid">
-      <input type="search" id="recherche-tarifs" class="form-control" placeholder="Rechercher par nom…" />
+      <input type="search" id="recherche-tarifs" class="form-control" placeholder="Rechercher par nom…" data-i18n-placeholder="marché.rechercherNom" />
     </div>
 
     <table class="table" id="tarifs-table">
@@ -84,10 +86,14 @@
     import { Usine, GestionnaireEvenements } from "./app/service.js"
     import {
       decodeEchoesListe, UNICODE_DATE_FORMAT, NUMBER_FORMAT,
-      initialiserElement, notifier
+      initialiserElement, notifier, prépareNotification
     } from "./app/presentation.js"
     import { filtrerTarifs, trierTarifs } from "./app/marchéSortFilter.js"
     import { Stockage } from "./app/storage.js"
+    import { i18n } from "./app/i18n.js"
+
+    prépareNotification();
+    await i18n.charger();
 
     const stockage = new Stockage(Stockage.lirePantryId());
     let usine;
@@ -122,6 +128,46 @@
     préparerSaisieMassive();
     préparerTriEtRecherche();
     présenterTarifs();
+
+    // Appliquer les traductions
+    function appliquerTraductions() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const clé = el.getAttribute('data-i18n');
+        el.textContent = i18n.t(clé);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const clé = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = i18n.t(clé);
+      });
+      document.querySelectorAll('[data-i18n-value]').forEach(el => {
+        const clé = el.getAttribute('data-i18n-value');
+        el.value = i18n.t(clé);
+      });
+    }
+
+    function alimenterSelecteurLangue() {
+      const select = document.getElementById('select-langue');
+      select.innerHTML = '';
+      const labels = { fr: 'Français', en: 'English', de: 'Deutsch', es: 'Español' };
+      i18n.localesDisponibles.forEach(code => {
+        const option = document.createElement('option');
+        option.value = code;
+        option.textContent = labels[code] || code.toUpperCase();
+        if (code === i18n.locale) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+    }
+
+    appliquerTraductions();
+    alimenterSelecteurLangue();
+
+    document.getElementById('select-langue').addEventListener('change', async (event) => {
+      await i18n.changerLocale(event.target.value);
+      appliquerTraductions();
+      alimenterSelecteurLangue();
+    });
 
 
     // Fonction de réparation de la fenêtre modale de saisie unitaire
@@ -174,7 +220,7 @@
         tarifs = trierTarifs(tarifs, col, dir);
       }
 
-      let html_tarif = (tarifs.length > 0) ? "\n" : "<tr><td class='text-center' colspan='3'>Aucun tarif enregistré</td></tr>";
+      let html_tarif = (tarifs.length > 0) ? "\n" : "<tr><td class='text-center' colspan='3'>" + i18n.t("marché.aucunTarif") + "</td></tr>";
       for (const tarif of tarifs) {
         html_tarif += `<tr><td>${tarif.nom}</td><td class="text-end">${NUMBER_FORMAT.format(tarif.montant)}</td><td class="right">${UNICODE_DATE_FORMAT.format(tarif.date_effet)}</td></tr>\n`
       }
@@ -187,7 +233,7 @@
     // Mise à jour des flèches de tri dans les en-têtes
     function mettreAJourIndicateursTri() {
       const ths = { nom: TH_NOM, prix: TH_PRIX, date: TH_DATE };
-      const labels = { nom: "Nom", prix: "Prix", date: "Date d'effet" };
+      const labels = { nom: i18n.t("marché.nom"), prix: i18n.t("marché.prix"), date: i18n.t("marché.dateEffet") };
       for (const [col, th] of Object.entries(ths)) {
         if (!th) continue;
         if (triEtat && triEtat.col === col) {
