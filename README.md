@@ -35,6 +35,13 @@ Au-delà de 15 % de rentabilité, le commentaire est « Commercialisable » ; un
 - Modifier les liquidités et vider le stock / remettre les liquidités à zéro depuis la page Stock.
 - Refuser le retrait d’une quantité supérieure au stock disponible.
 
+### Stockage
+
+- Stockage local par défaut dans le `localStorage` du navigateur.
+- Mode Pantry optionnel : saisie d'un identifiant Pantry pour stocker les données dans le cloud (https://getpantry.cloud/).
+- Transition automatique lors de la première saisie d'un identifiant Pantry : transfert silencieux si un seul côté contient des données, demande de choix si les deux contiennent des données.
+- L'identifiant Pantry est mémorisé pour les sessions suivantes.
+
 ### Planification de production
 
 - Générer un plan de production pour un produit cible et une quantité souhaitée.
@@ -63,7 +70,7 @@ Les données sont propres au navigateur et à son origine. Effacer les données 
 
 ## Limites et travaux restants
 
-- Les données de l’usine sont locales ; aucun stockage distant, export/import de sauvegarde ou synchronisation entre appareils n’est implémenté.
+- Les données de l’usine sont locales par défaut ; un mode Pantry optionnel est disponible pour le stockage distant.
 - Les calculs dépendent de prix saisis/importés et peuvent être incomplets ou périmés.
 - Les mouvements de production ne déduisent pas automatiquement les matériaux ni ne créditent les objets produits ; les achats et gains ne modifient pas automatiquement stock ou liquidités.
 - L’internationalisation et la mise à jour automatique des prix ne sont pas implémentées.

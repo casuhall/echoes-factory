@@ -50,12 +50,27 @@
     <button type="button" class="btn warning" id="button-reset">Reset</button>
   </footer>
 
+  <section id="section-pantry" style="margin-top: 16px;">
+    <h3>Stockage Pantry (optionnel)</h3>
+    <div class="grid">
+      <div>
+        <label for="input-pantry-id">Identifiant Pantry</label>
+        <input type="text" id="input-pantry-id" placeholder="Entrez votre identifiant Pantry" />
+      </div>
+      <div style="display: flex; align-items: flex-end;">
+        <button type="button" class="btn" id="button-associer-pantry">Associer Pantry</button>
+      </div>
+    </div>
+    <p id="status-pantry" style="margin-top: 8px;"></p>
+  </section>
+
   <script type="module">
     import { Usine } from "./app/service.js"
     import { notifier } from "./app/presentation.js"
     import { Stockage } from "./app/storage.js"
+    import { associerPantry } from "./app/storage.js"
 
-    const stockage = new Stockage();
+    const stockage = new Stockage(Stockage.lirePantryId());
     const usine = Usine.parse(stockage.lireUsine() || new Usine("He's alive !").toString());
 
     init();
@@ -64,11 +79,58 @@
     document.querySelector("#input-nomUsine").addEventListener("change", (event) => {
       save();
     });
-    // Auclic sur le bouton "reset", supression de l'usine persistée pour la remplacer par une usine vide
-    document.querySelector("#button-reset").addEventListener("click", () => {
+    // Affichage du statut Pantry
+    function mettreAJourStatutPantry() {
+      const status = document.getElementById("status-pantry");
+      const pantryId = Stockage.lirePantryId();
+      if (pantryId) {
+        status.textContent = `Mode Pantry actif (identifiant : ${pantryId})`;
+      } else {
+        status.textContent = "Mode local actif (pas de Pantry associé)";
+      }
+    }
+
+    mettreAJourStatutPantry();
+
+    // Clic sur le bouton "Associer Pantry"
+    document.querySelector("#button-associer-pantry").addEventListener("click", async () => {
+      const identifiant = document.querySelector("#input-pantry-id").value.trim();
+      if (!identifiant) {
+        notifier("Veuillez saisir un identifiant Pantry.", "warn");
+        return;
+      }
+      try {
+        const résultat = await associerPantry(identifiant);
+        if (résultat.conflit) {
+          // Règle 5 : demander à l'utilisateur
+          const choix = confirm("Les données locales et Pantry contiennent toutes deux des données valides.\n\nOK = garder Pantry\nAnnuler = garder local");
+          if (choix) {
+            // Garder Pantry
+            Stockage.mémoriserPantryId(identifiant);
+            notifier("Pantry associé (données Pantry conservées).", "info");
+          } else {
+            // Garder local : transférer les données locales vers le Pantry
+            Stockage.mémoriserPantryId(identifiant);
+            const stockagePantry = new Stockage(identifiant);
+            const donnéesLocales = localStorage.getItem("usine");
+            if (donnéesLocales) {
+              await stockagePantry.sauvegarderUsine(Usine.parse(donnéesLocales));
+            }
+            notifier("Pantry associé (données locales conservées).", "info");
+          }
+        } else {
+          notifier("Pantry associé avec succès.", "info");
+        }
+        mettreAJourStatutPantry();
+      } catch (erreur) {
+        notifier(`Erreur lors de l'association Pantry : ${erreur.message}`, "error");
+      }
+    });
+      // Clic sur le bouton "reset", suppression de l'usine persistée pour la remplacer par une usine vide
+      document.querySelector("#button-reset").addEventListener("click", () => {
       stockage.sauvegarderUsine(new Usine("Red is DED"));
       window.location.reload();
-    });
+      });
 
     // initialisation des parties du DOM qui sont dynamiques
     function init() {

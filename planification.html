@@ -144,7 +144,7 @@
     import { Stockage } from "./app/storage.js"
     import { notifier } from "./app/presentation.js"
 
-    const stockage = new Stockage();
+    const stockage = new Stockage(Stockage.lirePantryId());
     let usine;
     let storedUsine = stockage.lireUsine();
     if (storedUsine) {

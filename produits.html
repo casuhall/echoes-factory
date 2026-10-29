@@ -57,7 +57,7 @@
     import { estPérimé } from "./app/péremption.js"
     import { Stockage } from "./app/storage.js"
 
-    const stockage = new Stockage();
+    const stockage = new Stockage(Stockage.lirePantryId());
     const usine = Usine.parse(stockage.lireUsine() || "{}");
     document.getElementById("nav-nomUsine").innerText = usine.nom;
 

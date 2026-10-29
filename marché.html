@@ -89,7 +89,7 @@
     import { filtrerTarifs, trierTarifs } from "./app/marchéSortFilter.js"
     import { Stockage } from "./app/storage.js"
 
-    const stockage = new Stockage();
+    const stockage = new Stockage(Stockage.lirePantryId());
     let usine;
     let storedUsine = stockage.lireUsine();
     if (storedUsine) {
