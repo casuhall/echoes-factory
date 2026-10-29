@@ -48,7 +48,7 @@ export class StockagePantry {
   async lire(clé) {
     const réponse = await fetch(`${URL_PANTRY}/${this.#pantryId}/basket/${BASKET_NAME}`, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'text/plain' }
     });
     if (réponse.status === 404) {
       return null;
@@ -78,7 +78,7 @@ export class StockagePantry {
     }
     const réponse = await fetch(`${URL_PANTRY}/${this.#pantryId}/basket/${BASKET_NAME}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ usine: usineObjet })
     });
     if (!réponse.ok) {
@@ -90,7 +90,7 @@ export class StockagePantry {
   async supprimer(clé) {
     const réponse = await fetch(`${URL_PANTRY}/${this.#pantryId}/basket/${BASKET_NAME}`, {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'text/plain' }
     });
     if (!réponse.ok && réponse.status !== 204) {
       throw new Error(`Erreur de suppression Pantry : ${réponse.status} ${réponse.statusText}`);

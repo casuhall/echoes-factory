@@ -19,8 +19,22 @@ class I18n {
       const sauvegardée = localStorage.getItem(CLÉ_LOCALE);
       if (sauvegardée && this.#localesDisponibles.includes(sauvegardée)) {
         this.#locale = sauvegardée;
+        return;
       }
     }
+    // Détecter la langue du navigateur
+    if (typeof navigator !== 'undefined') {
+      const languesNavigateur = navigator.languages || [navigator.language];
+      for (const langue of languesNavigateur) {
+        const code = langue.split('-')[0].toLowerCase();
+        if (this.#localesDisponibles.includes(code)) {
+          this.#locale = code;
+          return;
+        }
+      }
+    }
+    // Fallback sur le français
+    this.#locale = LOCALE_PAR_DÉFAUT;
   }
 
   /** @type {string} */
