@@ -54,7 +54,7 @@ describe('StockagePantry', () => {
             return {
                 status: 200,
                 ok: true,
-                json: async () => ({ usine: '{"nom":"Pantry Usine"}' })
+                json: async () => ({ usine: { nom: "Pantry Usine" } })
             };
         };
         const pantry = new StockagePantry('test-id');
@@ -98,7 +98,7 @@ describe('StockagePantry', () => {
         };
         const pantry = new StockagePantry('test-id');
         await pantry.sauvegarder('usine', '{"nom":"Test"}');
-        expect(capturedBody).to.deep.equal({ usine: '{"nom":"Test"}' });
+        expect(capturedBody).to.deep.equal({ usine: { nom: "Test" } });
     });
 
     it('Devrait supprimer les données du Pantry (DELETE)', async () => {

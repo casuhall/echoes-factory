@@ -57,15 +57,29 @@ export class StockagePantry {
       throw new Error(`Erreur de lecture Pantry : ${réponse.status} ${réponse.statusText}`);
     }
     const données = await réponse.json();
-    return données.usine ?? null;
+    if (données.usine === undefined || données.usine === null) {
+      return null;
+    }
+    // Si l'usine est stockée comme objet, la sérialiser
+    if (typeof données.usine === 'object') {
+      return JSON.stringify(données.usine);
+    }
+    return données.usine;
   }
 
   /** @param {string} clé @param {string} valeur */
   async sauvegarder(clé, valeur) {
+    // Stocker l'usine comme objet, pas comme chaîne
+    let usineObjet;
+    try {
+      usineObjet = JSON.parse(valeur);
+    } catch {
+      usineObjet = valeur;
+    }
     const réponse = await fetch(`${URL_PANTRY}/${this.#pantryId}/basket/${BASKET_NAME}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usine: valeur })
+      body: JSON.stringify({ usine: usineObjet })
     });
     if (!réponse.ok) {
       throw new Error(`Erreur de sauvegarde Pantry : ${réponse.status} ${réponse.statusText}`);
