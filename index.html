@@ -44,17 +44,9 @@
       </div>
     </div>
 
-  </main>
-
-  <footer><span>Gestion des données</span>
-    <button type="button" class="btn warning" id="button-reset">Reset</button>
-  </footer>
-
-  <section id="section-pantry" style="margin-top: 16px;">
-    <h3>Stockage Pantry (optionnel)</h3>
-    <div class="grid">
+    <div class="grid" style="margin-top: 16px;">
       <div>
-        <label for="input-pantry-id">Identifiant Pantry</label>
+        <label for="input-pantry-id">Identifiant Pantry (optionnel)</label>
         <input type="text" id="input-pantry-id" placeholder="Entrez votre identifiant Pantry" />
       </div>
       <div style="display: flex; align-items: flex-end;">
@@ -62,7 +54,12 @@
       </div>
     </div>
     <p id="status-pantry" style="margin-top: 8px;"></p>
-  </section>
+
+  </main>
+
+  <footer><span>Gestion des données</span>
+    <button type="button" class="btn warning" id="button-reset">Reset</button>
+  </footer>
 
   <script type="module">
     import { Usine } from "./app/service.js"
