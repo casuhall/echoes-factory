@@ -17,11 +17,7 @@
       <a href="./produits.html" class="btn ghost" id="nav-produits" data-i18n="nav.produits">Produits</a>
       <a href="./stock.html" class="btn ghost" id="nav-stock" data-i18n="nav.stock">Stock</a>
       <a href="./planification.html" class="btn ghost" id="nav-planification" data-i18n="nav.planification">Planification</a>
-      <select id="select-langue" style="margin-left: 8px;">
-        <option value="fr">Français</option>
-        <option value="en">English</option>
-        <option value="de">Deutsch</option>
-        <option value="es">Español</option>
+      <select id="select-langue" style="margin-left: 8px; padding: 2px 8px; font-size: 0.85em; width: auto;">
       </select>
     </div>
   </nav>
@@ -92,17 +88,34 @@
         const clé = el.getAttribute('data-i18n-placeholder');
         el.placeholder = i18n.t(clé);
       });
-      document.getElementById('select-langue').value = i18n.locale;
     }
 
-    appliquerTraductions();
+    // Alimenter le sélecteur de langue dynamiquement
+      function alimenterSelecteurLangue() {
+        const select = document.getElementById('select-langue');
+        select.innerHTML = '';
+        const labels = { fr: 'Français', en: 'English', de: 'Deutsch', es: 'Español' };
+        i18n.localesDisponibles.forEach(code => {
+          const option = document.createElement('option');
+          option.value = code;
+          option.textContent = labels[code] || code.toUpperCase();
+          if (code === i18n.locale) {
+            option.selected = true;
+          }
+          select.appendChild(option);
+        });
+      }
 
-    // Changement de langue
-    document.getElementById('select-langue').addEventListener('change', async (event) => {
-      await i18n.changerLocale(event.target.value);
       appliquerTraductions();
-      mettreAJourStatutPantry();
-    });
+      alimenterSelecteurLangue();
+
+      // Changement de langue
+      document.getElementById('select-langue').addEventListener('change', async (event) => {
+        await i18n.changerLocale(event.target.value);
+        appliquerTraductions();
+        alimenterSelecteurLangue();
+        mettreAJourStatutPantry();
+      });
 
     // Auclic sur le bouton "reset", supression de l'usine persistée pour la remplacer par une usine vide
     document.querySelector("#input-nomUsine").addEventListener("change", (event) => {
