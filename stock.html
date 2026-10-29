@@ -116,7 +116,7 @@
 
     const stockage = new Stockage(Stockage.lirePantryId());
     let usine;
-    let storedUsine = stockage.lireUsine();
+    let storedUsine = await stockage.lireUsine();
     if (storedUsine) {
       usine = Usine.parse(storedUsine);
     }
@@ -314,8 +314,8 @@
     }
 
     // Fonction de stockage des données de l'usine
-    function updateStorage() {
-      stockage.sauvegarderUsine(usine);
+    async function updateStorage() {
+      await stockage.sauvegarderUsine(usine);
     }
 
   </script>

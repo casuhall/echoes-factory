@@ -146,7 +146,7 @@
 
     const stockage = new Stockage(Stockage.lirePantryId());
     let usine;
-    let storedUsine = stockage.lireUsine();
+    let storedUsine = await stockage.lireUsine();
     if (storedUsine) {
       usine = Usine.parse(storedUsine);
     } else {

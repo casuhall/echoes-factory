@@ -71,7 +71,7 @@
     import { associerPantry } from "./app/storage.js"
 
     const stockage = new Stockage(Stockage.lirePantryId());
-    const usine = Usine.parse(stockage.lireUsine() || new Usine("He's alive !").toString());
+    const usine = Usine.parse(await stockage.lireUsine() || new Usine("He's alive !").toString());
 
     init();
 
@@ -127,9 +127,9 @@
       }
     });
       // Clic sur le bouton "reset", suppression de l'usine persistée pour la remplacer par une usine vide
-      document.querySelector("#button-reset").addEventListener("click", () => {
-      stockage.sauvegarderUsine(new Usine("Red is DED"));
-      window.location.reload();
+      document.querySelector("#button-reset").addEventListener("click", async () => {
+        await stockage.sauvegarderUsine(new Usine("Red is DED"));
+        window.location.reload();
       });
 
     // initialisation des parties du DOM qui sont dynamiques
@@ -143,9 +143,9 @@
       document.getElementById("input-liquidités").value = usine.liquidités;
     }
 
-    function save() {
+    async function save() {
       usine.nom = document.querySelector("#input-nomUsine").value;
-      stockage.sauvegarderUsine(usine);
+      await stockage.sauvegarderUsine(usine);
       init();
     }
   </script>

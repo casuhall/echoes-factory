@@ -58,7 +58,7 @@
     import { Stockage } from "./app/storage.js"
 
     const stockage = new Stockage(Stockage.lirePantryId());
-    const usine = Usine.parse(stockage.lireUsine() || "{}");
+    const usine = Usine.parse(await stockage.lireUsine() || "{}");
     document.getElementById("nav-nomUsine").innerText = usine.nom;
 
     const corpsTableauProduits = document.getElementById('produitsBody');
@@ -142,10 +142,10 @@
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "🗑";
         deleteButton.classList.add("btn", "warning");
-        deleteButton.addEventListener("click", () => {
+        deleteButton.addEventListener("click", async () => {
           if (confirm(`Êtes-vous sûr de vouloir supprimer le produit "${produit.nom}" ?`)) {
             usine.supprimeProduit(produit.nom);
-            stockage.sauvegarderUsine(usine);
+            await stockage.sauvegarderUsine(usine);
             location.reload();
           }
         });
