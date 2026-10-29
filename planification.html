@@ -12,127 +12,129 @@
   <nav>
     <div>
       <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
-      <a href="./index.html" class="btn ghost" id="nav-accueil">Accueil</a>
-      <a href="./marché.html" class="btn ghost" id="nav-marché">Marché</a>
-      <a href="./produits.html" class="btn ghost" id="nav-produits">Produits</a>
-      <a href="./stock.html" class="btn ghost" id="nav-stock">Stock</a>
-      <a href="./planification.html" class="btn" id="nav-planification">Planification</a>
+      <a href="./index.html" class="btn ghost" id="nav-accueil" data-i18n="nav.accueil">Accueil</a>
+      <a href="./marché.html" class="btn ghost" id="nav-marché" data-i18n="nav.marché">Marché</a>
+      <a href="./produits.html" class="btn ghost" id="nav-produits" data-i18n="nav.produits">Produits</a>
+      <a href="./stock.html" class="btn ghost" id="nav-stock" data-i18n="nav.stock">Stock</a>
+      <a href="./planification.html" class="btn" id="nav-planification" data-i18n="nav.planification">Planification</a>
+      <select id="select-langue" style="margin-left: 8px; padding: 2px 8px; font-size: 0.85em; width: auto;">
+      </select>
     </div>
   </nav>
 
   <main>
     <div class="grid">
       <div>
-        <label for="produit_cible">Produit cible</label>
+        <label for="produit_cible" data-i18n="planification.produitCible">Produit cible</label>
         <select id="produit_cible">
           <option value="">-- Sélectionner un produit --</option>
         </select>
       </div>
       <div>
-        <label for="quantité_cible">Quantité cible</label>
+        <label for="quantité_cible" data-i18n="planification.quantitéCible">Quantité cible</label>
         <input id="quantité_cible" type="number" min="1" step="1" value="1" />
       </div>
       <div class="right">
-        <button id="btn_générer" class="btn" type="button">Générer le plan</button>
+        <button id="btn_générer" class="btn" type="button" data-i18n="planification.générerPlan">Générer le plan</button>
       </div>
     </div>
 
     <section id="résumé" style="margin-top: 16px;">
-      <h3>Résumé du plan</h3>
+      <h3 data-i18n="planification.résuméPlan">Résumé du plan</h3>
       <div class="grid">
         <div>
-          <span>Coût total estimé : </span>
+          <span data-i18n="planification.coûtTotal">Coût total estimé : </span>
           <span id="coût_total">—</span>
         </div>
         <div>
-          <span>Nombre d'étapes : </span>
+          <span data-i18n="planification.nombreÉtapes">Nombre d'étapes : </span>
           <span id="nombre_étapes">—</span>
         </div>
       </div>
     </section>
 
     <section style="margin-top: 16px;">
-      <h3>Stratégie sous-produits</h3>
+      <h3 data-i18n="planification.stratégieSousProduits">Stratégie sous-produits</h3>
       <table class="table" id="strategie-table">
         <thead>
           <tr>
-            <th>Sous-produit</th>
-            <th>Recommandation</th>
-            <th>Décision actuelle</th>
-            <th>Actions</th>
+            <th data-i18n="planification.sousProduit">Sous-produit</th>
+            <th data-i18n="planification.recommandation">Recommandation</th>
+            <th data-i18n="planification.décisionActuelle">Décision actuelle</th>
+            <th data-i18n="planification.actions">Actions</th>
           </tr>
         </thead>
         <tbody id="strategie-body">
           <tr>
-            <td class="empty" colspan="4">Aucun sous-produit impliqué</td>
+            <td class="empty" colspan="4" data-i18n="planification.aucunSousProduit">Aucun sous-produit impliqué</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section style="margin-top: 16px;">
-      <h3>Étapes de construction</h3>
+      <h3 data-i18n="planification.étapesConstruction">Étapes de construction</h3>
       <table class="table" id="etapes-table">
         <thead>
           <tr>
-            <th>Étape</th>
-            <th style="text-align: end;">Quantité requise</th>
-            <th style="text-align: end;">Stock disponible</th>
-            <th style="text-align: end;">Quantité manquante</th>
-            <th style="text-align: end;">Frais fabrication</th>
+            <th data-i18n="planification.étape">Étape</th>
+            <th style="text-align: end;" data-i18n="planification.quantitéRequise">Quantité requise</th>
+            <th style="text-align: end;" data-i18n="planification.stockDisponible">Stock disponible</th>
+            <th style="text-align: end;" data-i18n="planification.quantitéManquante">Quantité manquante</th>
+            <th style="text-align: end;" data-i18n="planification.fraisFabrication">Frais fabrication</th>
           </tr>
         </thead>
         <tbody id="etapes-body">
           <tr>
-            <td class="empty" colspan="5">Aucune étape de construction</td>
+            <td class="empty" colspan="5" data-i18n="planification.aucuneÉtape">Aucune étape de construction</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section style="margin-top: 16px;">
-      <h3>Matériaux nécessaires / manquants</h3>
-      <button type="button" id="export-materiaux" class="btn ghost" style="margin-bottom: 8px;">Exporter</button>
+      <h3 data-i18n="planification.matériauxNécessaires">Matériaux nécessaires / manquants</h3>
+      <button type="button" id="export-materiaux" class="btn ghost" style="margin-bottom: 8px;" data-i18n="planification.exporter">Exporter</button>
       <table class="table" id="materiaux-table">
         <thead>
           <tr>
-            <th>Matériau</th>
-            <th style="text-align: end;">Quantité requise</th>
-            <th style="text-align: end;">Stock disponible</th>
-            <th style="text-align: end;">Quantité manquante</th>
-            <th style="text-align: end;">Coût unitaire</th>
-            <th style="text-align: end;">Coût total</th>
+            <th data-i18n="planification.matériau">Matériau</th>
+            <th style="text-align: end;" data-i18n="planification.quantitéRequise">Quantité requise</th>
+            <th style="text-align: end;" data-i18n="planification.stockDisponible">Stock disponible</th>
+            <th style="text-align: end;" data-i18n="planification.quantitéManquante">Quantité manquante</th>
+            <th style="text-align: end;" data-i18n="planification.coûtUnitaire">Coût unitaire</th>
+            <th style="text-align: end;" data-i18n="planification.coûtTotal">Coût total</th>
           </tr>
         </thead>
         <tbody id="materiaux-body">
           <tr>
-            <td class="empty" colspan="6">Aucun matériau nécessaire</td>
+            <td class="empty" colspan="6" data-i18n="planification.aucunMatériau">Aucun matériau nécessaire</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section style="margin-top: 16px;">
-      <h3>Liquidités requises</h3>
+      <h3 data-i18n="planification.liquiditésRequises">Liquidités requises</h3>
       <div class="grid">
         <div>
-          <span>Frais de fabrication : </span>
+          <span data-i18n="planification.fraisFabrication">Frais de fabrication : </span>
           <span id="frais_fabrication">—</span>
         </div>
         <div>
-          <span>Coûts d'achat : </span>
+          <span data-i18n="planification.coûtsAchat">Coûts d'achat : </span>
           <span id="couts_achat">—</span>
         </div>
         <div>
-          <span>Total requis : </span>
+          <span data-i18n="planification.totalRequis">Total requis : </span>
           <span id="total_requis">—</span>
         </div>
         <div>
-          <span>Liquidités disponibles : </span>
+          <span data-i18n="planification.liquiditésDisponibles">Liquidités disponibles : </span>
           <span id="liquidites_disponibles">—</span>
         </div>
         <div>
-          <span>Fonds manquants : </span>
+          <span data-i18n="planification.fondsManquants">Fonds manquants : </span>
           <span id="fonds_manquants">—</span>
         </div>
       </div>
@@ -142,7 +144,11 @@
   <script type="module">
     import { Usine, Planificateur } from "./app/service.js"
     import { Stockage } from "./app/storage.js"
-    import { notifier } from "./app/presentation.js"
+    import { notifier, prépareNotification } from "./app/presentation.js"
+    import { i18n } from "./app/i18n.js"
+
+    prépareNotification();
+    await i18n.charger();
 
     const stockage = new Stockage(Stockage.lirePantryId());
     let usine;
@@ -171,6 +177,38 @@
 
     nomUsine.textContent = usine.nom;
 
+    // Appliquer les traductions
+    function appliquerTraductions() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const clé = el.getAttribute('data-i18n');
+        el.textContent = i18n.t(clé);
+      });
+    }
+
+    function alimenterSelecteurLangue() {
+      const select = document.getElementById('select-langue');
+      select.innerHTML = '';
+      const labels = { fr: 'Français', en: 'English', de: 'Deutsch', es: 'Español' };
+      i18n.localesDisponibles.forEach(code => {
+        const option = document.createElement('option');
+        option.value = code;
+        option.textContent = labels[code] || code.toUpperCase();
+        if (code === i18n.locale) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+    }
+
+    appliquerTraductions();
+    alimenterSelecteurLangue();
+
+    document.getElementById('select-langue').addEventListener('change', async (event) => {
+      await i18n.changerLocale(event.target.value);
+      appliquerTraductions();
+      alimenterSelecteurLangue();
+    });
+
     // Remplir le select des produits
     const produits = usine.produits.sort((a, b) => a.nom.localeCompare(b.nom));
     for (const produit of produits) {
@@ -188,12 +226,12 @@
       const quantitéCible = parseInt(quantitéCibleInput.value || "1", 10);
 
       if (!produitCible) {
-        notifier("Veuillez sélectionner un produit cible.", "warn");
+        notifier(i18n.t('planification.aucunProduitCible'), "warn");
         return;
       }
 
       if (!Number.isInteger(quantitéCible) || quantitéCible <= 0) {
-        notifier("La quantité cible doit être un entier positif.", "warn");
+        notifier(i18n.t('planification.quantitéCiblePositive'), "warn");
         return;
       }
 
@@ -204,7 +242,7 @@
 
     exportMateriauxBtn.addEventListener("click", () => {
       if (materiauxActuels.length === 0) {
-        notifier("Aucun matériau à exporter.", "warn");
+        notifier(i18n.t('planification.aucunMatériauExporter'), "warn");
         return;
       }
       const lignes = ["Material;Quantity;Stock;Missing;UnitCost;TotalCost"];
@@ -263,7 +301,7 @@
       if (subProduits.length === 0) {
         const ligneVide = document.createElement("tr");
         ligneVide.className = "empty";
-        ligneVide.innerHTML = `<td colspan="4">Aucun sous-produit impliqué</td>`;
+        ligneVide.innerHTML = `<td colspan="4">${i18n.t('planification.aucunSousProduit')}</td>`;
         strategieBody.appendChild(ligneVide);
         return;
       }
@@ -275,21 +313,21 @@
         celluleNom.textContent = étape.nom;
 
         const celluleRecommandation = document.createElement("td");
-        const recommandation = produit.statut === 'BUY' ? 'Acheter' : 'Produire';
+        const recommandation = produit.statut === 'BUY' ? i18n.t('planification.acheter') : i18n.t('planification.produire');
         celluleRecommandation.textContent = recommandation;
 
         const celluleDécision = document.createElement("td");
         const boutonDécision = document.createElement("button");
         boutonDécision.type = "button";
         boutonDécision.className = étape.décision === "BUILD" ? "btn" : "btn ghost";
-        boutonDécision.textContent = étape.décision === "BUILD" ? "Produire" : "Acheter";
+        boutonDécision.textContent = étape.décision === "BUILD" ? i18n.t('planification.produire') : i18n.t('planification.acheter');
         boutonDécision.addEventListener("click", () => {
           try {
             const nouvelleDécision = étape.décision === "BUILD" ? "BUY" : "BUILD";
             const nouveauPlan = planificateur.surcharger(plan, étape.nom, nouvelleDécision);
             présenterPlan(nouveauPlan, planificateur);
           } catch (erreur) {
-            notifier(`Erreur lors de la modification : ${erreur.message}`, "warn");
+            notifier(i18n.t('planification.erreurModification').replace('{message}', erreur.message), "warn");
           }
         });
         celluleDécision.appendChild(boutonDécision);
@@ -300,14 +338,14 @@
           const boutonRéinitialiser = document.createElement("button");
           boutonRéinitialiser.type = "button";
           boutonRéinitialiser.className = "btn ghost";
-          boutonRéinitialiser.textContent = "Réinitialiser";
+          boutonRéinitialiser.textContent = i18n.t('planification.réinitialiser');
           boutonRéinitialiser.addEventListener("click", () => {
             try {
               const décisionParDéfaut = produit.statut === 'BUY' ? 'BUY' : 'BUILD';
               const planRéinitialisé = planificateur.surcharger(plan, étape.nom, décisionParDéfaut);
               présenterPlan(planRéinitialisé, planificateur);
             } catch (erreur) {
-              notifier(`Erreur lors de la réinitialisation : ${erreur.message}`, "warn");
+              notifier(i18n.t('planification.erreurRéinitialisation').replace('{message}', erreur.message), "warn");
             }
           });
           celluleActions.appendChild(boutonRéinitialiser);
@@ -327,7 +365,7 @@
       if (etapesConstruction.length === 0) {
         const ligneVide = document.createElement("tr");
         ligneVide.className = "empty";
-        ligneVide.innerHTML = `<td colspan="5">Aucune étape de construction</td>`;
+        ligneVide.innerHTML = `<td colspan="5">${i18n.t('planification.aucuneÉtape')}</td>`;
         etapesBody.appendChild(ligneVide);
         return;
       }
@@ -374,7 +412,7 @@
       if (materiaux.length === 0) {
         const ligneVide = document.createElement("tr");
         ligneVide.className = "empty";
-        ligneVide.innerHTML = `<td colspan="6">Aucun matériau nécessaire</td>`;
+        ligneVide.innerHTML = `<td colspan="6">${i18n.t('planification.aucunMatériau')}</td>`;
         materiauxBody.appendChild(ligneVide);
         return;
       }
