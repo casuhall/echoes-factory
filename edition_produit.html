@@ -12,11 +12,13 @@
   <nav>
     <div>
       <span class="h1" id="nav-nomUsine">[Nom de l'usine]</span>
-      <a href="./index.html" class="btn ghost" id="nav-accueil">Accueil</a>
-      <a href="./marché.html" class="btn ghost" id="nav-marché">Marché</a>
-      <a href="./produits.html" class="btn ghost" id="nav-produits">Produits</a>
-      <a href="./stock.html" class="btn ghost" id="nav-stock">Stock</a>
-      <a href="./planification.html" class="btn ghost" id="nav-planification">Planification</a>
+      <a href="./index.html" class="btn ghost" id="nav-accueil" data-i18n="nav.accueil">Accueil</a>
+      <a href="./marché.html" class="btn ghost" id="nav-marché" data-i18n="nav.marché">Marché</a>
+      <a href="./produits.html" class="btn ghost" id="nav-produits" data-i18n="nav.produits">Produits</a>
+      <a href="./stock.html" class="btn ghost" id="nav-stock" data-i18n="nav.stock">Stock</a>
+      <a href="./planification.html" class="btn ghost" id="nav-planification" data-i18n="nav.planification">Planification</a>
+      <select id="select-langue" style="margin-left: 8px; padding: 2px 8px; font-size: 0.85em; width: auto;">
+      </select>
     </div>
   </nav>
   <main id="ajoutProduitMain">
@@ -25,15 +27,15 @@
     <section aria-labelledby="production-info">
       <div class="grid" id="production-info">
         <div>
-          <label for="cost">Frais de fabrication (ISK)</label>
+          <label for="cost" data-i18n="edition.fraisFabrication">Frais de fabrication (ISK)</label>
           <input id="cost" type="number" min="1" step="1" placeholder="Ex : 12 000" />
         </div>
         <div>
-          <label for="count">Nombre d'objets produits</label>
+          <label for="count" data-i18n="edition.nombreObjets">Nombre d'objets produits</label>
           <input id="count" type="number" min="1" step="1" placeholder="Ex : 10" />
         </div>
         <div>
-          <label for="success">Chances de réussites (%)</label>
+          <label for="success" data-i18n="edition.chancesReussite">Chances de réussites (%)</label>
           <div class="row">
             <input id="success" type="number" min="0.01" max="100" step="0.01" placeholder="Ex : 85.5" value="100" />
             <input id="successRange" type="range" min="0.1" max="100" step="0.01" style="flex:1" value="100" />
@@ -44,9 +46,9 @@
 
     <section aria-labelledby="ingredients">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-        <h2 id="ingredients" style="margin:0;font-size:16px">Ingrédients</h2>
-        <button id="toggleAddIngredientForm" class="btn ghost" type="button">Ajouter un ingrédient</button>
-        <button id="toggleAllIngredientForm" class="btn ghost" type="button">Initialiser les
+        <h2 id="ingredients" style="margin:0;font-size:16px" data-i18n="edition.ingredients">Ingrédients</h2>
+        <button id="toggleAddIngredientForm" class="btn ghost" type="button" data-i18n="edition.ajouterIngredient">Ajouter un ingrédient</button>
+        <button id="toggleAllIngredientForm" class="btn ghost" type="button" data-i18n="edition.initialiserIngredients">Initialiser les
           ingrédients</button>
       </div>
 
@@ -54,17 +56,17 @@
         aria-hidden="true">
         <div class="grid">
           <div>
-            <label for="ingName">Nom de l'ingrédient</label>
+            <label for="ingName" data-i18n="edition.nomIngredient">Nom de l'ingrédient</label>
             <input id="ingName" type="text" placeholder="Ex : Tritanium" />
           </div>
           <div>
-            <label for="ingQty">Quantité</label>
+            <label for="ingQty" data-i18n="edition.quantité">Quantité</label>
             <input id="ingQty" type="number" min="0" step="1" placeholder="Ex : 2" />
           </div>
         </div>
         <div style="margin-top:10px;display:flex;gap:8px">
-          <button id="addIngredientBtn" class="btn" type="button">Ajouter</button>
-          <button id="cancelIngredientBtn" class="btn ghost" type="button">Annuler</button>
+          <button id="addIngredientBtn" class="btn" type="button" data-i18n="edition.ajouter">Ajouter</button>
+          <button id="cancelIngredientBtn" class="btn ghost" type="button" data-i18n="edition.annuler">Annuler</button>
         </div>
       </form>
 
@@ -72,7 +74,7 @@
         aria-hidden="true">
         <div class="grid">
           <div>
-            <label for="ingredientsArea">Ingrédients</label>
+            <label for="ingredientsArea" data-i18n="edition.ingredients">Ingrédients</label>
             <textarea id="ingredientsArea" placeholder='ID	Names	Quantity	Valuation 
 1	Phantasm Blueprint	2	92105263.159999996 
 2	Datacore - Amarrian Starship Engineering	20	3439725.2000000002 
@@ -81,17 +83,17 @@
           </div>
         </div>
         <div style="margin-top:10px;display:flex;gap:8px">
-          <button id="addAllIngredientBtn" class="btn" type="button">Initialiser</button>
-          <button id="cancelAllIngredientBtn" class="btn ghost" type="button">Annuler</button>
+          <button id="addAllIngredientBtn" class="btn" type="button" data-i18n="edition.initialiser">Initialiser</button>
+          <button id="cancelAllIngredientBtn" class="btn ghost" type="button" data-i18n="edition.annuler">Annuler</button>
         </div>
       </form>
       <div class="grid">
         <table id="ingredientsTable" aria-live="polite">
           <thead>
             <tr>
-              <th>Nom</th>
-              <th>Quantité</th>
-              <th style="width:110px">Actions</th>
+              <th data-i18n="edition.nom">Nom</th>
+              <th data-i18n="edition.quantité">Quantité</th>
+              <th style="width:110px" data-i18n="edition.actions">Actions</th>
             </tr>
           </thead>
           <tbody id="ingredientsBody">
@@ -105,21 +107,25 @@
     <section id="boutons">
       <div class="grid">
         <div>
-          <button id="annulerBtn" class="btn ghost" type="button">Retour aux produits</button>
+          <button id="annulerBtn" class="btn ghost" type="button" data-i18n="edition.retourProduits">Retour aux produits</button>
         </div>
         <div class="right">
-          <button id="saveBtn" class="btn" type="button">Enregistrer le produit</button>
+          <button id="saveBtn" class="btn" type="button" data-i18n="edition.enregistrerProduit">Enregistrer le produit</button>
         </div>
       </div>
     </section>
   </main>
 
   <script type="module">
-    import { decodeEchoesListe, notifier } from "./app/presentation.js"
+    import { decodeEchoesListe, notifier, prépareNotification } from "./app/presentation.js"
     import { Usine } from "./app/service.js"
     import { Stockage } from "./app/storage.js"
+    import { i18n } from "./app/i18n.js"
 
-    const stockage = new Stockage();
+    prépareNotification();
+    await i18n.charger();
+
+    const stockage = new Stockage(Stockage.lirePantryId());
 
     // ============================================================
     // ÉLÉMENTS DU DOM
@@ -228,7 +234,7 @@
       formulaireAjoutIngredient.style.display = 'block';
       formulaireAjoutIngredient.setAttribute('aria-hidden', 'false');
       champNomIngredient.focus();
-      boutonAjouterIngredient.textContent = 'Masquer le formulaire';
+      boutonAjouterIngredient.textContent = i18n.t('edition.masquerFormulaire');
     }
 
     /**
@@ -237,7 +243,7 @@
     function masquerFormulaireIngredient() {
       formulaireAjoutIngredient.style.display = 'none';
       formulaireAjoutIngredient.setAttribute('aria-hidden', 'true');
-      boutonAjouterIngredient.textContent = 'Ajouter un ingrédient';
+      boutonAjouterIngredient.textContent = i18n.t('edition.ajouterIngredient');
       champNomIngredient.value = '';
       champQuantiteIngredient.value = '';
     }
@@ -267,7 +273,7 @@
       formulaireInitialisationIngredients.style.display = 'block';
       formulaireInitialisationIngredients.setAttribute('aria-hidden', 'false');
       zoneTextePlusieursIngredients.focus();
-      boutonInitialiserIngredients.textContent = 'Masquer le formulaire';
+      boutonInitialiserIngredients.textContent = i18n.t('edition.masquerFormulaire');
     }
 
     /**
@@ -276,7 +282,7 @@
     function masquerFormulaireInitialisation() {
       formulaireInitialisationIngredients.style.display = 'none';
       formulaireInitialisationIngredients.setAttribute('aria-hidden', 'true');
-      boutonInitialiserIngredients.textContent = 'Ajouter plusieurs ingrédients';
+      boutonInitialiserIngredients.textContent = i18n.t('edition.initialiserIngredients');
       zoneTextePlusieursIngredients.value = '';
     }
 
@@ -294,14 +300,14 @@
 
       // Validation du nom
       if (!nomIngredient) {
-        alert("Le nom de l'ingrédient est requis.");
+        alert(i18n.t('edition.leNomIngredientRequis'));
         champNomIngredient.focus();
         return;
       }
 
       // Validation de la quantité
       if (!isFinite(quantiteIngredient) || quantiteIngredient <= 0) {
-        alert("La quantité doit être un nombre strictement positif.");
+        alert(i18n.t('edition.quantitePositive'));
         champQuantiteIngredient.focus();
         return;
       }
@@ -332,7 +338,7 @@
 
         // Valide qu'au moins un ingrédient a été trouvé
         if (ingredientsDécodés.length === 0) {
-          alert("Aucun ingrédient valide trouvé. Veuillez vérifier le format.");
+          alert(i18n.t('edition.aucunIngredientValide'));
           zoneTextePlusieursIngredients.focus();
           return;
         }
@@ -356,7 +362,7 @@
 
       } catch (erreur) {
         console.error("Erreur lors du décodage de la liste d'ingrédients:", erreur);
-        alert("Format de liste d'ingrédients invalide. Veuillez vérifier et réessayer.");
+        alert(i18n.t('edition.formatInvalide'));
         zoneTextePlusieursIngredients.focus();
       }
     });
@@ -376,7 +382,7 @@
       if (ingredientsListe.length === 0) {
         const ligneVide = document.createElement('tr');
         ligneVide.className = 'empty';
-        ligneVide.innerHTML = '<td colspan="4">Aucun ingrédient défini</td>';
+        ligneVide.innerHTML = '<td colspan="4">' + i18n.t('edition.aucunIngredient') + '</td>';
         corpsTableauIngredients.appendChild(ligneVide);
         return;
       }
@@ -400,7 +406,7 @@
         const boutonSupprimer = document.createElement('button');
         boutonSupprimer.type = 'button';
         boutonSupprimer.className = 'btn ghost';
-        boutonSupprimer.textContent = 'Supprimer';
+        boutonSupprimer.textContent = i18n.t('edition.supprimer');
         boutonSupprimer.addEventListener('click', () => {
           // Filtre l'ingrédient supprimé de la liste
           ingredientsListe = ingredientsListe.filter(i => i.nom !== ingredient.nom);
@@ -450,6 +456,42 @@
     // ============================================================
     // INITIALISATION
     // ============================================================
+
+    // Appliquer les traductions
+    function appliquerTraductions() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const clé = el.getAttribute('data-i18n');
+        el.textContent = i18n.t(clé);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const clé = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = i18n.t(clé);
+      });
+    }
+
+    function alimenterSelecteurLangue() {
+      const select = document.getElementById('select-langue');
+      select.innerHTML = '';
+      const labels = { fr: 'Français', en: 'English', de: 'Deutsch', es: 'Español' };
+      i18n.localesDisponibles.forEach(code => {
+        const option = document.createElement('option');
+        option.value = code;
+        option.textContent = labels[code] || code.toUpperCase();
+        if (code === i18n.locale) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+    }
+
+    appliquerTraductions();
+    alimenterSelecteurLangue();
+
+    document.getElementById('select-langue').addEventListener('change', async (event) => {
+      await i18n.changerLocale(event.target.value);
+      appliquerTraductions();
+      alimenterSelecteurLangue();
+    });
 
     // Affiche le tableau vide au chargement
     afficherIngredients();
